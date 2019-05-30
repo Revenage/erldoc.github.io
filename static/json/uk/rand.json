@@ -1,0 +1,748 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2015",
+					"2017"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "rand",
+			"prepared": {},
+			"responsible": {},
+			"docno": "1",
+			"approved": {},
+			"checked": {},
+			"date": {},
+			"rev": "A",
+			"file": "rand.xml"
+		},
+		"module": {
+			"since": "OTP 18.0",
+			"$t": "rand"
+		},
+		"modulesummary": "Pseudo random number generation.",
+		"description": {
+			"p": [
+				{
+					"url": [
+						{
+							"href": "http://xorshift.di.unimi.it",
+							"$t": "Xoroshiro and Xorshift algorithms"
+						},
+						{
+							"href": "http://www.jstatsoft.org/v05/i08",
+							"$t": "Ziggurat Method by Marsaglia and Tsang"
+						}
+					]
+				},
+				"For most algorithms, jump functions are provided for generating non-overlapping sequences for parallel computations. The jump functions perform calculations equivalent to perform a large number of repeated calls for calculating new states.",
+				"The following algorithms are provided:",
+				{
+					"c": "exsss",
+					"seealso": {
+						"marker": "#seed-1",
+						"c": "seed/1"
+					}
+				},
+				"Undocumented (old) algorithms are deprecated but still implemented so old code relying on them will produce the same pseudo random sequences as before.",
+				"Every time a random number is requested, a state is used to calculate it and a new state is produced. The state can either be implicit or be an explicit argument and return value.",
+				{
+					"c": "rand_seed"
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#uniform-0",
+							"c": "uniform/0"
+						},
+						{
+							"marker": "#uniform-1",
+							"c": "uniform/1"
+						},
+						{
+							"marker": "#uniform_real-0",
+							"c": "uniform_real/0"
+						},
+						{
+							"marker": "#seed-1",
+							"c": "seed/1"
+						}
+					]
+				},
+				"The functions with explicit state never use the process dictionary.",
+				{
+					"em": "Examples:"
+				},
+				"Simple use; creates and seeds the default algorithm with a non-constant seed if not already done:",
+				"Use a specified algorithm:",
+				"Use a specified algorithm with a constant seed:",
+				"Use the functional API with a non-constant seed:",
+				"Textbook basic form Box-Muller standard normal deviate",
+				"Create a standard normal deviate:",
+				"Create a normal deviate with mean -3 and variance 0.5:",
+				{
+					"c": [
+						"exro928ss",
+						"exsss",
+						"exrop",
+						"exsp",
+						"exs1024s"
+					],
+					"url": {
+						"href": "http://xoroshiro.di.unimi.it/xoroshiro128plus.c",
+						"$t": "Xoroshiro128+"
+					}
+				},
+				"If this is a problem; to generate a boolean with these algorithms use something like this:",
+				{
+					"c": [
+						"N = 1",
+						"exrop",
+						"N = 3",
+						"exs1024s"
+					]
+				},
+				"The floating point generating functions in this module waste the lowest bits when converting from an integer so they avoid this snag."
+			],
+			"taglist": {
+				"tag": [
+					{
+						"c": "exsss"
+					},
+					{
+						"c": "exro928ss"
+					},
+					{
+						"c": "exrop"
+					},
+					{
+						"c": "exs1024s"
+					},
+					{
+						"c": "exsp"
+					}
+				],
+				"item": [
+					{
+						"p": [
+							"Xorshift116**, 58 bits precision and period of 2^116-1",
+							"Jump function: equivalent to 2^64 calls",
+							{
+								"url": {
+									"href": "http://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf",
+									"$t": "Scrambled Linear Pseudorandom Number Generators"
+								}
+							},
+							{
+								"c": "exrop"
+							},
+							{
+								"c": "exrop"
+							}
+						]
+					},
+					{
+						"p": [
+							"Xoroshiro928**, 58 bits precision and a period of 2^928-1",
+							"Jump function: equivalent to 2^512 calls",
+							{
+								"url": {
+									"href": "http://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf",
+									"$t": "Scrambled Linear Pseudorandom Number Generators"
+								},
+								"c": "exsss"
+							},
+							"Many thanks to Sebastiano Vigna for his help with the 58 bit adaption."
+						]
+					},
+					{
+						"p": [
+							"Xoroshiro116+, 58 bits precision and period of 2^116-1",
+							"Jump function: equivalent to 2^64 calls"
+						]
+					},
+					{
+						"p": [
+							"Xorshift1024*, 64 bits precision and a period of 2^1024-1",
+							"Jump function: equivalent to 2^512 calls"
+						]
+					},
+					{
+						"p": [
+							"Xorshift116+, 58 bits precision and period of 2^116-1",
+							"Jump function: equivalent to 2^64 calls",
+							{
+								"c": [
+									"exrop",
+									"exrop"
+								],
+								"url": {
+									"href": "http://xorshift.di.unimi.it",
+									"$t": "algorithms' homepage"
+								}
+							}
+						]
+					}
+				]
+			},
+			"note": [
+				{
+					"p": [
+						"There were a number of problems in the implementation	of the now undocumented algorithms, which is why	they are deprecated. The new algorithms are a bit slower	but do not have these problems:",
+						"Uniform integer ranges had a skew in the probability distribution	that was not noticable for small ranges but for large ranges	less than the generator's precision the probability to produce	a low number could be twice the probability for a high.",
+						"Uniform integer ranges larger than or equal to the generator's	precision used a floating point fallback that only calculated	with 52 bits which is smaller than the requested range	and therefore were not all numbers in the requested range	even possible to produce.",
+						"Uniform floats had a non-uniform density so small values	i.e less than 0.5 had got smaller intervals decreasing	as the generated value approached 0.0 although still uniformly	distributed for sufficiently large subranges. The new algorithms	produces uniformly distributed floats on the form N * 2.0^(-53)	hence equally spaced."
+					]
+				},
+				{
+					"p": {
+						"seealso": {
+							"marker": "crypto:crypto#rand_seed-0",
+							"c": "crypto:rand_seed/0"
+						}
+					}
+				}
+			],
+			"pre": [
+				"R0 = rand:uniform(),R1 = rand:uniform(),",
+				"_ = rand:seed(exs928ss),R2 = rand:uniform(),",
+				"_ = rand:seed(exs928ss, {123, 123534, 345345}),R3 = rand:uniform(),",
+				"S0 = rand:seed_s(exsss),{R4, S1} = rand:uniform_s(S0),",
+				"R5 = rand:uniform_real(),R6 = rand:uniform(),SND0 = math:sqrt(-2 * math:log(R5)) * math:cos(math:pi() * R6)",
+				"{SND1, S2} = rand:normal_s(S1),",
+				"{ND0, S3} = rand:normal_s(-3, 0.5, S2),",
+				"Beside passing BigCrush, this generator passes the PractRand test suiteup to (and included) 16TB, with the exception of binary rank tests,which fail due to the lowest bit being an LFSR; all other bits pass alltests. We suggest to use a sign test to extract a random Boolean value.",
+				"(rand:uniform(16) > 8)",
+				"(((rand:uniform(Range bsl N) - 1) bsr N) + 1)"
+			]
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "builtin_alg"
+					}
+				},
+				{
+					"name": {
+						"name": "alg"
+					}
+				},
+				{
+					"name": {
+						"name": "alg_handler"
+					}
+				},
+				{
+					"name": {
+						"name": "alg_state"
+					}
+				},
+				{
+					"name": {
+						"name": "state"
+					},
+					"desc": {
+						"p": "Algorithm-dependent state."
+					}
+				},
+				{
+					"name": {
+						"name": "export_state"
+					},
+					"desc": {
+						"p": "Algorithm-dependent state that can be printed or saved to file."
+					}
+				},
+				{
+					"name": {
+						"name": "seed"
+					},
+					"desc": {
+						"p": [
+							"A seed value for the generator.",
+							"A list of integers sets the generator's internal state directly, after algorithm-dependent checks of the value and masking to the proper word size.",
+							"An integer is used as the initial state for a SplitMix64 generator. The output values of that is then used for setting the generator's internal state after masking to the proper word size and if needed avoiding zero values.",
+							"A traditional 3-tuple of integers seed is passed through algorithm-dependent hashing functions to create the generator's initial state."
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "exsplus_state"
+					},
+					"desc": {
+						"p": "Algorithm specific internal state"
+					}
+				},
+				{
+					"name": {
+						"name": "exro928_state"
+					},
+					"desc": {
+						"p": "Algorithm specific internal state"
+					}
+				},
+				{
+					"name": {
+						"name": "exrop_state"
+					},
+					"desc": {
+						"p": "Algorithm specific internal state"
+					}
+				},
+				{
+					"name": {
+						"name": "exs1024_state"
+					},
+					"desc": {
+						"p": "Algorithm specific internal state"
+					}
+				},
+				{
+					"name": {
+						"name": "exs64_state"
+					},
+					"desc": {
+						"p": "Algorithm specific internal state"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "export_seed",
+						"arity": "0",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Export the random number generation state.",
+					"desc": {
+						"marker": {
+							"id": "export_seed-0"
+						},
+						"p": {
+							"seealso": {
+								"marker": "#seed-1",
+								"c": "seed/1"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "export_seed_s",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Export the random number generation state.",
+					"desc": {
+						"marker": {
+							"id": "export_seed_s-1"
+						},
+						"p": {
+							"seealso": {
+								"marker": "#seed-1",
+								"c": "seed/1"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "jump",
+						"arity": "0",
+						"since": "OTP 20.0"
+					},
+					"fsummary": "Return the seed after performing jump calculation to the state in the process dictionary.",
+					"desc": {
+						"marker": {
+							"id": "jump-0"
+						},
+						"p": [
+							"Returns the state after performing jump calculation to the state in the process dictionary.",
+							{
+								"c": "not_implemented"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "jump",
+						"arity": "1",
+						"since": "OTP 20.0"
+					},
+					"fsummary": "Return the seed after performing jump calculation.",
+					"desc": {
+						"marker": {
+							"id": "jump-1"
+						},
+						"p": [
+							"Returns the state after performing jump calculation to the given state.",
+							{
+								"c": "not_implemented"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "normal",
+						"arity": "0",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return a standard normal distributed random float.",
+					"desc": {
+						"p": "Returns a standard normal deviate float (that is, the mean is 0 and the standard deviation is 1) and updates the state in the process dictionary."
+					}
+				},
+				{
+					"name": {
+						"name": "normal",
+						"arity": "2",
+						"since": "OTP 20.0"
+					},
+					"fsummary": "Return a normal distributed random float.",
+					"desc": {
+						"p": "Returns a normal N(Mean, Variance) deviate float and updates the state in the process dictionary."
+					}
+				},
+				{
+					"name": {
+						"name": "normal_s",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return a standard normal distributed random float.",
+					"desc": {
+						"p": "Returns, for a specified state, a standard normal deviate float (that is, the mean is 0 and the standard deviation is 1) and a new state."
+					}
+				},
+				{
+					"name": {
+						"name": "normal_s",
+						"arity": "3",
+						"since": "OTP 20.0"
+					},
+					"fsummary": "Return a normal distributed random float.",
+					"desc": {
+						"p": "Returns, for a specified state, a normal N(Mean, Variance) deviate float and a new state."
+					}
+				},
+				{
+					"name": {
+						"name": "seed",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Seed random number generator.",
+					"desc": {
+						"marker": {
+							"id": "seed-1"
+						},
+						"p": [
+							{
+								"c": {
+									"anno": "AlgOrStateOrExpState"
+								}
+							},
+							{
+								"seealso": {
+									"marker": "#export_seed-0",
+									"c": "export_seed/0"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "seed",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Seed the random number generation.",
+					"desc": {
+						"p": "Seeds random number generation with the specified algorithm and integers in the process dictionary and returns the state."
+					}
+				},
+				{
+					"name": {
+						"name": "seed_s",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Seed random number generator.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "AlgOrStateOrExpState"
+								}
+							},
+							{
+								"seealso": {
+									"marker": "#export_seed-0",
+									"c": "export_seed/0"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "seed_s",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Seed the random number generation.",
+					"desc": {
+						"p": "Seeds random number generation with the specified algorithm and integers and returns the state."
+					}
+				},
+				{
+					"name": {
+						"name": "uniform",
+						"arity": "0",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return a random float.",
+					"desc": {
+						"marker": {
+							"id": "uniform-0"
+						},
+						"p": [
+							{
+								"c": {
+									"anno": "X"
+								}
+							},
+							"The generated numbers are on the form N * 2.0^(-53), that is; equally spaced in the interval."
+						],
+						"warning": {
+							"p": [
+								{
+									"c": [
+										"0.0",
+										"(1.0 - rand:uniform())",
+										{
+											"anno": "X"
+										}
+									],
+									"seealso": {
+										"marker": "#uniform_real-0",
+										"c": "uniform_real/0"
+									}
+								},
+								"If neither endpoint is desired you can test and re-try like this:"
+							],
+							"pre": "my_uniform() -> case rand:uniform() of 0.0 -> my_uniform();	X -> X endend."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "uniform_real",
+						"arity": "0",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Return a random float.",
+					"desc": {
+						"marker": {
+							"id": "uniform_real-0"
+						},
+						"p": [
+							{
+								"c": {
+									"anno": "X"
+								}
+							},
+							{
+								"c": [
+									"R",
+									"0 =< R < 1"
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#uniform_real_s-1",
+									"c": "uniform_real_s/1"
+								}
+							}
+						],
+						"note": {
+							"p": {
+								"seealso": {
+									"marker": "#uniform-0",
+									"c": "uniform/0"
+								},
+								"c": [
+									{
+										"anno": "X"
+									},
+									{
+										"anno": "X"
+									}
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "uniform",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return a random integer.",
+					"desc": {
+						"marker": {
+							"id": "uniform-1"
+						},
+						"p": {
+							"c": [
+								{
+									"anno": "N"
+								},
+								{
+									"anno": [
+										"X",
+										"N"
+									]
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "uniform_s",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return a random float.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "X"
+								}
+							},
+							"The generated numbers are on the form N * 2.0^(-53), that is; equally spaced in the interval."
+						],
+						"warning": {
+							"p": [
+								{
+									"c": [
+										"0.0",
+										"(1.0 - rand:uniform(State))",
+										{
+											"anno": "X"
+										}
+									],
+									"seealso": {
+										"marker": "#uniform_real_s-1",
+										"c": "uniform_real_s/1"
+									}
+								},
+								"If neither endpoint is desired you can test and re-try like this:"
+							],
+							"pre": "my_uniform(State) -> case rand:uniform(State) of {0.0, NewState} -> my_uniform(NewState);	Result -> Result endend."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "uniform_real_s",
+						"arity": "1",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Return a random float.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "X"
+								}
+							},
+							{
+								"c": [
+									"R",
+									"0 =< R < 1"
+								]
+							},
+							{
+								"c": "DBL_MIN"
+							},
+							{
+								"c": {
+									"anno": "X"
+								}
+							},
+							{
+								"c": [
+									"N*2.0^(-53) =< X < (N+1)*2.0^(-53)",
+									"0 =< integer(N) < 2.0^53"
+								],
+								"seealso": {
+									"marker": "#uniform_s-1",
+									"c": "uniform_s/1"
+								}
+							},
+							{
+								"seealso": {
+									"marker": "#uniform_s-1",
+									"c": "uniform_s/1"
+								}
+							}
+						],
+						"note": {
+							"p": {
+								"seealso": {
+									"marker": "#uniform_s-1",
+									"c": "uniform_s/1"
+								},
+								"c": [
+									{
+										"anno": "X"
+									},
+									{
+										"anno": "X"
+									}
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "uniform_s",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return a random integer.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "N"
+								},
+								{
+									"anno": [
+										"X",
+										"N"
+									]
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	}
+}

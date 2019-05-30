@@ -1,0 +1,2130 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "string",
+			"prepared": "Robert Virding",
+			"responsible": "Bjarne Dcker",
+			"docno": "1",
+			"approved": "Bjarne Dcker",
+			"checked": {},
+			"date": "1996-09-28",
+			"rev": "A",
+			"file": "string.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "string"
+		},
+		"modulesummary": "String processing functions.",
+		"description": {
+			"p": [
+				"This module provides functions for string processing.",
+				{
+					"seealso": {
+						"marker": "unicode#type-chardata",
+						"c": "unicode:chardata()"
+					},
+					"em": "UTF-8 binaries"
+				},
+				{
+					"em": "grapheme cluster"
+				},
+				{
+					"c": [
+						"[223,8593,101,778]",
+						"<<195,159,226,134,145,101,204,138>>"
+					]
+				},
+				{
+					"c": "prepend",
+					"seealso": [
+						{
+							"marker": "#find/3",
+							"c": "find/3"
+						},
+						{
+							"marker": "#replace/3",
+							"c": "replace/3"
+						},
+						{
+							"marker": "#split/2",
+							"c": "split/2"
+						},
+						{
+							"marker": "#lexemes/2",
+							"c": "split/2"
+						},
+						{
+							"marker": "#trim/3",
+							"c": "trim/3"
+						}
+					]
+				},
+				"Splitting and appending strings is to be done on grapheme clusters borders. There is no verification that the results of appending strings are valid or normalized.",
+				{
+					"seealso": {
+						"marker": "unicode#characters_to_nfc_list/1",
+						"c": "unicode:characters_to_nfc_list/1"
+					}
+				},
+				"Language or locale specific handling of input is not considered in any function.",
+				"The functions can crash for non-valid input strings. For example, the functions expect UTF-8 binaries but not all functions verify that all binaries are encoded correctly.",
+				"Unless otherwise specified the return value type is the same as the input type. That is, binary input returns binary output, list input returns a list output, and mixed input can return a mixed output.",
+				{
+					"seealso": [
+						{
+							"marker": "unicode#type-chardata",
+							"c": "unicode:chardata()"
+						},
+						{
+							"marker": "#oldapi",
+							"c": "old functions"
+						}
+					]
+				}
+			],
+			"code": [
+				"\"abcd\" is a valid string<<\"abcd\">> is a valid string[\"abcd\"] is a valid string<<\"abc..åäö\"/utf8>> is a valid string<<\"abc..åäö\">> is NOT a valid string, but a binary with Latin-1-encoded codepoints[<<\"abc\">>, \"..åäö\"] is a valid string[atom] is NOT a valid string",
+				"\"å\" [229] or [97, 778]\"e̊\" [101, 778]",
+				"1> string:trim(\" sarah \").\"sarah\"2> string:trim(<<\" sarah \">>).<<\"sarah\">>3> string:lexemes(\"foo bar\", \" \").[\"foo\",\"bar\"]4> string:lexemes(<<\"foo bar\">>, \" \").[<<\"foo\">>,<<\"bar\">>]"
+			]
+		},
+		"datatypes": {
+			"datatype": {
+				"name": [
+					{
+						"name": "direction"
+					},
+					{
+						"name": "grapheme_cluster"
+					}
+				],
+				"desc": {
+					"p": "A user-perceived character, consisting of one or more codepoints."
+				}
+			}
+		},
+		"funcs": [
+			{
+				"func": [
+					{
+						"name": {
+							"name": "casefold",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Convert a string to a comparable string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										"casefold/1",
+										"lowercase/1"
+									],
+									"seealso": {
+										"marker": "#equal/4",
+										"c": "equal/4"
+									}
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": "string:casefold(\"Ω and ẞ SHARP S\")."
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "chomp",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Remove trailing end of line control characters.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"\\n",
+										"\\r\\n",
+										{
+											"anno": "String"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:chomp(<<\"\\nHello\\n\\n\">>).",
+									"string:chomp(\"\\nHello\\r\\r\\n\")."
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "equal",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "equal",
+								"arity": "3",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "equal",
+								"arity": "4",
+								"since": "OTP 20.0"
+							}
+						],
+						"fsummary": "Test string equality.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"true",
+										{
+											"anno": "A"
+										},
+										{
+											"anno": "B"
+										},
+										"false"
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "IgnoreCase"
+										},
+										"true"
+									],
+									"seealso": {
+										"marker": "#casefold/1",
+										"c": "casefold"
+									}
+								},
+								{
+									"c": [
+										{
+											"anno": "Norm"
+										},
+										"none"
+									],
+									"seealso": [
+										{
+											"marker": "unicode#characters_to_nfc_list/1",
+											"c": "nfc"
+										},
+										{
+											"marker": "unicode#characters_to_nfd_list/1",
+											"c": "nfd"
+										},
+										{
+											"marker": "unicode#characters_to_nfkc_list/1",
+											"c": "nfkc"
+										},
+										{
+											"marker": "unicode#characters_to_nfkd_list/1",
+											"c": "nfkd"
+										}
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "IgnoreCase"
+										},
+										"false",
+										{
+											"anno": "Norm"
+										},
+										"none"
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:equal(\"åäö\", <<\"åäö\"/utf8>>).",
+									"string:equal(\"åäö\", unicode:characters_to_nfd_binary(\"åäö\")).",
+									"string:equal(\"åäö\", unicode:characters_to_nfd_binary(\"ÅÄÖ\"), true, nfc)."
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "find",
+								"arity": "2",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "find",
+								"arity": "3",
+								"since": "OTP 20.0"
+							}
+						],
+						"fsummary": "Find start of substring.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "SearchPattern"
+										},
+										{
+											"anno": "String"
+										},
+										"nomatch",
+										{
+											"anno": "SearchPattern"
+										},
+										{
+											"anno": "Dir"
+										},
+										"leading",
+										"trailing"
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "Dir"
+										},
+										"leading"
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:find(\"ab..cd..ef\", \".\").",
+									"string:find(<<\"ab..cd..ef\">>, \"..\", trailing).",
+									"string:find(<<\"ab..cd..ef\">>, \"x\", leading).",
+									"string:find(\"ab..cd..ef\", \"x\", trailing)."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "is_empty",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Check if the string is empty.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"true",
+										{
+											"anno": "String"
+										},
+										"false"
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:is_empty(\"foo\").",
+									"string:is_empty([\"\",<<>>])."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "length",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Calculate length of the string.",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "String"
+									}
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:length(\"ß↑e̊\").",
+									"string:length(<<195,159,226,134,145,101,204,138>>)."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "lexemes",
+							"arity": "2",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Split string into lexemes.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "SeparatorList"
+										}
+									]
+								},
+								{
+									"c": {
+										"anno": "String"
+									},
+									"seealso": {
+										"marker": "#split/3",
+										"c": "split/3"
+									}
+								},
+								{
+									"c": "[$\\r,$\\n]"
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:lexemes(\"abc de̊fxxghix jkl\\r\\nfoo\", \"x e\" ++ [[$\\r,$\\n]]).",
+									"string:lexemes(<<\"abc de̊fxxghix jkl\\r\\nfoo\"/utf8>>, \"x e\" ++ [$\\r,$\\n])."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "lowercase",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Convert a string to lowercase",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "String"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#casefold/1",
+										"c": "casefold/1"
+									}
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": "string:lowercase(string:uppercase(\"Michał\"))."
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "next_codepoint",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Pick the first codepoint.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "String"
+										},
+										"{error, String}"
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": "string:next_codepoint(unicode:characters_to_binary(\"e̊fg\"))."
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "next_grapheme",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Pick the first grapheme cluster.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "String"
+										},
+										"{error, String}"
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": "string:next_grapheme(unicode:characters_to_binary(\"e̊fg\"))."
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "nth_lexeme",
+							"arity": "3",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Pick the nth lexeme.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "N"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "SeparatorList"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": "string:nth_lexeme(\"abc.de̊f.ghiejkl\", 3, \".e\")."
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "pad",
+								"arity": "2",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "pad",
+								"arity": "3",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "pad",
+								"arity": "4",
+								"since": "OTP 20.0"
+							}
+						],
+						"fsummary": "Pad a string to given length.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Length"
+										},
+										{
+											"anno": "Char"
+										},
+										{
+											"anno": "Dir"
+										},
+										"leading",
+										"trailing",
+										"both"
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "Char"
+										},
+										"$\\s",
+										{
+											"anno": "Dir"
+										},
+										"trailing"
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:pad(<<\"He̊llö\"/utf8>>, 8).",
+									"io:format(\"'~ts'~n\",[string:pad(\"He̊llö\", 8, leading)]).",
+									"io:format(\"'~ts'~n\",[string:pad(\"He̊llö\", 8, both)])."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "prefix",
+							"arity": "2",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Remove prefix from string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Prefix"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "String"
+										},
+										"nomatch"
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:prefix(<<\"prefix of string\">>, \"pre\").",
+									"string:prefix(\"pre\", \"prefix\")."
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "replace",
+								"arity": "3",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "replace",
+								"arity": "4",
+								"since": "OTP 20.0"
+							}
+						],
+						"fsummary": "Replace a pattern in string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "SearchPattern"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Replacement"
+										},
+										{
+											"anno": "Where"
+										},
+										"leading",
+										"leading",
+										"trailing",
+										"all",
+										{
+											"anno": "SearchPattern"
+										}
+									]
+								},
+								"Can be implemented as:",
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": [
+								"lists:join(Replacement, split(String, SearchPattern, Where)).",
+								{
+									"input": [
+										"string:replace(<<\"ab..cd..ef\">>, \"..\", \"*\").",
+										"string:replace(<<\"ab..cd..ef\">>, \"..\", \"*\", all)."
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "reverse",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Reverses a string",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "String"
+									}
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:reverse(unicode:characters_to_nfd_binary(\"ÅÄÖ\")).",
+									"io:format(\"~ts~n\",[Reverse])."
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "slice",
+								"arity": "2",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "slice",
+								"arity": "3",
+								"since": "OTP 20.0"
+							}
+						],
+						"fsummary": "Extract a part of string",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Length"
+										},
+										{
+											"anno": "Start"
+										}
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "Length"
+										},
+										"infinity"
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:slice(<<\"He̊llö Wörld\"/utf8>>, 4).",
+									"string:slice([\"He̊llö \", <<\"Wörld\"/utf8>>], 4,4).",
+									"string:slice([\"He̊llö \", <<\"Wörld\"/utf8>>], 4,50)."
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "split",
+								"arity": "2",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "split",
+								"arity": "3",
+								"since": "OTP 20.0"
+							}
+						],
+						"fsummary": "Split a string into substrings.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "SearchPattern"
+										},
+										{
+											"anno": "Where"
+										},
+										"leading",
+										"leading",
+										"trailing",
+										"all",
+										{
+											"anno": "SearchPattern"
+										},
+										{
+											"anno": "String"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:split(\"ab..bc..cd\", \"..\").",
+									"string:split(<<\"ab..bc..cd\">>, \"..\", trailing).",
+									"string:split(<<\"ab..bc....cd\">>, \"..\", all)."
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "take",
+								"arity": "2",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "take",
+								"arity": "3",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "take",
+								"arity": "4",
+								"since": "OTP 20.0"
+							}
+						],
+						"fsummary": "Take leading or trailing parts.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Characters"
+										},
+										{
+											"anno": "Characters"
+										},
+										{
+											"anno": "Dir"
+										},
+										"leading",
+										"trailing"
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:take(\"abc0z123\", lists:seq($a,$z)).",
+									"string:take(<<\"abc0z123\">>, lists:seq($0,$9), true, leading).",
+									"string:take(\"abc0z123\", lists:seq($0,$9), false, trailing).",
+									"string:take(<<\"abc0z123\">>, lists:seq($a,$z), true, trailing)."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "titlecase",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Convert a string to titlecase.",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "String"
+									}
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": "string:titlecase(\"ß is a SHARP s\")."
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "to_float",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return a float whose text representation is the integers (ASCII values) of a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Rest"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"{F1,Fs} = string:to_float(\"1.0-1.0e-1\"),",
+									"{F2,[]} = string:to_float(Fs),",
+									"F1+F2.",
+									"string:to_float(\"3/2=1.5\").",
+									"string:to_float(\"-1.5eX\")."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "to_integer",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return an integer whose text representation is the integers (ASCII values) of a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Rest"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"{I1,Is} = string:to_integer(\"33+22\"),",
+									"{I2,[]} = string:to_integer(Is),",
+									"I1-I2.",
+									"string:to_integer(\"0.5\").",
+									"string:to_integer(\"x=2\")."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "to_graphemes",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Convert a string to a list of grapheme clusters.",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "String"
+									}
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:to_graphemes(\"ß↑e̊\").",
+									"string:to_graphemes(<<\"ß↑e̊\"/utf8>>)."
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "trim",
+								"arity": "1",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "trim",
+								"arity": "2",
+								"since": "OTP 20.0"
+							},
+							{
+								"name": "trim",
+								"arity": "3",
+								"since": "OTP 20.0"
+							}
+						],
+						"fsummary": "Trim leading or trailing, or both, characters.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Characters"
+										},
+										{
+											"anno": "Dir"
+										},
+										"leading",
+										"trailing",
+										"both"
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "Characters"
+										},
+										{
+											"anno": "Dir"
+										},
+										"both"
+									],
+									"url": {
+										"href": "http://unicode.org/reports/tr31/",
+										"$t": "Unicode Standard Annex #31"
+									}
+								},
+								{
+									"c": "[$\\r,$\\n]"
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": [
+									"string:trim(\"\\t Hello \\n\").",
+									"string:trim(<<\"\\t Hello \\n\">>, leading).",
+									"string:trim(<<\".Hello.\\n\">>, trailing, \"\\n.\")."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "uppercase",
+							"arity": "1",
+							"since": "OTP 20.0"
+						},
+						"fsummary": "Convert a string to uppercase.",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "String"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#titlecase/1",
+										"c": "titlecase/1"
+									}
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"pre": {
+								"input": "string:uppercase(\"Michał\")."
+							}
+						}
+					}
+				]
+			},
+			{
+				"func": [
+					{
+						"name": [
+							{
+								"name": "centre",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "centre",
+								"arity": "3",
+								"since": ""
+							}
+						],
+						"fsummary": "Center a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Character"
+										},
+										{
+											"anno": "Number"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#pad/3",
+											"c": "pad/3"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "chars",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "chars",
+								"arity": "3",
+								"since": ""
+							}
+						],
+						"fsummary": "Return a string consisting of numbers of characters.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Number"
+										},
+										{
+											"anno": "Character"
+										},
+										{
+											"anno": "Tail"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "lists#duplicate/2",
+											"c": "lists:duplicate/2"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "chr",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Return the index of the first occurrence of a character in a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Character"
+										},
+										{
+											"anno": "String"
+										},
+										"0",
+										{
+											"anno": "Character"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#find/2",
+											"c": "find/2"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "concat",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Concatenate two strings.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String1"
+										},
+										{
+											"anno": "String2"
+										},
+										{
+											"anno": "String3"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "unicode#characters_to_list/2",
+											"c": "unicode:characters_to_list/2"
+										},
+										{
+											"marker": "unicode#characters_to_binary/2",
+											"c": "unicode:characters_to_binary/2"
+										}
+									],
+									"c": [
+										{
+											"anno": [
+												"String1",
+												"String2"
+											]
+										},
+										"Data"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "copies",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Copy a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Number"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "lists#duplicate/2",
+											"c": "lists:duplicate/2"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "cspan",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Span characters at start of a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Chars"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#take/3",
+											"c": "take/3"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> string:cspan(\"\\t abcdef\", \" \\t\").0"
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "join",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Join a list of strings with separator.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "StringList"
+										},
+										{
+											"anno": "Separator"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "lists#join/2",
+											"c": "lists:join/2"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> join([\"one\", \"two\", \"three\"], \", \").\"one, two, three\""
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "left",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "left",
+								"arity": "3",
+								"since": ""
+							}
+						],
+						"fsummary": "Adjust left end of a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Number"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Number"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Character"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#pad/2",
+											"c": "pad/2"
+										},
+										{
+											"marker": "#pad/3",
+											"c": "pad/3"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> string:left(\"Hello\",10,$.).\"Hello.....\""
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "len",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return the length of a string.",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "String"
+									}
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#length/1",
+											"c": "length/1"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "rchr",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Return the index of the last occurrence of a character in a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Character"
+										},
+										{
+											"anno": "String"
+										},
+										"0",
+										{
+											"anno": "Character"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#find/3",
+											"c": "find/3"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "right",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "right",
+								"arity": "3",
+								"since": ""
+							}
+						],
+						"fsummary": "Adjust right end of a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Number"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Number"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Character"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#pad/3",
+											"c": "pad/3"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> string:right(\"Hello\", 10, $.).\".....Hello\""
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "rstr",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Find the index of a substring.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "SubString"
+										},
+										{
+											"anno": "String"
+										},
+										"0",
+										{
+											"anno": "SubString"
+										},
+										{
+											"anno": "String"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#find/3",
+											"c": "find/3"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> string:rstr(\" Hello Hello World World \", \"Hello World\").8"
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "span",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Span characters at start of a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Chars"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#take/2",
+											"c": "take/2"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> string:span(\"\\t abcdef\", \" \\t\").5"
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "str",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Find the index of a substring.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "SubString"
+										},
+										{
+											"anno": "String"
+										},
+										"0",
+										{
+											"anno": "SubString"
+										},
+										{
+											"anno": "String"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#find/2",
+											"c": "find/2"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> string:str(\" Hello Hello World World \", \"Hello World\").8"
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "strip",
+								"arity": "1",
+								"since": ""
+							},
+							{
+								"name": "strip",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "strip",
+								"arity": "3",
+								"since": ""
+							}
+						],
+						"fsummary": "Strip leading or trailing characters.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Character"
+										},
+										{
+											"anno": "Direction"
+										},
+										"left",
+										"right",
+										"both",
+										"strip/1",
+										"strip(String, both)"
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#trim/3",
+											"c": "trim/3"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> string:strip(\"...Hello.....\", both, $.).\"Hello\""
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "sub_string",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "sub_string",
+								"arity": "3",
+								"since": ""
+							}
+						],
+						"fsummary": "Extract a substring.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Start"
+										},
+										{
+											"anno": "Stop"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#slice/3",
+											"c": "slice/3"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "sub_string(\"Hello World\", 4, 8).\"lo Wo\""
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "substr",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "substr",
+								"arity": "3",
+								"since": ""
+							}
+						],
+						"fsummary": "Return a substring of a string.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Start"
+										},
+										{
+											"anno": "Length"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#slice/3",
+											"c": "slice/3"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> substr(\"Hello World\", 4, 5).\"lo Wo\""
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "sub_word",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "sub_word",
+								"arity": "3",
+								"since": ""
+							}
+						],
+						"fsummary": "Extract subword.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Number"
+										},
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Character"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#nth_lexeme/3",
+											"c": "nth_lexeme/3"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> string:sub_word(\" Hello old boy !\",3,$o).\"ld b\""
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "to_lower",
+								"arity": "1",
+								"clause_i": "1",
+								"since": ""
+							},
+							{
+								"name": "to_lower",
+								"arity": "1",
+								"clause_i": "2",
+								"since": ""
+							},
+							{
+								"name": "to_upper",
+								"arity": "1",
+								"clause_i": "1",
+								"since": ""
+							},
+							{
+								"name": "to_upper",
+								"arity": "1",
+								"clause_i": "2",
+								"since": ""
+							}
+						],
+						"fsummary": "Convert case of string (ISO/IEC 8859-1).",
+						"type": [
+							{
+								"variable": "String",
+								"name_i": "1"
+							},
+							{
+								"variable": "Result",
+								"name_i": "1"
+							},
+							{
+								"variable": "Char"
+							},
+							{
+								"variable": "CharResult"
+							}
+						],
+						"desc": {
+							"p": [
+								"The specified string or character is case-converted. Notice that the supported character set is ISO/IEC 8859-1 (also called Latin 1); all values outside this set are unchanged",
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#lowercase/1",
+											"c": "lowercase/1"
+										},
+										{
+											"marker": "#uppercase/1",
+											"c": "uppercase/1"
+										},
+										{
+											"marker": "#titlecase/1",
+											"c": "titlecase/1"
+										},
+										{
+											"marker": "#casefold/1",
+											"c": "casefold/1"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "tokens",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Split string into tokens.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "SeparatorList"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								},
+								{
+									"c": {
+										"anno": "String"
+									}
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#lexemes/2",
+											"c": "lexemes/2"
+										}
+									]
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> tokens(\"abc defxxghix jkl\", \"x \").[\"abc\", \"def\", \"ghi\", \"jkl\"]"
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "words",
+								"arity": "1",
+								"since": ""
+							},
+							{
+								"name": "words",
+								"arity": "2",
+								"since": ""
+							}
+						],
+						"fsummary": "Count blank separated words.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "String"
+										},
+										{
+											"anno": "Character"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#oldapi",
+											"$t": "obsolete"
+										},
+										{
+											"marker": "#lexemes/2",
+											"c": "lexemes/2"
+										}
+									]
+								},
+								{
+									"em": "Example:"
+								}
+							],
+							"code": {
+								"type": "none",
+								"$t": "> words(\" Hello old boy!\", $o).4"
+							}
+						}
+					}
+				]
+			}
+		],
+		"section": [
+			{
+				"marker": {
+					"id": "oldapi"
+				},
+				"title": "Obsolete API functions",
+				"p": "Here follows the function of the old API. These functions only work on a list of Latin-1 characters.",
+				"note": {
+					"p": [
+						"The functions are kept for backward compatibility, but are not recommended. They will be deprecated in a future release.",
+						{
+							"c": "string"
+						}
+					]
+				}
+			},
+			{
+				"title": "Notes",
+				"p": "Some of the general string functions can seem to overlap each other. The reason is that this string package is the combination of two earlier packages and all functions of both packages have been retained."
+			}
+		]
+	}
+}

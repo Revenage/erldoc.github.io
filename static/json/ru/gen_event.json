@@ -1,0 +1,1379 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "gen_event",
+			"prepared": {},
+			"docno": {},
+			"date": {},
+			"rev": {}
+		},
+		"module": {
+			"since": "",
+			"$t": "gen_event"
+		},
+		"modulesummary": "Generic event handling behavior.",
+		"description": {
+			"p": [
+				"This behavior module provides event handling functionality. It consists of a generic event manager process with any number of event handlers that are added and deleted dynamically.",
+				{
+					"seealso": {
+						"marker": "doc/design_principles:events",
+						"$t": "OTP Design Principles"
+					}
+				},
+				"Each event handler is implemented as a callback module exporting a predefined set of functions. The relationship between the behavior functions and the callback functions is as follows:",
+				{
+					"c": [
+						"gen_event",
+						"Reason",
+						"Term",
+						"{error,{'EXIT',Reason}}",
+						"{error,Term}"
+					],
+					"seealso": {
+						"marker": "#Module:terminate/2",
+						"c": "Module:terminate/2"
+					}
+				},
+				{
+					"c": [
+						"gen_event",
+						"sys"
+					],
+					"seealso": {
+						"marker": "sys",
+						"c": "sys(3)"
+					}
+				},
+				{
+					"em": "does"
+				},
+				{
+					"c": [
+						"gen_event",
+						"hibernate"
+					],
+					"seealso": {
+						"marker": "erts:erlang#hibernate/3",
+						"c": "erlang:hibernate/3"
+					}
+				},
+				{
+					"c": "hibernate"
+				},
+				"Unless otherwise stated, all functions in this module fail if the specified event manager does not exist or if bad arguments are specified."
+			],
+			"pre": "gen_event module Callback module---------------- ---------------gen_event:startgen_event:start_link -----> -gen_event:add_handlergen_event:add_sup_handler -----> Module:init/1gen_event:notifygen_event:sync_notify -----> Module:handle_event/2gen_event:call -----> Module:handle_call/2- -----> Module:handle_info/2gen_event:delete_handler -----> Module:terminate/2gen_event:swap_handlergen_event:swap_sup_handler -----> Module1:terminate/2 Module2:init/1gen_event:which_handlers -----> -gen_event:stop -----> Module:terminate/2- -----> Module:code_change/3"
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "handler"
+					}
+				},
+				{
+					"name": {
+						"name": "handler_args"
+					}
+				},
+				{
+					"name": {
+						"name": "add_handler_ret"
+					}
+				},
+				{
+					"name": {
+						"name": "del_handler_ret"
+					}
+				}
+			]
+		},
+		"funcs": [
+			{
+				"func": [
+					{
+						"name": {
+							"since": "",
+							"$t": "add_handler(EventMgrRef, Handler, Args) -> Result"
+						},
+						"fsummary": "Add an event handler to a generic event manager.",
+						"type": {
+							"v": [
+								"EventMgrRef = Name | {Name,Node} | {global,GlobalName}\t| {via,Module,ViaName} | pid()",
+								"Name = Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Handler = Module | {Module,Id}",
+								"Module = atom()",
+								"Id = term()",
+								"Args = term()",
+								"Result = ok | {'EXIT',Reason} | term()",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "EventMgrRef",
+									"seealso": {
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									}
+								},
+								{
+									"c": "EventMgrRef"
+								},
+								{
+									"c": [
+										"Handler",
+										"Module",
+										"{Module,Id}",
+										"Id",
+										"{Module,Id}"
+									]
+								},
+								{
+									"c": [
+										"Args",
+										"Module:init/1"
+									]
+								},
+								{
+									"c": [
+										"Module:init/1",
+										"ok",
+										"Module:init/1",
+										"Reason",
+										"{error,Reason}",
+										"{'EXIT',Reason}",
+										"{error,Reason}"
+									]
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									"The pid",
+									{
+										"c": "Name"
+									},
+									{
+										"c": "{Name,Node}"
+									},
+									{
+										"c": "{global,GlobalName}"
+									},
+									{
+										"c": "{via,Module,ViaName}"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "add_sup_handler(EventMgrRef, Handler, Args) -> Result"
+						},
+						"fsummary": "Add a supervised event handler to a generic event manager.",
+						"type": {
+							"v": [
+								"EventMgrRef = Name | {Name,Node} | {global,GlobalName}\t| {via,Module,ViaName} | pid()",
+								"Name = Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Handler = Module | {Module,Id}",
+								"Module = atom()",
+								"Id = term()",
+								"Args = term()",
+								"Result = ok | {'EXIT',Reason} | term()",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"seealso": {
+										"marker": "#add_handler/3",
+										"c": "add_handler/3"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#add_handler/3",
+										"c": "add_handler/3"
+									}
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"c": [
+											"Reason",
+											"{stop,Reason}"
+										],
+										"seealso": {
+											"marker": "#Module:terminate/2",
+											"c": "Module:terminate/2"
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"{gen_event_EXIT,Handler,Reason}",
+												"Reason"
+											]
+										},
+										"list": {
+											"type": "bulleted",
+											"item": [
+												{
+													"p": {
+														"c": [
+															"normal",
+															"delete_handler/3",
+															"remove_handler"
+														]
+													}
+												},
+												{
+													"p": {
+														"c": "shutdown"
+													}
+												},
+												{
+													"p": {
+														"c": [
+															"{swapped,NewHandler,Pid}",
+															"Pid",
+															"NewHandler"
+														],
+														"seealso": [
+															{
+																"marker": "#swap_handler/3",
+																"c": "swap_handler/3"
+															},
+															{
+																"marker": "#swap_sup_handler/3",
+																"c": "swap_sup_handler/3"
+															}
+														]
+													}
+												},
+												{
+													"p": "A term, if the event handler is removed because of an error. Which term depends on the error."
+												}
+											]
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "call(EventMgrRef, Handler, Request) -> Result"
+							},
+							{
+								"since": "",
+								"$t": "call(EventMgrRef, Handler, Request, Timeout) -> Result"
+							}
+						],
+						"fsummary": "Make a synchronous call to a generic event manager.",
+						"type": {
+							"v": [
+								"EventMgrRef = Name | {Name,Node} | {global,GlobalName}\t| {via,Module,ViaName} | pid()",
+								"Name = Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Handler = Module | {Module,Id}",
+								"Module = atom()",
+								"Id = term()",
+								"Request = term()",
+								"Timeout = int()>0 | infinity",
+								"Result = Reply | {error,Error}",
+								"Reply = term()",
+								"Error = bad_module | {'EXIT',Reason} | term()",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"Handler",
+										"EventMgrRef"
+									],
+									"seealso": {
+										"marker": "#Module:handle_call/2",
+										"c": "Module:handle_call/2"
+									}
+								},
+								{
+									"c": [
+										"EventMgrRef",
+										"Handler"
+									],
+									"seealso": {
+										"marker": "#add_handler/3",
+										"c": "add_handler/3"
+									}
+								},
+								{
+									"c": [
+										"Request",
+										"Module:handle_call/2"
+									]
+								},
+								{
+									"c": [
+										"Timeout",
+										"infinity"
+									]
+								},
+								{
+									"c": [
+										"Reply",
+										"Module:handle_call/2",
+										"{error,bad_module}",
+										"Reason",
+										"Term",
+										"{error,{'EXIT',Reason}}",
+										"{error,Term}"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "delete_handler(EventMgrRef, Handler, Args) -> Result"
+						},
+						"fsummary": "Delete an event handler from a generic event manager.",
+						"type": {
+							"v": [
+								"EventMgrRef = Name | {Name,Node} | {global,GlobalName}\t| {via,Module,ViaName} | pid()",
+								"Name = Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Handler = Module | {Module,Id}",
+								"Module = atom()",
+								"Id = term()",
+								"Args = term()",
+								"Result = term() | {error,module_not_found} | {'EXIT',Reason}",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "EventMgrRef",
+									"seealso": {
+										"marker": "#Module:terminate/2",
+										"c": "Module:terminate/2"
+									}
+								},
+								{
+									"c": [
+										"EventMgrRef",
+										"Handler"
+									],
+									"seealso": {
+										"marker": "#add_handler/3",
+										"c": "add_handler/3"
+									}
+								},
+								{
+									"c": [
+										"Args",
+										"Module:terminate/2"
+									]
+								},
+								{
+									"c": [
+										"Module:terminate/2",
+										"{error,module_not_found}",
+										"Reason",
+										"{'EXIT',Reason}"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "notify(EventMgrRef, Event) -> ok"
+							},
+							{
+								"since": "",
+								"$t": "sync_notify(EventMgrRef, Event) -> ok"
+							}
+						],
+						"fsummary": "Notify an event manager about an event.",
+						"type": {
+							"v": [
+								"EventMgrRef = Name | {Name,Node} | {global,GlobalName}\t| {via,Module,ViaName} | pid()",
+								"Name = Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Event = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "EventMgrRef",
+									"seealso": {
+										"marker": "#Module:handle_event/2",
+										"c": "Module:handle_event/2"
+									}
+								},
+								{
+									"c": [
+										"notify/2",
+										"sync_notify/2",
+										"ok"
+									]
+								},
+								{
+									"c": "EventMgrRef",
+									"seealso": {
+										"marker": "#add_handler/3",
+										"c": "add_handler/3"
+									}
+								},
+								{
+									"c": "Event",
+									"seealso": {
+										"marker": "#Module:handle_event/2",
+										"c": "Module:handle_event/2"
+									}
+								},
+								{
+									"c": [
+										"notify/1",
+										"Name"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "start() -> Result"
+							},
+							{
+								"since": "",
+								"$t": "start(EventMgrName | Options) -> Result"
+							},
+							{
+								"since": "OTP 20.0",
+								"$t": "start(EventMgrName, Options) -> Result"
+							}
+						],
+						"fsummary": "Create a stand-alone event manager process.",
+						"type": {
+							"v": [
+								"EventMgrName = {local,Name} | {global,GlobalName} | {via,Module,ViaName}",
+								"Name = atom()",
+								"GlobalName = ViaName = term()",
+								"Options = [Option]",
+								"Option = {debug,Dbgs} | {timeout,Time} | {hibernate_after,HibernateAfterTimeout} | {spawn_opt,SOpts}",
+								"Dbgs = [Dbg]",
+								"Dbg = trace | log | statistics | {log_to_file,FileName} | {install,{Func,FuncState}}",
+								"SOpts = [term()]",
+								"Result = {ok,Pid} | {error,{already_started,Pid}}",
+								"Pid = pid()"
+							]
+						},
+						"desc": {
+							"p": [
+								"Creates a stand-alone event manager process, that is, an event manager that is not part of a supervision tree and thus has no supervisor.",
+								{
+									"seealso": {
+										"marker": "#start_link/0",
+										"c": "start_link/0,1"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "start_link() -> Result"
+							},
+							{
+								"since": "",
+								"$t": "start_link(EventMgrName | Options) -> Result"
+							},
+							{
+								"since": "OTP 20.0",
+								"$t": "start_link(EventMgrName, Options) -> Result"
+							}
+						],
+						"fsummary": "Create a generic event manager process in a supervision tree.",
+						"type": {
+							"v": [
+								"EventMgrName = {local,Name} | {global,GlobalName} | {via,Module,ViaName}",
+								"Name = atom()",
+								"GlobalName = ViaName = term()",
+								"Options = [Option]",
+								"Option = {debug,Dbgs} | {timeout,Time} | {hibernate_after,HibernateAfterTimeout} | {spawn_opt,SOpts}",
+								"Dbgs = [Dbg]",
+								"Dbg = trace | log | statistics | {log_to_file,FileName} | {install,{Func,FuncState}}",
+								"SOpts = [term()]",
+								"Result = {ok,Pid} | {error,{already_started,Pid}}",
+								"Pid = pid()"
+							]
+						},
+						"desc": {
+							"p": [
+								"Creates an event manager process as part of a supervision tree. The function is to be called, directly or indirectly, by the supervisor. For example, it ensures that the event manager is linked to the supervisor.",
+								{
+									"c": [
+										"{ok,Pid}",
+										"Pid",
+										"EventMgrName",
+										"{error,{already_started,Pid}}",
+										"Pid"
+									]
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"c": [
+												"EventMgrName={local,Name}",
+												"Name",
+												"register/2"
+											]
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"EventMgrName={global,GlobalName}",
+												"GlobalName"
+											],
+											"seealso": {
+												"marker": "kernel:global#register_name/2",
+												"c": "global:register_name/2"
+											}
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"EventMgrName={via,Module,ViaName}",
+												"Module",
+												"Module",
+												"register_name/2",
+												"unregister_name/1",
+												"whereis_name/1",
+												"send/2",
+												"{via,global,GlobalName}"
+											],
+											"seealso": {
+												"marker": "kernel:global",
+												"c": "global"
+											}
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"{hibernate_after,HibernateAfterTimeout}",
+												"gen_event",
+												"HibernateAfterTimeout"
+											],
+											"seealso": {
+												"marker": "proc_lib#hibernate/3",
+												"c": "proc_lib:hibernate/3"
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "stop(EventMgrRef) -> ok"
+							},
+							{
+								"since": "OTP 18.0",
+								"$t": "stop(EventMgrRef, Reason, Timeout) -> ok"
+							}
+						],
+						"fsummary": "Terminate a generic event manager.",
+						"type": {
+							"v": [
+								"EventMgrRef = Name | {Name,Node} | {global,GlobalName}\t| {via,Module,ViaName} | pid()",
+								"Name = Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Reason = term()",
+								"Timeout = int()>0 | infinity"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"EventMgrRef",
+										"Reason",
+										"gen_event"
+									],
+									"seealso": {
+										"marker": "#Module:terminate/2",
+										"c": "Module:terminate(stop,...)"
+									}
+								},
+								{
+									"c": [
+										"ok",
+										"normal",
+										"shutdown",
+										"{shutdown,Term}",
+										"Reason",
+										"normal"
+									],
+									"seealso": {
+										"marker": "kernel:logger",
+										"c": "logger(3)"
+									}
+								},
+								{
+									"c": [
+										"Timeout",
+										"infinity",
+										"infinity",
+										"timeout"
+									]
+								},
+								{
+									"c": "noproc"
+								},
+								{
+									"c": "EventMgrRef",
+									"seealso": {
+										"marker": "#add_handler/3",
+										"c": "add_handler/3"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "swap_handler(EventMgrRef, {Handler1,Args1}, {Handler2,Args2}) -> Result"
+						},
+						"fsummary": "Replace an event handler in a generic event manager.",
+						"type": {
+							"v": [
+								"EventMgrRef = Name | {Name,Node} | {global,GlobalName}\t| {via,Module,ViaName} | pid()",
+								"Name = Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Handler1 = Handler2 = Module | {Module,Id}",
+								"Module = atom()",
+								"Id = term()",
+								"Args1 = Args2 = term()",
+								"Result = ok | {error,Error}",
+								"Error = {'EXIT',Reason} | term()",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "EventMgrRef"
+								},
+								{
+									"seealso": {
+										"marker": "#add_handler/3",
+										"c": "add_handler/3"
+									}
+								},
+								{
+									"c": [
+										"Handler1",
+										"Module1:terminate(Args1, ...)",
+										"Module1",
+										"Handler1"
+									]
+								},
+								{
+									"c": [
+										"Handler2",
+										"Module2:init({Args2,Term})",
+										"Module2",
+										"Handler2",
+										"Term",
+										"Module1:terminate/2",
+										"Handler1",
+										"Handler2"
+									]
+								},
+								{
+									"c": [
+										"Term=error",
+										"Module1:terminate/2",
+										"Reason",
+										"Term={'EXIT',Reason}",
+										"Module2:init/1"
+									]
+								},
+								{
+									"c": [
+										"Handler1",
+										"Pid",
+										"Handler2",
+										"Pid"
+									]
+								},
+								{
+									"c": [
+										"Module2:init/1",
+										"ok",
+										"Module2:init/1",
+										"Reason",
+										"Term",
+										"{error,{'EXIT',Reason}}",
+										"{error,Term}"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "swap_sup_handler(EventMgrRef, {Handler1,Args1}, {Handler2,Args2}) -> Result"
+						},
+						"fsummary": "Replace an event handler in a generic event manager.",
+						"type": {
+							"v": [
+								"EventMgrRef = Name | {Name,Node} | {global,GlobalName}\t| {via,Module,ViaName} | pid()",
+								"Name = Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Handler1 = Handler 2 = Module | {Module,Id}",
+								"Module = atom()",
+								"Id = term()",
+								"Args1 = Args2 = term()",
+								"Result = ok | {error,Error}",
+								"Error = {'EXIT',Reason} | term()",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"EventMgrRef",
+										"swap_handler/3",
+										"Handler2"
+									]
+								},
+								{
+									"seealso": {
+										"marker": "#swap_handler/3",
+										"c": "swap_handler/3"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "which_handlers(EventMgrRef) -> [Handler]"
+						},
+						"fsummary": "Return all event handlers installed in a generic event manager.",
+						"type": {
+							"v": [
+								"EventMgrRef = Name | {Name,Node} | {global,GlobalName}\t| {via,Module,ViaName} | pid()",
+								"Name = Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Handler = Module | {Module,Id}",
+								"Module = atom()",
+								"Id = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "EventMgrRef"
+								},
+								{
+									"c": [
+										"EventMgrRef",
+										"Handler"
+									],
+									"seealso": {
+										"marker": "#add_handler/3",
+										"c": "add_handler/3"
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			{
+				"func": [
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:code_change(OldVsn, State, Extra) -> {ok, NewState}"
+						},
+						"fsummary": "Update the internal state during upgrade/downgrade.",
+						"type": {
+							"v": [
+								"OldVsn = Vsn | {down, Vsn}",
+								"Vsn = term()",
+								"State = NewState = term()",
+								"Extra = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": [
+										"Change={advanced,Extra}",
+										".appup",
+										"code_change/3",
+										"undef"
+									]
+								}
+							},
+							"p": [
+								{
+									"c": [
+										"{update,Module,Change,...}",
+										"Change={advanced,Extra}",
+										".appup"
+									],
+									"seealso": {
+										"marker": "doc/design_principles:users_guide",
+										"$t": "OTP Design Principles"
+									}
+								},
+								{
+									"c": [
+										"OldVsn",
+										"Vsn",
+										"OldVsn",
+										"{down,Vsn}",
+										"Vsn",
+										"vsn",
+										"Module"
+									]
+								},
+								{
+									"c": "State"
+								},
+								{
+									"c": [
+										"Extra",
+										"{advanced,Extra}"
+									]
+								},
+								"The function is to return the updated internal state."
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "OTP R14B",
+							"$t": "Module:format_status(Opt, [PDict, State]) -> Status"
+						},
+						"fsummary": "Optional function for providing a term describing the current event handler state.",
+						"type": {
+							"v": [
+								"Opt = normal | terminate",
+								"PDict = [{Key, Value}]",
+								"State = term()",
+								"Status = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": "gen_event"
+								}
+							},
+							"p": [
+								{
+									"c": "gen_event"
+								},
+								{
+									"c": [
+										"sys:get_status/1,2",
+										"format_status/2"
+									]
+								},
+								{
+									"c": [
+										"PDict",
+										"gen_event"
+									]
+								},
+								{
+									"c": "State"
+								},
+								{
+									"c": [
+										"Status",
+										"Status",
+										"gen_event",
+										"Status"
+									]
+								},
+								"One use for this function is to return compact alternative state representations to avoid that large state terms are printed in log files."
+							],
+							"list": [
+								{
+									"type": "bulleted",
+									"item": [
+										{
+											"seealso": {
+												"marker": "sys#get_status/1",
+												"c": "sys:get_status/1,2"
+											},
+											"c": [
+												"gen_event",
+												"Opt",
+												"normal"
+											]
+										},
+										{
+											"c": [
+												"gen_event",
+												"Opt",
+												"terminate"
+											]
+										}
+									]
+								},
+								{
+									"type": "bulleted",
+									"item": [
+										{
+											"p": {
+												"c": [
+													"sys:get_status/1,2",
+													"gen_event",
+													"Status"
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													"gen_event",
+													"Status"
+												]
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:handle_call(Request, State) -> Result"
+						},
+						"fsummary": "Handle a synchronous request.",
+						"type": {
+							"v": [
+								"Request = term()",
+								"State = term()",
+								"Result = {ok,Reply,NewState} | {ok,Reply,NewState,hibernate}",
+								"| {swap_handler,Reply,Args1,NewState,Handler2,Args2}",
+								"| {remove_handler, Reply}",
+								"Reply = term()",
+								"NewState = term()",
+								"Args1 = Args2 = term()",
+								"Handler2 = Module2 | {Module2,Id}",
+								"Module2 = atom()",
+								"Id = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"seealso": {
+										"marker": "#call/3",
+										"c": "call/3,4"
+									}
+								},
+								{
+									"c": [
+										"Request",
+										"Request",
+										"call/3,4"
+									]
+								},
+								{
+									"c": "State"
+								},
+								{
+									"seealso": {
+										"marker": "#Module:handle_event/2",
+										"c": "Module:handle_event/2"
+									},
+									"c": [
+										"Reply",
+										"call/3,4"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:handle_event(Event, State) -> Result"
+						},
+						"fsummary": "Handle an event.",
+						"type": {
+							"v": [
+								"Event = term()",
+								"State = term()",
+								"Result = {ok,NewState} | {ok,NewState,hibernate}",
+								"| {swap_handler,Args1,NewState,Handler2,Args2} | remove_handler",
+								"NewState = term()",
+								"Args1 = Args2 = term()",
+								"Handler2 = Module2 | {Module2,Id}",
+								"Module2 = atom()",
+								"Id = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"seealso": [
+										{
+											"marker": "#notify/2",
+											"c": "notify/2"
+										},
+										{
+											"marker": "#sync_notify/2",
+											"c": "sync_notify/2"
+										}
+									]
+								},
+								{
+									"c": [
+										"Event",
+										"Event",
+										"notify/2",
+										"sync_notify/2"
+									]
+								},
+								{
+									"c": "State"
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"c": [
+												"{ok,NewState}",
+												"{ok,NewState,hibernate}",
+												"NewState"
+											]
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"{ok,NewState,hibernate}",
+												"{ok,NewState,hibernate}"
+											],
+											"seealso": {
+												"marker": "proc_lib#hibernate/3",
+												"c": "proc_lib:hibernate/3"
+											}
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"{swap_handler,Args1,NewState,Handler2,Args2}",
+												"Handler2",
+												"Module:terminate(Args1,NewState)",
+												"Module2:init({Args2,Term})",
+												"Term",
+												"Module:terminate/2"
+											],
+											"seealso": {
+												"marker": "#swap_handler/3",
+												"c": "swap_handler/3"
+											}
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"remove_handler",
+												"Module:terminate(remove_handler,State)"
+											]
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:handle_info(Info, State) -> Result"
+						},
+						"fsummary": "Handle an incoming message.",
+						"type": {
+							"v": [
+								"Info = term()",
+								"State = term()",
+								"Result = {ok,NewState} | {ok,NewState,hibernate}",
+								"| {swap_handler,Args1,NewState,Handler2,Args2} | remove_handler",
+								"NewState = term()",
+								"Args1 = Args2 = term()",
+								"Handler2 = Module2 | {Module2,Id}",
+								"Module2 = atom()",
+								"Id = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": [
+										"gen_event",
+										"Info",
+										"{ok, State}"
+									]
+								}
+							},
+							"p": [
+								"This function is called for each installed event handler when an event manager receives any other message than an event or a synchronous request (or a system message).",
+								{
+									"c": "Info"
+								},
+								{
+									"c": "State",
+									"seealso": {
+										"marker": "#Module:handle_event/2",
+										"c": "Module:handle_event/2"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:init(InitArgs) -> {ok,State} | {ok,State,hibernate} | {error,Reason}"
+						},
+						"fsummary": "Initialize an event handler.",
+						"type": {
+							"v": [
+								"InitArgs = Args | {Args,Term}",
+								"Args = Term = term()",
+								"State = term()",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								"Whenever a new event handler is added to an event manager, this function is called to initialize the event handler.",
+								{
+									"seealso": [
+										{
+											"marker": "#add_handler/3",
+											"c": "add_handler/3"
+										},
+										{
+											"marker": "#add_sup_handler/3",
+											"c": "add_sup_handler/3"
+										}
+									],
+									"c": [
+										"InitArgs",
+										"Args"
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#swap_handler/3",
+											"c": "swap_handler/3"
+										},
+										{
+											"marker": "#swap_sup_handler/3",
+											"c": "swap_sup_handler/3"
+										},
+										{
+											"marker": "#swap_handler/3",
+											"c": "swap_handler/3"
+										}
+									],
+									"c": [
+										"swap",
+										"InitArgs",
+										"{Args,Term}",
+										"Args",
+										"Term"
+									]
+								},
+								{
+									"c": [
+										"{ok,State}",
+										"{ok,State,hibernate}",
+										"State"
+									]
+								},
+								{
+									"c": "{ok,State,hibernate}",
+									"seealso": {
+										"marker": "proc_lib#hibernate/3",
+										"c": "proc_lib:hibernate/3"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:terminate(Arg, State) -> term()"
+						},
+						"fsummary": "Clean up before deletion.",
+						"type": {
+							"v": [
+								"Arg = Args | {stop,Reason} | stop | remove_handler",
+								"| {error,{'EXIT',Reason}} | {error,Term}",
+								"Args = Reason = Term = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": "gen_event"
+								}
+							},
+							"p": [
+								{
+									"seealso": {
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									}
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#delete_handler/3",
+											"c": "delete_handler/3"
+										},
+										{
+											"marker": "#swap_handler/3",
+											"c": "swap_handler/3"
+										},
+										{
+											"marker": "#swap_sup_handler/3",
+											"c": "swap_sup_handler/3"
+										}
+									],
+									"c": [
+										"Arg",
+										"Args"
+									]
+								},
+								{
+									"c": [
+										"Arg={stop,Reason}",
+										"Reason"
+									]
+								},
+								{
+									"c": "Arg=stop"
+								},
+								{
+									"em": "not",
+									"c": "'EXIT'"
+								},
+								{
+									"c": [
+										"Arg=remove_handler",
+										"remove_handler",
+										"{remove_handler,Reply}"
+									]
+								},
+								{
+									"c": [
+										"Arg={error,Term}",
+										"Term",
+										"Arg={error,{'EXIT',Reason}}"
+									]
+								},
+								{
+									"c": "State"
+								},
+								{
+									"c": [
+										"gen_event:delete_handler/3",
+										"init"
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		],
+		"section": [
+			{
+				"title": "Callback Functions",
+				"p": {
+					"c": "gen_event"
+				}
+			},
+			{
+				"title": "See Also",
+				"p": {
+					"seealso": [
+						{
+							"marker": "supervisor",
+							"c": "supervisor(3)"
+						},
+						{
+							"marker": "sys",
+							"c": "sys(3)"
+						}
+					]
+				}
+			}
+		]
+	}
+}

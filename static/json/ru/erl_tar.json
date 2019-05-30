@@ -1,0 +1,926 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2003",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "erl_tar",
+			"prepared": "Bjorn Gustavsson",
+			"responsible": "Bjorn Gustavsson",
+			"docno": "1",
+			"approved": "Kenneth Lundin",
+			"checked": {},
+			"date": "2003-01-21",
+			"rev": "A",
+			"file": "erl_tar.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "erl_tar"
+		},
+		"modulesummary": "Unix 'tar' utility for reading and writing tar archives.",
+		"description": {
+			"p": [
+				{
+					"c": "erl_tar"
+				},
+				{
+					"c": [
+						".tar",
+						".tar"
+					]
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#create/2",
+							"c": "create/2"
+						},
+						{
+							"marker": "#create/3",
+							"c": "create/3"
+						}
+					]
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#open/2",
+							"c": "open/2"
+						},
+						{
+							"marker": "#add/3",
+							"c": "add/3,4"
+						},
+						{
+							"marker": "#close/1",
+							"c": "close/1"
+						}
+					]
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#extract/1",
+							"c": "extract/1"
+						},
+						{
+							"marker": "#extract/2",
+							"c": "extract/2"
+						}
+					]
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#table/1",
+							"c": "table/1"
+						},
+						{
+							"marker": "#table/2",
+							"c": "table/2"
+						},
+						{
+							"marker": "#t/1",
+							"c": "t/1"
+						},
+						{
+							"marker": "#tt/1",
+							"c": "tt/1"
+						}
+					]
+				},
+				{
+					"seealso": {
+						"marker": "#format_error/1",
+						"c": "format_error/1"
+					}
+				}
+			]
+		},
+		"section": [
+			{
+				"title": "Unicode Support",
+				"p": [
+					{
+						"seealso": {
+							"marker": "kernel:file#native_name_encoding/0",
+							"c": "file:native_name_encoding/0"
+						},
+						"c": "utf8"
+					},
+					{
+						"seealso": {
+							"marker": "kernel:file#native_name_encoding/0",
+							"c": "file:native_name_encoding/0"
+						},
+						"c": "latin1"
+					},
+					"Unicode metadata stored in PAX headers is preserved"
+				]
+			},
+			{
+				"title": "Other Storage Media",
+				"p": [
+					{
+						"seealso": [
+							{
+								"marker": "ftp:ftp",
+								"c": "ftp"
+							},
+							{
+								"marker": "kernel:file",
+								"c": "file"
+							},
+							{
+								"marker": "#init/3",
+								"c": "init/3"
+							}
+						]
+					},
+					{
+						"seealso": {
+							"marker": "ssh:ssh_sftp#open_tar/3",
+							"c": "ssh_sftp:open_tar/3"
+						}
+					}
+				]
+			},
+			{
+				"title": "Limitations",
+				"list": {
+					"type": "bulleted",
+					"item": [
+						{
+							"p": {
+								"c": [
+									"erl_tar",
+									"erl_tar",
+									"tar"
+								]
+							}
+						},
+						{
+							"p": "Like the above, if you must remain USTAR compatible, you must also ensure than paths for symbolic/hard links are no more than 100 bytes, otherwise PAX headers will be used."
+						}
+					]
+				}
+			}
+		],
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"since": "",
+						"$t": "add(TarDescriptor, Filename, Options) -> RetValue"
+					},
+					"fsummary": "Add a file to an open tar file.",
+					"type": {
+						"v": [
+							"TarDescriptor = term()",
+							"FilenameOrBin = filename()|binary()",
+							"NameInArchive = filename()",
+							"Filename = filename()|{NameInArchive,FilenameOrBin}",
+							"Options = [Option]",
+							"Option = dereference|verbose|{chunks,ChunkSize}",
+							"|{atime,non_neg_integer()}|{mtime,non_neg_integer()}",
+							"|{ctime,non_neg_integer()}|{uid,non_neg_integer()}",
+							"|{gid,non_neg_integer()}",
+							"ChunkSize = positive_integer()",
+							"RetValue = ok|{error,{Filename,Reason}}",
+							"Reason = term()"
+						]
+					},
+					"desc": {
+						"p": [
+							{
+								"seealso": {
+									"marker": "#open/2",
+									"c": "open/1"
+								}
+							},
+							{
+								"c": "NameInArchive"
+							},
+							"Options:"
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "dereference"
+								},
+								{
+									"c": "verbose"
+								},
+								{
+									"c": "{chunks,ChunkSize}"
+								},
+								{
+									"c": "{atime,non_neg_integer()}"
+								},
+								{
+									"c": "{mtime,non_neg_integer()}"
+								},
+								{
+									"c": "{ctime,non_neg_integer()}"
+								},
+								{
+									"c": "{uid,non_neg_integer()}"
+								},
+								{
+									"c": "{gid,non_neg_integer()}"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": "dereference"
+									}
+								},
+								{
+									"p": "Prints an informational message about the added file."
+								},
+								{
+									"p": {
+										"seealso": {
+											"marker": "ssh:ssh_sftp#open_tar/3",
+											"c": "ssh_sftp:open_tar/3"
+										}
+									}
+								},
+								{
+									"p": {
+										"seealso": [
+											{
+												"marker": "erts:time_correction#POSIX_Time",
+												"$t": "POSIX time"
+											},
+											{
+												"marker": "kernel:file#read_file_info/1",
+												"c": "file:read_file_info/1"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"seealso": [
+											{
+												"marker": "erts:time_correction#POSIX_Time",
+												"$t": "POSIX time"
+											},
+											{
+												"marker": "kernel:file#read_file_info/1",
+												"c": "file:read_file_info/1"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"seealso": [
+											{
+												"marker": "erts:time_correction#POSIX_Time",
+												"$t": "POSIX time"
+											},
+											{
+												"marker": "kernel:file#read_file_info/1",
+												"c": "file:read_file_info/1"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"seealso": {
+											"marker": "kernel:file#read_file_info/1",
+											"c": "file:read_file_info/1"
+										}
+									}
+								},
+								{
+									"p": {
+										"seealso": {
+											"marker": "kernel:file#read_file_info/1",
+											"c": "file:read_file_info/1"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "add(TarDescriptor, FilenameOrBin, NameInArchive, Options) -> RetValue"
+					},
+					"fsummary": "Add a file to an open tar file.",
+					"type": {
+						"v": [
+							"TarDescriptor = term()",
+							"FilenameOrBin = filename()|binary()",
+							"Filename = filename()",
+							"NameInArchive = filename()",
+							"Options = [Option]",
+							"Option = dereference|verbose",
+							"RetValue = ok|{error,{Filename,Reason}}",
+							"Reason = term()"
+						]
+					},
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "#open/2",
+									"c": "open/2"
+								},
+								{
+									"marker": "#add/3",
+									"c": "add/3"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "close(TarDescriptor)"
+					},
+					"fsummary": "Close an open tar file.",
+					"type": {
+						"v": "TarDescriptor = term()"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#open/2",
+								"c": "open/2"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "create(Name, FileList) ->RetValue"
+					},
+					"fsummary": "Create a tar archive.",
+					"type": {
+						"v": [
+							"Name = filename()",
+							"FileList = [Filename|{NameInArchive, FilenameOrBin}]",
+							"FilenameOrBin = filename()|binary()",
+							"Filename = filename()",
+							"NameInArchive = filename()",
+							"RetValue = ok|{error,{Name,Reason}}",
+							"Reason = term()"
+						]
+					},
+					"desc": {
+						"p": {
+							"c": "FileList"
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "create(Name, FileList, OptionList)"
+					},
+					"fsummary": "Create a tar archive with options.",
+					"type": {
+						"v": [
+							"Name = filename()",
+							"FileList = [Filename|{NameInArchive, FilenameOrBin}]",
+							"FilenameOrBin = filename()|binary()",
+							"Filename = filename()",
+							"NameInArchive = filename()",
+							"OptionList = [Option]",
+							"Option = compressed|cooked|dereference|verbose",
+							"RetValue = ok|{error,{Name,Reason}}",
+							"Reason = term()"
+						]
+					},
+					"desc": {
+						"p": [
+							{
+								"c": "FileList"
+							},
+							{
+								"c": "OptionList"
+							}
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "compressed"
+								},
+								{
+									"c": "cooked"
+								},
+								{
+									"c": "dereference"
+								},
+								{
+									"c": "verbose"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": [
+											"gzip",
+											".tar.gz",
+											".tgz"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"open/2",
+											"raw",
+											"cooked",
+											"raw"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": "dereference"
+									}
+								},
+								{
+									"p": "Prints an informational message about each added file."
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "extract(Name) -> RetValue"
+					},
+					"fsummary": "Extract all files from a tar file.",
+					"type": {
+						"v": [
+							"Name = filename() | {binary,binary()} | {file,Fd}",
+							"Fd = file_descriptor()",
+							"RetValue = ok|{error,{Name,Reason}}",
+							"Reason = term()"
+						]
+					},
+					"desc": {
+						"p": [
+							"Extracts all files from a tar archive.",
+							{
+								"c": [
+									"Name",
+									"{binary,Binary}"
+								]
+							},
+							{
+								"c": [
+									"Name",
+									"{file,Fd}",
+									"Fd",
+									"file:open/2"
+								]
+							},
+							{
+								"c": "Name"
+							}
+						],
+						"note": {
+							"p": "Leading slashes in tar member names will be removed before	writing the file. That is, absolute paths will be turned into	relative paths. There will be an info message written to the error	logger when paths are changed in this way."
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "extract(Name, OptionList)"
+					},
+					"fsummary": "Extract files from a tar file.",
+					"type": {
+						"v": [
+							"Name = filename() | {binary,binary()} | {file,Fd}",
+							"Fd = file_descriptor()",
+							"OptionList = [Option]",
+							"Option = {cwd,Cwd}|{files,FileList}|keep_old_files|verbose|memory",
+							"Cwd = [dirname()]",
+							"FileList = [filename()]",
+							"RetValue = ok|MemoryRetValue|{error,{Name,Reason}}",
+							"MemoryRetValue = {ok, [{NameInArchive,binary()}]}",
+							"NameInArchive = filename()",
+							"Reason = term()"
+						]
+					},
+					"desc": {
+						"p": [
+							"Extracts files from a tar archive.",
+							{
+								"c": [
+									"Name",
+									"{binary,Binary}"
+								]
+							},
+							{
+								"c": [
+									"Name",
+									"{file,Fd}",
+									"Fd",
+									"file:open/2"
+								]
+							},
+							{
+								"c": "Name"
+							},
+							"The following options modify the defaults for the extraction as follows:"
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "{cwd,Cwd}"
+								},
+								{
+									"c": "{files,FileList}"
+								},
+								{
+									"c": "compressed"
+								},
+								{
+									"c": "cooked"
+								},
+								{
+									"c": "memory"
+								},
+								{
+									"c": "keep_old_files"
+								},
+								{
+									"c": "verbose"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": "Cwd"
+									}
+								},
+								{
+									"p": {
+										"c": "FileList"
+									}
+								},
+								{
+									"p": "With this option, the file is uncompressed while extracting. If the tar file is not compressed, this option is ignored."
+								},
+								{
+									"p": {
+										"c": [
+											"open/2",
+											"raw",
+											"cooked",
+											"raw"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{Filename, Binary}",
+											"Binary",
+											"Filename"
+										]
+									}
+								},
+								{
+									"p": "By default, all existing files with the same name as files in the tar file are overwritten. With this option, existing files are not overwriten."
+								},
+								{
+									"p": "Prints an informational message for each extracted file."
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "format_error(Reason) -> string()"
+					},
+					"fsummary": "Convert error term to a readable string.",
+					"type": {
+						"v": "Reason = term()"
+					},
+					"desc": {
+						"p": "Converts an error reason term to a human-readable error message string."
+					}
+				},
+				{
+					"name": {
+						"since": "OTP 17.4",
+						"$t": "init(UserPrivate, AccessMode, Fun) -> {ok,TarDescriptor} | {error,Reason}"
+					},
+					"fsummary": {
+						"c": "TarDescriptor"
+					},
+					"type": {
+						"v": [
+							"UserPrivate = term()",
+							"AccessMode = [write] | [read]",
+							"Fun when AccessMode is [write] = fun(write, {UserPrivate,DataToWrite})->...; (position,{UserPrivate,Position})->...; (close, UserPrivate)->... end",
+							"Fun when AccessMode is [read] = fun(read2, {UserPrivate,Size})->...; (position,{UserPrivate,Position})->...; (close, UserPrivate)->... end",
+							"TarDescriptor = term()",
+							"Reason = term()"
+						]
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"Fun",
+									"add/3",
+									"add/4",
+									"close/1"
+								]
+							},
+							{
+								"c": [
+									"Fun",
+									"Fun",
+									"Fun(Op, {UserPrivate,Parameters...})",
+									"Op",
+									"UserPrivate",
+									"init/1",
+									"Parameters..."
+								]
+							},
+							{
+								"c": [
+									"UserPrivate",
+									"Fun"
+								]
+							},
+							"The following are the fun clauses parameter lists:",
+							{
+								"em": "Example:"
+							},
+							{
+								"c": "Fun",
+								"seealso": {
+									"marker": "kernel:file",
+									"c": "file"
+								}
+							},
+							{
+								"c": [
+									"Fd",
+									"init/3"
+								]
+							},
+							{
+								"c": "TarDesc"
+							},
+							{
+								"c": [
+									"erl_tar",
+									"Data",
+									"ExampleFun(write, {UserPrivate,Data})"
+								]
+							}
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "(write, {UserPrivate,DataToWrite})"
+								},
+								{
+									"c": "(close, UserPrivate)"
+								},
+								{
+									"c": "(read2, {UserPrivate,Size})"
+								},
+								{
+									"c": "(position,{UserPrivate,Position})"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": [
+											"DataToWrite",
+											"UserPrivate"
+										]
+									}
+								},
+								{
+									"p": "Closes the access."
+								},
+								{
+									"p": {
+										"c": [
+											"UserPrivate",
+											"Size"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": "UserPrivate",
+										"seealso": {
+											"marker": "kernel:file#position-2",
+											"c": "file:position/2"
+										}
+									}
+								}
+							]
+						},
+						"code": [
+							{
+								"type": "none",
+								"$t": "ExampleFun = fun(write, {Fd,Data}) -> file:write(Fd, Data); (position, {Fd,Pos}) -> file:position(Fd, Pos); (read2, {Fd,Size}) -> file:read(Fd, Size); (close, Fd) -> file:close(Fd) end"
+							},
+							"{ok,Fd} = file:open(Name, ...).{ok,TarDesc} = erl_tar:init(Fd, [write], ExampleFun),",
+							"erl_tar:add(TarDesc, SomeValueIwantToAdd, FileNameInTarFile),...,erl_tar:close(TarDesc)"
+						],
+						"note": {
+							"p": {
+								"c": "file",
+								"seealso": {
+									"marker": "#open/2",
+									"c": "open/2"
+								}
+							}
+						},
+						"warning": {
+							"p": {
+								"c": "TarDescriptor"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "open(Name, OpenModeList) -> RetValue"
+					},
+					"fsummary": "Open a tar file for writing.",
+					"type": {
+						"v": [
+							"Name = filename()",
+							"OpenModeList = [OpenMode]",
+							"Mode = write|compressed|cooked",
+							"RetValue = {ok,TarDescriptor}|{error,{Name,Reason}}",
+							"TarDescriptor = term()",
+							"Reason = term()"
+						]
+					},
+					"desc": {
+						"p": [
+							"Creates a tar file for writing (any existing file with the same name is truncated).",
+							{
+								"c": [
+									".tar",
+									".tar"
+								]
+							},
+							{
+								"c": [
+									"write",
+									"OpenModeList"
+								]
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#add/3",
+										"c": "add/3,4"
+									},
+									{
+										"marker": "#close/1",
+										"c": "close/1"
+									}
+								]
+							}
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "compressed"
+								},
+								{
+									"c": "cooked"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": [
+											"gzip",
+											".tar.gz",
+											".tgz"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"raw",
+											"cooked",
+											"raw"
+										]
+									}
+								}
+							]
+						},
+						"warning": {
+							"p": {
+								"c": "TarDescriptor"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "table(Name) -> RetValue"
+					},
+					"fsummary": "Retrieve the name of all files in a tar file.",
+					"type": {
+						"v": [
+							"Name = filename()|{binary,binary()}|{file,file_descriptor()}",
+							"RetValue = {ok,[string()]}|{error,{Name,Reason}}",
+							"Reason = term()"
+						]
+					},
+					"desc": {
+						"p": {
+							"c": "Name"
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "table(Name, Options)"
+					},
+					"fsummary": "Retrieve name and information of all files in a tar file.",
+					"type": {
+						"v": "Name = filename()|{binary,binary()}|{file,file_descriptor()}"
+					},
+					"desc": {
+						"p": {
+							"c": "Name"
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "t(Name)"
+					},
+					"fsummary": "Print the name of each file in a tar file.",
+					"type": {
+						"v": "Name = filename()|{binary,binary()}|{file,file_descriptor()}"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"Name",
+								"tart"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "tt(Name)"
+					},
+					"fsummary": "Print name and information for each file in a tar file.",
+					"type": {
+						"v": "Name = filename()|{binary,binary()}|{file,file_descriptor()}"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"Name",
+								"tartv"
+							]
+						}
+					}
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,505 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2015",
+					"2016"
+				],
+				"holder": "Ericsson AB, All Rights Reserved"
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. The Initial Developer of the Original Code is Ericsson AB.",
+			"title": "erl_anno",
+			"prepared": "Hans Bolinder",
+			"responsible": "Kenneth Lundin",
+			"docno": "1",
+			"approved": {},
+			"checked": {},
+			"date": "2015-02-26",
+			"rev": "A",
+			"file": "erl_anno.xml"
+		},
+		"module": {
+			"since": "OTP 18.0",
+			"$t": "erl_anno"
+		},
+		"modulesummary": "Abstract datatype for the annotations of the Erlang Compiler.",
+		"description": {
+			"p": [
+				{
+					"marker": {
+						"id": "annotations"
+					},
+					"em": "annotations"
+				},
+				"The Erlang Token Scanner returns tokens with a subset of the following annotations, depending on the options:",
+				"From this, the following annotation is derived:",
+				"This module also supports the following annotations, which are used by various modules:",
+				{
+					"seealso": [
+						{
+							"marker": "erl_scan#column/1",
+							"c": "column()"
+						},
+						{
+							"marker": "erl_scan#end_location/1",
+							"c": "end_location()"
+						},
+						{
+							"marker": "erl_scan#line/1",
+							"c": "line()"
+						},
+						{
+							"marker": "erl_scan#location/1",
+							"c": "location()"
+						},
+						{
+							"marker": "erl_scan#text/1",
+							"c": "text()"
+						}
+					],
+					"c": "erl_scan"
+				},
+				{
+					"seealso": [
+						{
+							"marker": "erl_parse#anno_from_term/1",
+							"c": "anno_from_term()"
+						},
+						{
+							"marker": "erl_parse#anno_to_term/1",
+							"c": "anno_to_term()"
+						},
+						{
+							"marker": "erl_parse#fold_anno/3",
+							"c": "fold_anno()"
+						},
+						{
+							"marker": "erl_parse#map_anno/2",
+							"c": "map_anno()"
+						},
+						{
+							"marker": "erl_parse#mapfold_anno/3",
+							"c": "mapfold_anno()"
+						},
+						{
+							"marker": "erl_parse#new_anno/1",
+							"c": "new_anno()"
+						}
+					],
+					"c": "erl_parse"
+				}
+			],
+			"taglist": [
+				{
+					"tag": [
+						{
+							"c": "column"
+						},
+						{
+							"c": "location"
+						},
+						{
+							"c": "text"
+						}
+					],
+					"item": [
+						{
+							"p": "The column where the token begins."
+						},
+						{
+							"p": "The line and column where the token begins, or just the line if the column is unknown."
+						},
+						{
+							"p": "The token's text."
+						}
+					]
+				},
+				{
+					"tag": {
+						"c": "line"
+					},
+					"item": {
+						"p": "The line where the token begins."
+					}
+				},
+				{
+					"tag": [
+						{
+							"c": "file"
+						},
+						{
+							"c": "generated"
+						},
+						{
+							"c": "record"
+						}
+					],
+					"item": [
+						{
+							"p": "A filename."
+						},
+						{
+							"p": "A Boolean indicating if the abstract code is compiler-generated. The Erlang Compiler does not emit warnings for such code."
+						},
+						{
+							"p": {
+								"seealso": {
+									"marker": "dialyzer:dialyzer",
+									"$t": "Dialyzer"
+								}
+							}
+						}
+					]
+				}
+			]
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": "anno()",
+					"desc": {
+						"p": "A collection of annotations."
+					}
+				},
+				{
+					"name": {
+						"name": "anno_term"
+					},
+					"desc": {
+						"p": {
+							"c": "location()"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "column"
+					}
+				},
+				{
+					"name": {
+						"name": "line"
+					}
+				},
+				{
+					"name": {
+						"name": "location"
+					}
+				},
+				{
+					"name": {
+						"name": "text"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "column",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the column.",
+					"type": {
+						"name": "column"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "end_location",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the end location of the text.",
+					"type": {
+						"name": "location"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno",
+							"c": "undefined"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "file",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the filename.",
+					"type": {
+						"name": "filename"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno",
+							"c": "undefined"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "from_term",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return annotations given a term.",
+					"desc": {
+						"p": [
+							{
+								"anno": "Term"
+							},
+							{
+								"seealso": {
+									"marker": "#to_term/1",
+									"$t": "to_term()"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "generated",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the generated Boolean.",
+					"type": {
+						"name": "generated"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								"false"
+							],
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "is_anno",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Test for a collection of annotations.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								"false"
+							],
+							"anno": "Term"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "line",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the line.",
+					"type": {
+						"name": "line"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "location",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the location.",
+					"type": {
+						"name": "location"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "new",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Create a new collection of annotations.",
+					"type": {
+						"name": "location"
+					},
+					"desc": {
+						"p": "Creates a new collection of annotations given a location."
+					}
+				},
+				{
+					"name": {
+						"name": "set_file",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Modify the filename.",
+					"type": {
+						"name": "filename"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "set_generated",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Modify the generated marker.",
+					"type": {
+						"name": "generated"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "set_line",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Modify the line.",
+					"type": {
+						"name": "line"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "set_location",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Modify the location.",
+					"type": {
+						"name": "location"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "set_record",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Modify the record marker.",
+					"type": {
+						"name": "record"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "set_text",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Modify the text.",
+					"type": {
+						"name": "text"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "text",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the text.",
+					"type": {
+						"name": "text"
+					},
+					"desc": {
+						"p": {
+							"anno": "Anno",
+							"c": "undefined"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "to_term",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the term representing a collection of annotations.",
+					"desc": {
+						"p": [
+							{
+								"anno": "Anno"
+							},
+							{
+								"seealso": {
+									"marker": "#from_term/1",
+									"$t": "from_term()"
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		"section": {
+			"title": "See Also",
+			"p": {
+				"seealso": [
+					{
+						"marker": "erl_parse",
+						"c": "erl_parse(3)"
+					},
+					{
+						"marker": "erl_scan",
+						"c": "erl_scan(3)"
+					}
+				]
+			}
+		}
+	}
+}

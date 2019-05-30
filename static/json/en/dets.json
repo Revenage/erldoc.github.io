@@ -1,0 +1,2071 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2016"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "dets",
+			"prepared": "Claes Wikstrm",
+			"responsible": "Claes Wikstrm",
+			"docno": {},
+			"approved": {},
+			"checked": {},
+			"date": "2001-06-06",
+			"rev": "B",
+			"file": "dets.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "dets"
+		},
+		"modulesummary": "A disk-based term storage.",
+		"description": {
+			"p": [
+				{
+					"em": [
+						"objects",
+						"table"
+					]
+				},
+				"This module is used by the Mnesia application, and is provided \"as is\" for users who are interested in efficient storage of Erlang terms on disk only. Many applications only need to store some terms in a file. Mnesia adds transactions, queries, and distribution. The size of Dets files cannot exceed 2 GB. If larger tables are needed, table fragmentation in Mnesia can be used.",
+				"Three types of Dets tables exist:",
+				"Dets tables must be opened before they can be updated or read, and when finished they must be properly closed. If a table is not properly closed, Dets automatically repairs the table. This can take a substantial time if the table is large. A Dets table is closed when the process which opened the table terminates. If many Erlang processes (users) open the same Dets table, they share the table. The table is properly closed when all users have either terminated or closed the table. Dets tables are not properly closed if the Erlang runtime system terminates abnormally.",
+				{
+					"seealso": {
+						"marker": "ets",
+						"c": "ets(3)"
+					}
+				},
+				{
+					"c": [
+						"repair",
+						"force"
+					]
+				},
+				{
+					"c": [
+						"ordered_set",
+						"first",
+						"next"
+					]
+				},
+				{
+					"c": [
+						"{error, Reason}",
+						"badarg"
+					],
+					"seealso": [
+						{
+							"marker": "#first/1",
+							"c": "first/1"
+						},
+						{
+							"marker": "#next/2",
+							"c": "next/2"
+						}
+					]
+				}
+			],
+			"list": {
+				"type": "bulleted",
+				"item": [
+					{
+						"p": {
+							"c": "set"
+						}
+					},
+					{
+						"p": {
+							"c": "bag"
+						}
+					},
+					{
+						"p": {
+							"c": "duplicate_bag"
+						}
+					}
+				]
+			},
+			"note": {
+				"p": {
+					"c": "^C"
+				}
+			}
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "access"
+					}
+				},
+				{
+					"name": {
+						"name": "auto_save"
+					}
+				},
+				{
+					"name": {
+						"name": "bindings_cont"
+					},
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "#match/1",
+									"c": "match/1"
+								},
+								{
+									"marker": "#match/3",
+									"c": "match/3"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "cont"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#bchunk/2",
+								"c": "bchunk/2"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "keypos"
+					}
+				},
+				{
+					"name": {
+						"name": "match_spec"
+					},
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "erts:match_spec",
+									"$t": "Match Specification in Erlang"
+								},
+								{
+									"marker": "ms_transform",
+									"c": "ms_transform(3)"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "no_slots"
+					}
+				},
+				{
+					"name": {
+						"name": "object"
+					}
+				},
+				{
+					"name": {
+						"name": "object_cont"
+					},
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "#match_object/1",
+									"c": "match_object/1"
+								},
+								{
+									"marker": "#match_object/3",
+									"c": "match_object/3"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "pattern"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "ets#match/2",
+								"c": "ets:match/2"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "select_cont"
+					},
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "#select/1",
+									"c": "select/1"
+								},
+								{
+									"marker": "#select/3",
+									"c": "select/3"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "tab_name"
+					}
+				},
+				{
+					"name": {
+						"name": "type"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "all",
+						"arity": "0",
+						"since": ""
+					},
+					"fsummary": "Return a list of the names of all open Dets tables on this node.",
+					"desc": {
+						"p": "Returns a list of the names of all open tables on this node."
+					}
+				},
+				{
+					"name": {
+						"name": "bchunk",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Return a chunk of objects stored in a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"bchunk",
+									"format"
+								],
+								"seealso": {
+									"marker": "#init_table/3",
+									"c": "init_table/3"
+								}
+							},
+							{
+								"c": [
+									"safe_fixtable/2",
+									"bchunk/2"
+								]
+							},
+							{
+								"c": [
+									"bchunk/2",
+									"start"
+								]
+							},
+							{
+								"c": [
+									"bchunk/2",
+									{
+										"anno": [
+											"Continuation2",
+											"Data"
+										]
+									},
+									{
+										"anno": "Data"
+									},
+									{
+										"anno": "Continuation2"
+									},
+									"bchunk/2",
+									"bchunk/2"
+								]
+							},
+							{
+								"c": [
+									"bchunk/2",
+									"'$end_of_table'",
+									{
+										"anno": "Reason"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "close",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Close a Dets table.",
+					"desc": {
+						"p": [
+							"Closes a table. Only processes that have opened a table are allowed to close it.",
+							"All open tables must be closed before the system is stopped. If an attempt is made to open a table that is not properly closed, Dets automatically tries to repair it."
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "delete",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Delete all objects with a specified key from a Dets table.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Key"
+								},
+								{
+									"anno": "Name"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "delete_all_objects",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Delete all objects from a Dets table.",
+					"desc": {
+						"p": {
+							"c": [
+								"delete_all_objects(T)",
+								"match_delete(T, '_')"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "delete_object",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Delete a specified object from a Dets table.",
+					"desc": {
+						"p": {
+							"c": [
+								"bag",
+								"duplicate_bag"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "first",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the first key stored in a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Name"
+									},
+									"'$end_of_table'"
+								]
+							},
+							{
+								"c": "safe_fixtable/2",
+								"seealso": {
+									"marker": "#next/2",
+									"c": "next/2"
+								}
+							},
+							{
+								"c": "{error, Reason}"
+							},
+							{
+								"c": [
+									"first/1",
+									"next/2",
+									"'$end_of_table'"
+								],
+								"seealso": [
+									{
+										"marker": "#match/1",
+										"c": "match"
+									},
+									{
+										"marker": "#match_object/1",
+										"c": "match_object"
+									},
+									{
+										"marker": "#select/1",
+										"c": "select"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "foldl",
+							"arity": "3",
+							"since": ""
+						},
+						{
+							"name": "foldr",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": "Fold a function over a Dets table.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Function"
+								},
+								{
+									"anno": "Name"
+								},
+								"AccIn",
+								{
+									"anno": "Function"
+								},
+								{
+									"anno": "Acc0"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "from_ets",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Replace the objects of a Dets table with the objects of an ETS table.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Name"
+								},
+								{
+									"anno": "EtsTab"
+								},
+								"ets:safe_fixtable/2"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "info",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return information about a Dets table.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Name"
+							}
+						},
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"c": "{file_size, integer() >= 0}}"
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{filename,",
+											"}"
+										],
+										"seealso": {
+											"marker": "file#type-name",
+											"c": "file:name()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{keypos,",
+											"}"
+										],
+										"seealso": {
+											"marker": "#type-keypos",
+											"c": "keypos()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": "{size, integer() >= 0}"
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{type,",
+											"}"
+										],
+										"seealso": {
+											"marker": "#type-type",
+											"c": "type()"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "info",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Return the information associated with a specified item for a Dets table.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Item"
+								},
+								{
+									"anno": "Name"
+								},
+								{
+									"anno": [
+										"Item",
+										"Value"
+									]
+								}
+							],
+							"seealso": {
+								"marker": "#info/1",
+								"c": "info/1"
+							}
+						},
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"c": [
+											"{access,",
+											"}"
+										],
+										"seealso": {
+											"marker": "#type-access",
+											"c": "access()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{auto_save,",
+											"}"
+										],
+										"seealso": {
+											"marker": "#type-auto_save",
+											"c": "auto_save()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{bchunk_format, binary()}",
+											"bchunk/2",
+											"is_compatible_chunk_format/2"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{hash, Hash}",
+											"Hash"
+										]
+									},
+									"list": {
+										"item": [
+											{
+												"p": {
+													"c": [
+														"phash",
+														"erlang:phash/2"
+													]
+												}
+											},
+											{
+												"p": {
+													"c": [
+														"phash2",
+														"erlang:phash2/1"
+													]
+												}
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{memory, integer() >= 0}",
+											"file_size"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": "{no_keys, integer >= 0()}"
+									}
+								},
+								{
+									"p": {
+										"c": "{no_objects, integer >= 0()}"
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{no_slots, {Min, Used, Max}}",
+											"Min",
+											"Used",
+											"Max"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": "{owner, pid()}"
+									}
+								},
+								{
+									"p": {
+										"c": "{ram_file, boolean()}"
+									}
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"{safe_fixed_monotonic_time, SafeFixed}",
+												"SafeFixed",
+												"{FixedAtTime, [{Pid,RefCount}]}",
+												"FixedAtTime",
+												"Pid",
+												"RefCount",
+												"SafeFixed",
+												"false"
+											]
+										},
+										{
+											"c": [
+												"FixedAtTime",
+												"safe_fixed_monotonic_time"
+											],
+											"seealso": [
+												{
+													"marker": "erts:erlang#monotonic_time/0",
+													"c": "erlang:monotonic_time/0"
+												},
+												{
+													"marker": "erts:time_correction#Time_Warp_Safe_Code",
+													"$t": "time warp safe"
+												}
+											]
+										}
+									]
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"{safe_fixed, SafeFixed}",
+												"{safe_fixed_monotonic_time, SafeFixed}",
+												"FixedAtTime"
+											]
+										},
+										{
+											"c": [
+												"FixedAtTime",
+												"safe_fixed",
+												"safe_fixed_monotonic_time"
+											],
+											"seealso": [
+												{
+													"marker": "erts:erlang#timestamp/0",
+													"c": "erlang:timestamp/0"
+												},
+												{
+													"marker": "erts:time_correction#Time_Warp_Modes",
+													"$t": "time warp modes"
+												},
+												{
+													"marker": "erts:time_correction#Time_Warp_Safe_Code",
+													"$t": "time warp safe"
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "init_table",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "init_table",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": "Replace all objects of a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Name"
+									},
+									{
+										"anno": "InitFun"
+									},
+									"insert/2"
+								]
+							},
+							{
+								"c": [
+									"read",
+									{
+										"anno": "InitFun"
+									},
+									"end_of_input",
+									"{Objects, Fun}",
+									"Objects",
+									"Fun",
+									"Value",
+									"{error, {init_fun, Value}}",
+									"close"
+								]
+							},
+							{
+								"c": [
+									"set",
+									"bag"
+								]
+							},
+							{
+								"c": [
+									"init_table/2",
+									"open_file/2",
+									"min_no_slots",
+									"info/2",
+									"no_slots",
+									"min_no_slots"
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "Options"
+									},
+									"{Key, Val}"
+								]
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"c": [
+											"{min_no_slots, no_slots()}",
+											"open_file/2"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{format, Format}",
+											{
+												"anno": "InitFun"
+											},
+											"Format",
+											"term",
+											{
+												"anno": "InitFun"
+											},
+											"Format",
+											"bchunk",
+											{
+												"anno": "InitFun"
+											},
+											{
+												"anno": "Data"
+											},
+											"min_no_slots"
+										],
+										"seealso": {
+											"marker": "#bchunk/2",
+											"c": "bchunk/2"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "insert",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Insert one or more objects into a Dets table.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Name"
+								},
+								"set"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "insert_new",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Insert one or more objects into a Dets table.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Name"
+								},
+								"false",
+								"true"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "is_compatible_bchunk_format",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Test compatibility of chunk data of a table.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Name"
+								},
+								"{format,bchunk}",
+								"T",
+								"info(T,bchunk_format)",
+								"BchunkFormat"
+							],
+							"seealso": [
+								{
+									"marker": "#init_table/3",
+									"c": "init_table/3"
+								},
+								{
+									"marker": "#bchunk/2",
+									"c": "bchunk/2"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "is_dets_file",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Test for a Dets table.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Filename"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "lookup",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Return all objects with a specified key stored in a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Name"
+									}
+								]
+							},
+							{
+								"c": [
+									"set",
+									"bag",
+									"duplicate_bag"
+								]
+							},
+							"Notice that the order of objects returned is unspecified. In particular, the order in which objects were inserted is not reflected."
+						],
+						"pre": {
+							"input": [
+								"dets:open_file(abc, [{type, bag}]).",
+								"dets:insert(abc, {1,2,3}).",
+								"dets:insert(abc, {1,3,4}).",
+								"dets:lookup(abc, 1)."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "match",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Match a chunk of objects stored in a Dets table and return a list of variable bindings.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Continuation"
+									},
+									"match/1",
+									"match/3"
+								]
+							},
+							{
+								"c": "'$end_of_table'"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "match",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Match the objects stored in a Dets table and return a list of variable bindings.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Name"
+								},
+								{
+									"anno": "Pattern"
+								},
+								{
+									"anno": "Pattern"
+								}
+							],
+							"seealso": {
+								"marker": "ets#match/2",
+								"c": "ets:match/2"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "match",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Match the first chunk of objects stored in a Dets table and return a list of variable bindings.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Name"
+									},
+									{
+										"anno": "Pattern"
+									}
+								],
+								"seealso": {
+									"marker": "ets#match/2",
+									"c": "ets:match/2"
+								}
+							},
+							{
+								"c": "'$end_of_table'",
+								"seealso": {
+									"marker": "#match/1",
+									"c": "match/1"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": "Pattern"
+									},
+									{
+										"anno": "N"
+									},
+									{
+										"anno": "N"
+									},
+									"default"
+								],
+								"anno": "N"
+							},
+							{
+								"seealso": {
+									"marker": "#safe_fixtable/2",
+									"c": "safe_fixtable/2"
+								},
+								"c": [
+									"match/3",
+									"match/1"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "match_delete",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Delete all objects that match a given pattern from a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Pattern"
+									},
+									{
+										"anno": "Name"
+									}
+								],
+								"seealso": {
+									"marker": "ets#match/2",
+									"c": "ets:match/2"
+								}
+							},
+							{
+								"c": "Pattern"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "match_object",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Match a chunk of objects stored in a Dets table and return a list of objects.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Continuation"
+									},
+									"match_object/1",
+									"match_object/3"
+								]
+							},
+							{
+								"c": "'$end_of_table'"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "match_object",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Match the objects stored in a Dets table and return a list of objects.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Name"
+									},
+									{
+										"anno": "Pattern"
+									}
+								],
+								"seealso": {
+									"marker": "ets#match/2",
+									"c": "ets:match/2"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": "Pattern"
+									},
+									{
+										"anno": "Pattern"
+									}
+								]
+							},
+							{
+								"c": [
+									"match_object",
+									"first/1",
+									"next/2",
+									"slot/2"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "match_object",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Match the first chunk of objects stored in a Dets table and return a list of objects.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Name"
+									},
+									{
+										"anno": "Pattern"
+									}
+								],
+								"seealso": {
+									"marker": "ets#match/2",
+									"c": "ets:match/2"
+								}
+							},
+							{
+								"c": "'$end_of_table'",
+								"seealso": {
+									"marker": "#match_object/1",
+									"c": "match_object/1"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": "Pattern"
+									},
+									{
+										"anno": "N"
+									},
+									{
+										"anno": "N"
+									},
+									"default"
+								],
+								"anno": "N"
+							},
+							{
+								"seealso": {
+									"marker": "#safe_fixtable/2",
+									"c": "safe_fixtable/2"
+								},
+								"c": [
+									"match_object/3",
+									"match_object/1"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "member",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Test for occurrence of a key in a Dets table.",
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#lookup/2",
+								"c": "lookup/2"
+							},
+							"c": [
+								"true",
+								{
+									"anno": "Key"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "next",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Return the next key in a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key1"
+									},
+									{
+										"anno": "Name"
+									},
+									"'$end_of_table'"
+								]
+							},
+							{
+								"c": "{error, Reason}"
+							},
+							{
+								"seealso": {
+									"marker": "#first/1",
+									"c": "first/1"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "open_file",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Open an existing Dets table.",
+					"desc": {
+						"p": "Opens an existing table. If the table is not properly closed, it is repaired. The returned reference is to be used as the table name. This function is most useful for debugging purposes."
+					}
+				},
+				{
+					"name": {
+						"name": "open_file",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Open a Dets table.",
+					"desc": {
+						"p": [
+							"Opens a table. An empty Dets table is created if no file exists.",
+							{
+								"c": {
+									"anno": "Name"
+								}
+							},
+							"If two processes open the same table by giving the same name and arguments, the table has two users. If one user closes the table, it remains open until the second user closes it.",
+							{
+								"c": [
+									{
+										"anno": "Args"
+									},
+									"{Key, Val}"
+								]
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"c": [
+											"{access,",
+											"}",
+											"read_write"
+										],
+										"seealso": {
+											"marker": "#type-access",
+											"c": "access()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{auto_save,",
+											"}",
+											"Time",
+											"Time",
+											"infinity"
+										],
+										"seealso": {
+											"marker": "#type-auto_save",
+											"c": "auto_save()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{estimated_no_objects,",
+											"}",
+											"min_no_slots"
+										],
+										"seealso": {
+											"marker": "#type-no_slots",
+											"c": "no_slots()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{file,",
+											"}"
+										],
+										"seealso": {
+											"marker": "file#type-name",
+											"c": "file:name()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{max_no_slots,",
+											"}"
+										],
+										"seealso": {
+											"marker": "#type-no_slots",
+											"c": "no_slots()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{min_no_slots,",
+											"}"
+										],
+										"seealso": {
+											"marker": "#type-no_slots",
+											"c": "no_slots()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{keypos,",
+											"}"
+										],
+										"seealso": {
+											"marker": "#type-keypos",
+											"c": "keypos()"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{ram_file, boolean()}",
+											"false"
+										]
+									}
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"{repair, Value}",
+												"Value",
+												"boolean()",
+												"force",
+												"true",
+												"false",
+												"{error, {needs_repair, FileName}}"
+											]
+										},
+										{
+											"c": "force"
+										},
+										{
+											"c": "repair"
+										}
+									]
+								},
+								{
+									"p": {
+										"c": [
+											"{type,",
+											"}",
+											"set"
+										],
+										"seealso": {
+											"marker": "#type-type",
+											"c": "type()"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "pid2name",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the name of the Dets table handled by a pid.",
+					"desc": {
+						"p": [
+							{
+								"c": "undefined"
+							},
+							"This function is meant to be used for debugging only."
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "repair_continuation",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {
+						"c": [
+							"select/1",
+							"select/3"
+						]
+					},
+					"desc": {
+						"p": [
+							{
+								"seealso": [
+									{
+										"marker": "#select/3",
+										"c": "select/3"
+									},
+									{
+										"marker": "#select/1",
+										"c": "select/1"
+									}
+								]
+							},
+							{
+								"c": "select/1"
+							},
+							{
+								"seealso": {
+									"marker": "ets",
+									"c": "ets(3)"
+								}
+							}
+						],
+						"note": {
+							"p": [
+								{
+									"c": [
+										"select/3",
+										"select/1"
+									]
+								},
+								"The reason for not having an external representation of compiled match specifications is performance. It can be subject to change in future releases, while this interface remains for backward compatibility."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "safe_fixtable",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Fix a Dets table for safe traversal.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Fix"
+									},
+									"true",
+									{
+										"anno": "Name"
+									}
+								]
+							},
+							"If many processes fix a table, the table remains fixed until all processes have released it or terminated. A reference counter is kept on a per process basis, and N consecutive fixes require N releases to release the table.",
+							{
+								"c": [
+									"first/1",
+									"next/2"
+								],
+								"seealso": {
+									"marker": "ets",
+									"c": "ets(3)"
+								}
+							},
+							"If objects have been added while the table was fixed, the hash list starts to grow when the table is released, which significantly slows down access to the table for a period of time."
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "select",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Apply a match specification to some objects stored in a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Continuation"
+								},
+								"seealso": [
+									{
+										"marker": "#select/1",
+										"c": "select/1"
+									},
+									{
+										"marker": "#select/3",
+										"c": "select/3"
+									}
+								]
+							},
+							{
+								"c": "'$end_of_table'"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "select",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Apply a match specification to all objects stored in a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "MatchSpec"
+									},
+									{
+										"anno": "Name"
+									}
+								],
+								"seealso": {
+									"marker": "erts:match_spec",
+									"$t": "ERTS User's Guide"
+								}
+							},
+							{
+								"c": {
+									"anno": "MatchSpec"
+								}
+							},
+							{
+								"c": [
+									"select",
+									"first/1",
+									"next/2",
+									"slot/2"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "select",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Apply a match specification to the first chunk of objects stored in a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "MatchSpec"
+									},
+									{
+										"anno": "Name"
+									}
+								],
+								"seealso": {
+									"marker": "erts:match_spec",
+									"$t": "ERTS User's Guide"
+								}
+							},
+							{
+								"c": "'$end_of_table'",
+								"seealso": {
+									"marker": "#select/1",
+									"c": "select/1"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": "MatchSpec"
+									},
+									{
+										"anno": "MatchSpec"
+									},
+									{
+										"anno": "N"
+									},
+									{
+										"anno": "N"
+									},
+									"default"
+								],
+								"anno": "N"
+							},
+							{
+								"seealso": {
+									"marker": "#safe_fixtable/2",
+									"c": "safe_fixtable/2"
+								},
+								"c": [
+									"select/3",
+									"select/1"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "select_delete",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Delete all objects that match a given pattern from a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Name"
+									},
+									{
+										"anno": "MatchSpec"
+									},
+									"true"
+								],
+								"seealso": {
+									"marker": "erts:match_spec",
+									"$t": "ERTS User's Guide"
+								}
+							},
+							{
+								"c": {
+									"anno": "MatchSpec"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "slot",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Return the list of objects associated with a slot of a Dets table.",
+					"desc": {
+						"p": {
+							"c": [
+								"0",
+								"n",
+								{
+									"anno": "I"
+								},
+								{
+									"anno": "I"
+								},
+								"n",
+								"'$end_of_table'"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "sync",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Ensure that all updates made to a Dets table are written to disk.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Name"
+									},
+									"ram_file",
+									"true"
+								]
+							},
+							"Notice that the space management data structures kept in RAM, the buddy system, is also written to the disk. This can take some time if the table is fragmented."
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "table",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "table",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Return a QLC query handle.",
+					"desc": {
+						"p": [
+							{
+								"seealso": [
+									{
+										"marker": "qlc",
+										"c": "qlc(3)"
+									},
+									{
+										"marker": "dets#table/1",
+										"c": "dets:table/1,2"
+									}
+								],
+								"c": [
+									"qlc",
+									{
+										"anno": "Name"
+									},
+									"qlc"
+								]
+							},
+							{
+								"c": [
+									"qlc",
+									"traverse"
+								],
+								"seealso": {
+									"marker": "dets#lookup/2",
+									"c": "dets:lookup/2"
+								}
+							},
+							"The following example uses an explicit match specification to traverse the table:",
+							"An example with implicit match specification:",
+							{
+								"c": "qlc:info/1"
+							},
+							{
+								"c": "qlc:info/1"
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"c": [
+											"first_next",
+											"dets:first/1",
+											"dets:next/2"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"select",
+											"n_objects",
+											"select/3",
+											"select/3",
+											"qlc"
+										],
+										"seealso": [
+											{
+												"marker": "dets#select/3",
+												"c": "dets:select/3"
+											},
+											{
+												"marker": "dets#select/1",
+												"c": "dets:select/1"
+											}
+										]
+									},
+									"list": {
+										"type": "bulleted",
+										"item": [
+											{
+												"p": "Simple filters are translated into equivalent match specifications."
+											},
+											{
+												"p": {
+													"c": "select/3"
+												}
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{select,",
+											"}",
+											"select",
+											"dets:select/3",
+											"dets:select/1",
+											"qlc"
+										],
+										"seealso": {
+											"marker": "#type-match_spec",
+											"$t": "match_spec()"
+										}
+									}
+								}
+							]
+						},
+						"pre": [
+							{
+								"input": [
+									"dets:open_file(t, []),",
+									"ok = dets:insert(t, [{1,a},{2,b},{3,c},{4,d}]),",
+									"MS = ets:fun2ms(fun({X,Y}) when (X > 1) or (X < 5) -> {Y} end),",
+									"QH1 = dets:table(t, [{traverse, {select, MS}}])."
+								]
+							},
+							{
+								"input": "QH2 = qlc:q([{Y} || {X,Y} <- dets:table(t), (X > 1) or (X < 5)])."
+							},
+							{
+								"input": "qlc:info(QH1) =:= qlc:info(QH2)."
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "to_ets",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Insert all objects of a Dets table into an ETS table.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Name"
+								},
+								{
+									"anno": "EtsTab"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "traverse",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Apply a function to all or some objects stored in a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Fun"
+									},
+									{
+										"anno": "Name"
+									},
+									{
+										"anno": "Fun"
+									},
+									{
+										"anno": "Fun"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "OtherValue"
+									},
+									{
+										"anno": "Fun"
+									}
+								]
+							}
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "continue"
+								},
+								{
+									"c": "{continue, Val}"
+								},
+								{
+									"c": {
+										"anno": "Value"
+									}
+								}
+							],
+							"item": [
+								{
+									"p": "Continue to perform the traversal. For example, the following function can be used to print the contents of a table:",
+									"pre": "fun(X) -> io:format(\"~p~n\", [X]), continue end."
+								},
+								{
+									"p": {
+										"c": {
+											"anno": "Val"
+										}
+									},
+									"pre": "fun(X) -> {continue, X} end."
+								},
+								{
+									"p": {
+										"c": {
+											"anno": "Value"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "update_counter",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Update a counter object stored in a Dets table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Name"
+									},
+									"set",
+									{
+										"anno": "Incr"
+									},
+									{
+										"anno": "Pos"
+									}
+								]
+							},
+							"This functions provides a way of updating a counter, without having to look up an object, update the object by incrementing an element, and insert the resulting object into the table again."
+						]
+					}
+				}
+			]
+		},
+		"section": {
+			"title": "See Also",
+			"p": {
+				"seealso": [
+					{
+						"marker": "ets",
+						"c": "ets(3)"
+					},
+					{
+						"marker": "mnesia:mnesia",
+						"c": "mnesia(3)"
+					},
+					{
+						"marker": "qlc",
+						"c": "qlc(3)"
+					}
+				]
+			}
+		}
+	}
+}

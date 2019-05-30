@@ -1,0 +1,787 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "timer",
+			"prepared": "Sebastian Strollo",
+			"responsible": "Bjarne Dcker",
+			"docno": "1",
+			"approved": "Bjarne Dcker",
+			"checked": {},
+			"date": "1998-09-09",
+			"rev": "D",
+			"file": "timer.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "timer"
+		},
+		"modulesummary": "Timer functions.",
+		"description": {
+			"p": [
+				{
+					"em": "milliseconds"
+				},
+				{
+					"c": [
+						"TRef",
+						"TRef"
+					],
+					"seealso": {
+						"marker": "#cancel/1",
+						"c": "cancel/1"
+					}
+				},
+				{
+					"em": "at least"
+				}
+			]
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "time"
+					},
+					"desc": {
+						"p": "Time in milliseconds."
+					}
+				},
+				{
+					"name": {
+						"name": "tref"
+					},
+					"desc": {
+						"p": "A timer reference."
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "apply_after",
+						"arity": "4",
+						"since": ""
+					},
+					"fsummary": {
+						"c": [
+							"Module:Function(Arguments)",
+							"Time"
+						]
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": [
+											"Module",
+											"Function",
+											"Arguments"
+										]
+									},
+									{
+										"anno": "Time"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "TRef"
+									},
+									{
+										"anno": "Reason"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "apply_interval",
+						"arity": "4",
+						"since": ""
+					},
+					"fsummary": {
+						"c": [
+							"Module:Function(Arguments)",
+							"Time"
+						]
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": [
+											"Module",
+											"Function",
+											"Arguments"
+										]
+									},
+									{
+										"anno": "Time"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "TRef"
+									},
+									{
+										"anno": "Reason"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "cancel",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {
+						"c": "TRef"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "TRef"
+								}
+							},
+							{
+								"c": [
+									"{ok, cancel}",
+									{
+										"anno": "Reason"
+									},
+									{
+										"anno": "TRef"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "exit_after",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "exit_after",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": {
+						"c": [
+							"Reason",
+							"Time"
+						]
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"exit_after/2",
+									{
+										"anno": [
+											"Time",
+											"Reason1"
+										]
+									}
+								]
+							},
+							{
+								"c": [
+									"exit_after/3",
+									{
+										"anno": "Reason1"
+									},
+									{
+										"anno": "Pid"
+									},
+									{
+										"anno": "TRef"
+									},
+									{
+										"anno": "Reason2"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "hms",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": {
+						"c": [
+							"Hours",
+							"Minutes",
+							"Seconds",
+							"Milliseconds"
+						]
+					},
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Hours",
+									"Minutes",
+									"Seconds"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "hours",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {
+						"c": [
+							"Hours",
+							"Milliseconds"
+						]
+					},
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Hours"
+							}
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "kill_after",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "kill_after",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": {
+						"c": [
+							"Reason",
+							"Time"
+						]
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"kill_after/1",
+									{
+										"anno": "Time"
+									}
+								]
+							},
+							{
+								"c": [
+									"kill_after/2",
+									{
+										"anno": [
+											"Time",
+											"Pid"
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "minutes",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {
+						"c": [
+							"Minutes",
+							"Milliseconds"
+						]
+					},
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Minutes"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "now_diff",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Calculate time difference between time stamps.",
+					"type_desc": {
+						"variable": "Tdiff",
+						"$t": "In microseconds"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": [
+										"Tdiff",
+										"T2",
+										"T1"
+									]
+								},
+								{
+									"anno": "T1"
+								},
+								{
+									"anno": "T2"
+								}
+							],
+							"em": "microseconds",
+							"seealso": [
+								{
+									"marker": "erts:erlang#timestamp/0",
+									"c": "erlang:timestamp/0"
+								},
+								{
+									"marker": "kernel:os#timestamp/0",
+									"c": "os:timestamp/0"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "seconds",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {
+						"c": [
+							"Seconds",
+							"Milliseconds"
+						]
+					},
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Seconds"
+							}
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "send_after",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "send_after",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": {
+						"c": [
+							"Message",
+							"Pid",
+							"Time"
+						]
+					},
+					"desc": {
+						"taglist": {
+							"tag": [
+								{
+									"c": "send_after/3"
+								},
+								{
+									"c": "send_after/2"
+								}
+							],
+							"item": [
+								{
+									"p": [
+										{
+											"c": [
+												{
+													"anno": [
+														"Pid",
+														"Message"
+													]
+												},
+												{
+													"anno": "Time"
+												},
+												{
+													"anno": "Pid"
+												}
+											]
+										},
+										{
+											"c": [
+												{
+													"anno": "TRef"
+												},
+												{
+													"anno": "Reason"
+												}
+											]
+										}
+									]
+								},
+								{
+									"p": {
+										"c": {
+											"anno": [
+												"Time",
+												"Message"
+											]
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "send_interval",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "send_interval",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": {
+						"c": [
+							"Message",
+							"Time"
+						]
+					},
+					"desc": {
+						"taglist": {
+							"tag": [
+								{
+									"c": "send_interval/3"
+								},
+								{
+									"c": "send_interval/2"
+								}
+							],
+							"item": [
+								{
+									"p": [
+										{
+											"c": [
+												{
+													"anno": [
+														"Pid",
+														"Message"
+													]
+												},
+												{
+													"anno": "Time"
+												},
+												{
+													"anno": "Pid"
+												}
+											]
+										},
+										{
+											"c": [
+												{
+													"anno": "TRef"
+												},
+												{
+													"anno": "Reason"
+												}
+											]
+										}
+									]
+								},
+								{
+									"p": {
+										"c": {
+											"anno": [
+												"Time",
+												"Message"
+											]
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "sleep",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {
+						"c": "Time"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Time"
+								},
+								"ok",
+								{
+									"anno": "Time"
+								},
+								"infinity"
+							],
+							"em": "not"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "start",
+						"arity": "0",
+						"since": ""
+					},
+					"fsummary": {
+						"c": "timer_server"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "kernel:index",
+								"$t": "Kernel"
+							}
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "tc",
+							"arity": "1",
+							"since": "OTP R14B03"
+						},
+						{
+							"name": "tc",
+							"arity": "2",
+							"since": "OTP R14B"
+						},
+						{
+							"name": "tc",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": {
+						"c": [
+							"apply(Module, Function, Arguments)",
+							"apply(Fun, Arguments)"
+						]
+					},
+					"type_desc": {
+						"variable": "Time",
+						"$t": "In microseconds"
+					},
+					"desc": {
+						"taglist": {
+							"tag": [
+								{
+									"c": "tc/3"
+								},
+								{
+									"c": "tc/2"
+								},
+								{
+									"c": "tc/1"
+								}
+							],
+							"item": [
+								{
+									"p": [
+										{
+											"c": {
+												"anno": [
+													"Module",
+													"Function",
+													"Arguments"
+												]
+											},
+											"seealso": {
+												"marker": "erts:erlang#monotonic_time/0",
+												"c": "erlang:monotonic_time/0"
+											}
+										},
+										{
+											"c": [
+												{
+													"anno": [
+														"Time",
+														"Value"
+													]
+												},
+												{
+													"anno": "Time"
+												},
+												{
+													"anno": "Value"
+												}
+											],
+											"em": "microseconds"
+										}
+									]
+								},
+								{
+									"p": {
+										"c": [
+											{
+												"anno": [
+													"Fun",
+													"Arguments"
+												]
+											},
+											"tc/3"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "Fun"
+											},
+											"tc/2"
+										]
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		"section": [
+			{
+				"title": "Examples",
+				"p": [
+					{
+						"em": "Example 1"
+					},
+					"The following example shows how to print \"Hello World!\" in 5 seconds:",
+					{
+						"em": "Example 2"
+					},
+					"The following example shows a process performing a certain action, and if this action is not completed within a certain limit, the process is killed:"
+				],
+				"pre": {
+					"input": "timer:apply_after(5000, io, format, [\"~nHello World!~n\", []])."
+				},
+				"code": {
+					"type": "none",
+					"$t": "Pid = spawn(mod, fun, [foo, bar]),%% If pid is not finished in 10 seconds, kill him{ok, R} = timer:kill_after(timer:seconds(10), Pid),...%% We change our mind...timer:cancel(R),..."
+				}
+			},
+			{
+				"title": "Notes",
+				"p": [
+					{
+						"seealso": {
+							"marker": "#cancel/1",
+							"c": "cancel/1"
+						}
+					},
+					{
+						"seealso": [
+							{
+								"marker": "#apply_interval/4",
+								"c": "apply_interval/4"
+							},
+							{
+								"marker": "#send_interval/3",
+								"c": "send_interval/3"
+							},
+							{
+								"marker": "#send_interval/2",
+								"c": "send_interval/2"
+							}
+						]
+					},
+					{
+						"seealso": [
+							{
+								"marker": "#apply_after/4",
+								"c": "apply_after/4"
+							},
+							{
+								"marker": "#send_after/3",
+								"c": "send_after/3"
+							},
+							{
+								"marker": "#send_after/2",
+								"c": "send_after/2"
+							},
+							{
+								"marker": "#exit_after/3",
+								"c": "exit_after/3"
+							},
+							{
+								"marker": "#exit_after/2",
+								"c": "exit_after/2"
+							},
+							{
+								"marker": "#kill_after/2",
+								"c": "kill_after/2"
+							},
+							{
+								"marker": "#kill_after/1",
+								"c": "kill_after/1"
+							},
+							{
+								"marker": "#cancel/1",
+								"c": "cancel/1"
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+}

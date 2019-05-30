@@ -1,0 +1,1049 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2009",
+					"2016"
+				],
+				"holder": "Ericsson AB, All Rights Reserved"
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. The Initial Developer of the Original Code is Ericsson AB.",
+			"title": "binary",
+			"prepared": "Patrik Nyblom",
+			"responsible": "Kenneth Lundin",
+			"docno": "1",
+			"approved": {},
+			"checked": {},
+			"date": "2010-05-05",
+			"rev": "A",
+			"file": "binary.xml"
+		},
+		"module": {
+			"since": "OTP R14B",
+			"$t": "binary"
+		},
+		"modulesummary": "Library for handling binary data.",
+		"description": {
+			"p": [
+				"This module contains functions for manipulating byte-oriented binaries. Although the majority of functions could be provided using bit-syntax, the functions in this library are highly optimized and are expected to either execute faster or consume less memory, or both, than a counterpart written in pure Erlang.",
+				"The module is provided according to Erlang Enhancement Proposal (EEP) 31."
+			],
+			"note": {
+				"p": {
+					"c": "badarg"
+				}
+			}
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "cp"
+					},
+					"desc": {
+						"p": {
+							"c": "tuple()"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "part"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"Start",
+								"binary()",
+								"Length",
+								"Length",
+								"Start",
+								"Length",
+								"Length",
+								"N",
+								"{size(Binary), -N}",
+								"part()",
+								"Length"
+							]
+						}
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "at",
+						"arity": "2",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Return the byte at a specific position in a binary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Pos"
+								},
+								{
+									"anno": "Subject"
+								},
+								{
+									"anno": "Pos"
+								},
+								{
+									"anno": "Subject"
+								},
+								"badarg"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "bin_to_list",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Convert a binary to a list of integers.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Subject",
+									"Subject"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "bin_to_list",
+						"arity": "2",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Convert a binary to a list of integers.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Subject"
+									},
+									"byte()",
+									"part()",
+									"binary()"
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									{
+										"anno": "PosLen"
+									},
+									"badarg"
+								]
+							}
+						],
+						"code": "1> binary:bin_to_list(<<\"erlang\">>, {1,3}).\"rla\"%% or [114,108,97] in list notation."
+					}
+				},
+				{
+					"name": {
+						"name": "bin_to_list",
+						"arity": "3",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Convert a binary to a list of integers.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Subject",
+									"Pos",
+									"Len"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "compile_pattern",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Precompile a binary search pattern.",
+					"desc": {
+						"p": [
+							{
+								"seealso": [
+									{
+										"marker": "#match-3",
+										"c": "match/3"
+									},
+									{
+										"marker": "#matches-3",
+										"c": "matches/3"
+									},
+									{
+										"marker": "#split-3",
+										"c": "split/3"
+									},
+									{
+										"marker": "#replace-4",
+										"c": "replace/4"
+									}
+								],
+								"c": [
+									"cp()",
+									"tuple()"
+								]
+							},
+							{
+								"c": [
+									"[<<\"functional\">>,<<\"programming\">>]",
+									{
+										"anno": "Pattern"
+									},
+									"<<\"functional\">>",
+									"<<\"programming\">>"
+								]
+							},
+							"The list of binaries used for search alternatives must be flat and proper.",
+							{
+								"c": [
+									{
+										"anno": "Pattern"
+									},
+									"badarg"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "copy",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Create a duplicate of a binary.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Subject"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "copy",
+						"arity": "2",
+						"since": "OTP R14B"
+					},
+					"fsummary": {
+						"c": "N"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Subject"
+									},
+									{
+										"anno": "N"
+									}
+								]
+							},
+							{
+								"c": {
+									"anno": "N"
+								},
+								"seealso": {
+									"marker": "#copy/1",
+									"c": "copy/1"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": "N"
+									},
+									"0",
+									"badarg"
+								]
+							}
+						],
+						"note": {
+							"p": "By deliberately copying a single binary to avoid referencing a larger binary, one can, instead of freeing up the larger binary for later garbage collection, create much more binary data than needed. Sharing binary data is usually good. Only in special cases, when small parts reference large binaries and the large binaries are no longer used in any process, deliberate copying can be a good idea."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "decode_unsigned",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Decode a whole binary into an integer of arbitrary size.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Subject"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "decode_unsigned",
+						"arity": "2",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Decode a whole binary into an integer of arbitrary size.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Subject"
+									},
+									"integer()"
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": "1> binary:decode_unsigned(<<169,138,199>>,big).11111111"
+					}
+				},
+				{
+					"name": {
+						"name": "encode_unsigned",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Encode an unsigned integer into the minimal binary.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Unsigned"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "encode_unsigned",
+						"arity": "2",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Encode an unsigned integer into the minimal binary.",
+					"desc": {
+						"p": [
+							"Converts a positive integer to the smallest possible representation in a binary digit representation, either big endian or little endian.",
+							{
+								"em": "Example:"
+							}
+						],
+						"code": "1> binary:encode_unsigned(11111111, big).<<169,138,199>>"
+					}
+				},
+				{
+					"name": {
+						"name": "first",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Return the first byte of a binary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Subject"
+								},
+								{
+									"anno": "Subject"
+								},
+								"badarg"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "last",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Return the last byte of a binary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Subject"
+								},
+								{
+									"anno": "Subject"
+								},
+								"badarg"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "list_to_bin",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Convert a list of integers and binaries to a binary.",
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "erts:erlang#list_to_binary/1",
+								"c": "erlang:list_to_binary/1"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "longest_common_prefix",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Return length of longest common prefix for a set of binaries.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Binaries"
+								}
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									{
+										"anno": "Binaries"
+									},
+									"badarg"
+								]
+							}
+						],
+						"code": "1> binary:longest_common_prefix([<<\"erlang\">>, <<\"ergonomy\">>]).22> binary:longest_common_prefix([<<\"erlang\">>, <<\"perl\">>]).0"
+					}
+				},
+				{
+					"name": {
+						"name": "longest_common_suffix",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Return length of longest common suffix for a set of binaries.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Binaries"
+								}
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									"Binaries",
+									"badarg"
+								]
+							}
+						],
+						"code": "1> binary:longest_common_suffix([<<\"erlang\">>, <<\"fang\">>]).32> binary:longest_common_suffix([<<\"erlang\">>, <<\"perl\">>]).0"
+					}
+				},
+				{
+					"name": {
+						"name": "match",
+						"arity": "2",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Search for the first match of a pattern in a binary.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Subject",
+									"Pattern"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "match",
+						"arity": "3",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Search for the first match of a pattern in a binary.",
+					"type": {
+						"name": "part"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Pattern"
+									},
+									{
+										"anno": "Subject"
+									}
+								]
+							},
+							{
+								"c": [
+									"{Pos, Length}",
+									{
+										"anno": "Pattern"
+									},
+									{
+										"anno": "Subject"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									"<<\"cd\">>",
+									"<<\"bcde\">>",
+									"<<\"bcde\">>"
+								]
+							},
+							"Summary of the options:",
+							{
+								"c": [
+									{
+										"anno": "Pattern"
+									},
+									"nomatch"
+								]
+							},
+							{
+								"c": {
+									"anno": "Pattern"
+								},
+								"seealso": {
+									"marker": "#compile_pattern-1",
+									"c": "compile_pattern/1"
+								}
+							},
+							{
+								"c": [
+									"{scope, {Start,Length}}",
+									"Start",
+									"Subject",
+									"Start",
+									"Length",
+									"Start",
+									"Length",
+									"Subject",
+									"badarg"
+								]
+							}
+						],
+						"code": "1> binary:match(<<\"abcde\">>, [<<\"bcde\">>, <<\"cd\">>],[]).{1,4}",
+						"taglist": {
+							"tag": {
+								"anno": [
+									"Start",
+									"Length"
+								]
+							},
+							"item": {
+								"p": {
+									"c": [
+										{
+											"anno": "Subject"
+										},
+										"Length"
+									]
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "matches",
+						"arity": "2",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Search for all matches of a pattern in a binary.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Subject",
+									"Pattern"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "matches",
+						"arity": "3",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Search for all matches of a pattern in a binary.",
+					"type": {
+						"name": "part"
+					},
+					"desc": {
+						"p": [
+							{
+								"seealso": {
+									"marker": "#match-2",
+									"c": "match/2"
+								},
+								"c": [
+									{
+										"anno": "Subject"
+									},
+									{
+										"anno": "Pattern"
+									}
+								]
+							},
+							"The first and longest match is preferred to a shorter, which is illustrated by the following example:",
+							{
+								"c": "re"
+							},
+							"If none of the strings in a pattern is found, an empty list is returned.",
+							{
+								"c": {
+									"anno": "Pattern"
+								},
+								"seealso": [
+									{
+										"marker": "#compile_pattern-1",
+										"c": "compile_pattern/1"
+									},
+									{
+										"marker": "#match-3",
+										"c": "match/3"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": [
+											"Start",
+											"Length"
+										]
+									},
+									{
+										"anno": "Start"
+									},
+									{
+										"anno": "Subject"
+									},
+									{
+										"anno": [
+											"Start",
+											"Length"
+										]
+									},
+									{
+										"anno": [
+											"Start",
+											"Length"
+										]
+									},
+									{
+										"anno": "Subject"
+									},
+									"badarg"
+								]
+							}
+						],
+						"code": "1> binary:matches(<<\"abcde\">>, [<<\"bcde\">>,<<\"bc\">>,<<\"de\">>],[]).[{1,4}]"
+					}
+				},
+				{
+					"name": {
+						"name": "part",
+						"arity": "2",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Extract a part of a binary.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Subject"
+									},
+									{
+										"anno": "PosLen"
+									}
+								]
+							},
+							"A negative length can be used to extract bytes at the end of a binary:",
+							{
+								"c": [
+									{
+										"anno": "PosLen"
+									},
+									"badarg"
+								]
+							}
+						],
+						"code": "1> Bin = <<1,2,3,4,5,6,7,8,9,10>>.2> binary:part(Bin, {byte_size(Bin), -5}).<<6,7,8,9,10>>",
+						"note": {
+							"p": {
+								"seealso": [
+									{
+										"marker": "#part-2",
+										"$t": "part/2"
+									},
+									{
+										"marker": "#part-3",
+										"$t": "part/3"
+									},
+									{
+										"marker": "erts:erlang",
+										"c": "erlang"
+									}
+								],
+								"c": [
+									"binary_part/2",
+									"binary_part/3"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "part",
+						"arity": "3",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Extract a part of a binary.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Subject",
+									"Pos",
+									"Len"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "referenced_byte_size",
+						"arity": "1",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Determine the size of the binary pointed out by a subbinary.",
+					"desc": {
+						"p": [
+							{
+								"seealso": {
+									"marker": "#copy/1",
+									"c": "copy/1"
+								}
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": "gb_sets:set()"
+							},
+							{
+								"c": "copy/1"
+							},
+							"Example of binary sharing:",
+							{
+								"c": [
+									"B",
+									"C",
+									"A"
+								]
+							}
+						],
+						"code": [
+							"store(Binary, GBSet) -> NewBin = case binary:referenced_byte_size(Binary) of Large when Large > 2 * byte_size(Binary) -> binary:copy(Binary); _ -> Binary end, gb_sets:insert(NewBin,GBSet).",
+							"1> A = binary:copy(<<1>>, 100).<<1,1,1,1,1 ...2> byte_size(A).1003> binary:referenced_byte_size(A).1004> <<B:10/binary, C:90/binary>> = A.<<1,1,1,1,1 ...5> {byte_size(B), binary:referenced_byte_size(B)}.{10,10}6> {byte_size(C), binary:referenced_byte_size(C)}.{90,100}"
+						],
+						"note": {
+							"p": "Binary data is shared among processes. If another process still references the larger binary, copying the part this process uses only consumes more memory and does not free up the larger binary for garbage collection. Use this kind of intrusive functions with extreme care and only if a real problem is detected."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "replace",
+						"arity": "3",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Replace bytes in a binary according to a pattern.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Subject",
+									"Pattern",
+									"Replacement"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "replace",
+						"arity": "4",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Replace bytes in a binary according to a pattern.",
+					"type_desc": {
+						"variable": "OnePos",
+						"anno": "Replacement"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Subject"
+									},
+									{
+										"anno": "Pattern"
+									},
+									{
+										"anno": "Replacement"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "Subject"
+									},
+									{
+										"anno": "InsPos"
+									},
+									{
+										"anno": "Replacement"
+									},
+									{
+										"anno": "Replacement"
+									},
+									{
+										"anno": "Subject"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									{
+										"anno": "InsPos"
+									},
+									"badarg"
+								]
+							},
+							{
+								"c": [
+									"global",
+									"{scope, part()}",
+									"binary()"
+								],
+								"seealso": {
+									"marker": "#split-3",
+									"c": "split/3"
+								}
+							},
+							{
+								"c": {
+									"anno": "Pattern"
+								},
+								"seealso": {
+									"marker": "#compile_pattern-1",
+									"c": "compile_pattern/1"
+								}
+							}
+						],
+						"code": "1> binary:replace(<<\"abcde\">>,<<\"b\">>,<<\"[]\">>, [{insert_replaced,1}]).<<\"a[b]cde\">>2> binary:replace(<<\"abcde\">>,[<<\"b\">>,<<\"d\">>],<<\"[]\">>,[global,{insert_replaced,1}]).<<\"a[b]c[d]e\">>3> binary:replace(<<\"abcde\">>,[<<\"b\">>,<<\"d\">>],<<\"[]\">>,[global,{insert_replaced,[1,1]}]).<<\"a[bb]c[dd]e\">>4> binary:replace(<<\"abcde\">>,[<<\"b\">>,<<\"d\">>],<<\"[-]\">>,[global,{insert_replaced,[1,2]}]).<<\"a[b-b]c[d-d]e\">>"
+					}
+				},
+				{
+					"name": {
+						"name": "split",
+						"arity": "2",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Split a binary according to a pattern.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Subject",
+									"Pattern"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "split",
+						"arity": "3",
+						"since": "OTP R14B"
+					},
+					"fsummary": "Split a binary according to a pattern.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Subject"
+									},
+									{
+										"anno": "Pattern"
+									},
+									"global",
+									{
+										"anno": "Pattern"
+									},
+									{
+										"anno": "Subject"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "Pattern"
+									},
+									{
+										"anno": "Subject"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							"Summary of options:",
+							"Example of the difference between a scope and taking the binary apart before splitting:",
+							{
+								"c": [
+									{
+										"anno": "Subject"
+									},
+									{
+										"anno": "Subject"
+									},
+									{
+										"anno": "Subject"
+									}
+								]
+							},
+							{
+								"c": {
+									"anno": "Pattern"
+								},
+								"seealso": {
+									"marker": "#compile_pattern-1",
+									"c": "compile_pattern/1"
+								}
+							}
+						],
+						"code": [
+							"1> binary:split(<<1,255,4,0,0,0,2,3>>, [<<0,0,0>>,<<2>>],[]).[<<1,255,4>>, <<2,3>>]2> binary:split(<<0,1,0,0,4,255,255,9>>, [<<0,0>>, <<255,255>>],[global]).[<<0,1>>,<<4>>,<<9>>]",
+							"1> binary:split(<<\"banana\">>, [<<\"a\">>],[{scope,{2,3}}]).[<<\"ban\">>,<<\"na\">>]2> binary:split(binary:part(<<\"banana\">>,{2,3}), [<<\"a\">>],[]).[<<\"n\">>,<<\"n\">>]"
+						],
+						"taglist": {
+							"tag": [
+								"{scope, part()}",
+								"trim",
+								"trim_all",
+								"global"
+							],
+							"item": [
+								{
+									"p": {
+										"seealso": [
+											{
+												"marker": "#match-3",
+												"c": "match/3"
+											},
+											{
+												"marker": "#matches-3",
+												"c": "matches/3"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"c": "trim",
+										"seealso": {
+											"marker": "re#split/3",
+											"c": "re:split/3"
+										}
+									}
+								},
+								{
+									"p": "Removes all empty parts of the result."
+								},
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "Subject"
+											},
+											"global"
+										],
+										"seealso": [
+											{
+												"marker": "#matches-3",
+												"c": "matches/3"
+											},
+											{
+												"marker": "#match-3",
+												"c": "match/3"
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	}
+}

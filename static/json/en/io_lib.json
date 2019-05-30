@@ -1,0 +1,908 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "io_lib",
+			"prepared": {},
+			"docno": {},
+			"date": {},
+			"rev": {}
+		},
+		"module": {
+			"since": "",
+			"$t": "io_lib"
+		},
+		"modulesummary": "I/O library functions.",
+		"description": {
+			"p": {
+				"seealso": [
+					{
+						"marker": "io",
+						"c": "io"
+					},
+					{
+						"marker": "lists#flatten/1",
+						"c": "lists:flatten/1"
+					}
+				]
+			}
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "chars"
+					}
+				},
+				{
+					"name": {
+						"name": "continuation"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#fread/3",
+								"c": "fread/3"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "chars_limit"
+					}
+				},
+				{
+					"name": {
+						"name": "depth"
+					}
+				},
+				{
+					"name": {
+						"name": "fread_error"
+					}
+				},
+				{
+					"name": {
+						"name": "fread_item"
+					}
+				},
+				{
+					"name": {
+						"name": "latin1_string"
+					}
+				},
+				{
+					"name": {
+						"name": "format_spec"
+					},
+					"desc": {
+						"p": "Where:",
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"c": [
+											"control_char",
+											"$P",
+											"$w"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": "args"
+									}
+								},
+								{
+									"p": {
+										"c": "width"
+									}
+								},
+								{
+									"p": {
+										"c": "adjust"
+									}
+								},
+								{
+									"p": {
+										"c": "precision"
+									}
+								},
+								{
+									"p": {
+										"c": "pad_char"
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"encoding",
+											"true",
+											"t"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"strings",
+											"false",
+											"l"
+										]
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "build_text",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Build the output text for a preparsed format list.",
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#scan_format/2",
+								"c": "scan_format/2"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "char_list",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Test for a list of characters.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Term"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "deep_char_list",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Test for a deep list of characters.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Term"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "deep_latin1_char_list",
+						"arity": "1",
+						"since": "OTP R16B"
+					},
+					"fsummary": "Test for a deep list of characters.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Term"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "format",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "fwrite",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Write formatted output.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Data"
+									},
+									{
+										"anno": "Format"
+									}
+								],
+								"seealso": {
+									"marker": "io#fwrite/1",
+									"c": "io:fwrite/1,2,3"
+								}
+							},
+							{
+								"c": [
+									"~ts",
+									"~tc",
+									"string()"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "format",
+							"arity": "3",
+							"since": "OTP 21.0"
+						},
+						{
+							"name": "fwrite",
+							"arity": "3",
+							"since": "OTP 21.0"
+						}
+					],
+					"fsummary": "Write formatted output.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Data"
+									},
+									{
+										"anno": "Format"
+									}
+								],
+								"seealso": [
+									{
+										"marker": "#fwrite/2",
+										"c": "fwrite/2"
+									},
+									{
+										"marker": "#format/2",
+										"c": "format/2"
+									}
+								]
+							},
+							"Valid option:"
+						],
+						"taglist": {
+							"tag": {
+								"c": {
+									"anno": "CharsLimit"
+								}
+							},
+							"item": {
+								"p": {
+									"c": [
+										"...",
+										{
+											"anno": "CharsLimit"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "fread",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Read formatted input.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "String"
+									},
+									{
+										"anno": "Format"
+									},
+									{
+										"anno": "String"
+									}
+								],
+								"seealso": {
+									"marker": "io#fread/3",
+									"c": "io:fread/3"
+								}
+							},
+							"The function returns:",
+							{
+								"em": "Example:"
+							}
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": {
+										"anno": [
+											"InputList",
+											"LeftOverChars"
+										]
+									}
+								},
+								{
+									"c": {
+										"anno": [
+											"RestFormat",
+											"Nchars",
+											"InputStack"
+										]
+									}
+								},
+								{
+									"c": {
+										"anno": "What"
+									}
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "InputList"
+											},
+											{
+												"anno": "LeftOverChars"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "RestFormat"
+											},
+											{
+												"anno": "Nchars"
+											},
+											{
+												"anno": "InputStack"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"c": {
+											"anno": "What"
+										}
+									}
+								}
+							]
+						},
+						"pre": {
+							"input": "io_lib:fread(\"~f~f~f\", \"15.6 17.3e-6 24.5\")."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "fread",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Re-entrant formatted reader",
+					"desc": {
+						"p": [
+							{
+								"c": "[]"
+							},
+							"The function returns:"
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": {
+										"anno": [
+											"Result",
+											"LeftOverChars"
+										]
+									}
+								},
+								{
+									"c": {
+										"anno": "Continuation"
+									}
+								}
+							],
+							"item": [
+								{
+									"p": "The input is complete. The result is one of the following:",
+									"taglist": {
+										"tag": [
+											{
+												"c": {
+													"anno": "InputList"
+												}
+											},
+											{
+												"c": "eof"
+											},
+											{
+												"c": {
+													"anno": "What"
+												}
+											}
+										],
+										"item": [
+											{
+												"p": {
+													"c": [
+														{
+															"anno": "InputList"
+														},
+														{
+															"anno": "LeftOverChars"
+														}
+													]
+												}
+											},
+											{
+												"p": {
+													"c": {
+														"anno": "LeftOverChars"
+													}
+												}
+											},
+											{
+												"p": {
+													"c": {
+														"anno": "What"
+													}
+												}
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "Continuation"
+											},
+											"fread/3"
+										]
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "indentation",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Indentation after printing string.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "String"
+								},
+								{
+									"anno": "StartIndent"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "latin1_char_list",
+						"arity": "1",
+						"since": "OTP R16B"
+					},
+					"fsummary": "Test for a list of ISO Latin-1 characters.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Term"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "nl",
+						"arity": "0",
+						"since": ""
+					},
+					"fsummary": "Write a newline.",
+					"desc": {
+						"p": "Returns a character list that represents a new line character."
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "print",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "print",
+							"arity": "4",
+							"since": ""
+						}
+					],
+					"fsummary": "Pretty print a term.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Term"
+							}
+						},
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"c": {
+										"anno": "Column"
+									}
+								},
+								{
+									"c": {
+										"anno": "LineLength"
+									}
+								},
+								{
+									"c": {
+										"anno": "Depth"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "printable_latin1_list",
+						"arity": "1",
+						"since": "OTP R16B"
+					},
+					"fsummary": "Test for a list of printable ISO Latin-1 characters.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Term"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "printable_list",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Test for a list of printable characters.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"true",
+									{
+										"anno": "Term"
+									},
+									"false"
+								]
+							},
+							{
+								"c": "+pc",
+								"seealso": [
+									{
+										"marker": "io#printable_range/0",
+										"c": "io:printable_range/0"
+									},
+									{
+										"marker": "erts:erl",
+										"c": "erl(1)"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "printable_unicode_list",
+						"arity": "1",
+						"since": "OTP R16B"
+					},
+					"fsummary": "Test for a list of printable Unicode characters.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Term"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "scan_format",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Parse all control sequences in the format string.",
+					"desc": {
+						"p": [
+							"Returns a list corresponding to the specified format string, where control sequences have been replaced with corresponding tuples. This list can be passed to:",
+							{
+								"c": [
+									"~w",
+									"~p",
+									"~W",
+									"~P"
+								]
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"seealso": {
+											"marker": "#build_text/1",
+											"c": "build_text/1"
+										},
+										"c": "format(Format, Args)"
+									}
+								},
+								{
+									"p": {
+										"seealso": {
+											"marker": "#unscan_format/1",
+											"c": "unscan_format/1"
+										},
+										"c": [
+											"Format",
+											"Args",
+											"*"
+										]
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "unscan_format",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Revert a preparsed format list to a plain character list and a list of arguments.",
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#scan_format/2",
+								"c": "scan_format/2"
+							}
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "write",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "write",
+							"arity": "2",
+							"clause_i": "1",
+							"since": ""
+						},
+						{
+							"name": "write",
+							"arity": "2",
+							"clause_i": "2",
+							"since": "OTP 20.0"
+						}
+					],
+					"fsummary": "Write a term.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Term"
+									},
+									{
+										"anno": "Depth"
+									},
+									"...",
+									{
+										"anno": "Depth"
+									},
+									{
+										"anno": "CharsLimit"
+									},
+									"...",
+									{
+										"anno": "CharsLimit"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"pre": {
+							"input": [
+								"lists:flatten(io_lib:write({1,[2],[3],[4,5],6,7,8,9})).",
+								"lists:flatten(io_lib:write({1,[2],[3],[4,5],6,7,8,9}, 5)).",
+								"lists:flatten(io_lib:write({[1,2,3],[4,5],6,7,8,9}, [{chars_limit,20}]))."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "write_atom",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Write an atom.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Atom"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "write_atom_as_latin1",
+						"arity": "1",
+						"since": "OTP 20.0"
+					},
+					"fsummary": "Write an atom.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Atom"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "write_char",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Write a character.",
+					"desc": {
+						"p": "Returns the list of characters needed to print a character constant in the Unicode character set."
+					}
+				},
+				{
+					"name": {
+						"name": "write_char_as_latin1",
+						"arity": "1",
+						"since": "OTP R16B"
+					},
+					"fsummary": "Write a character.",
+					"desc": {
+						"p": "Returns the list of characters needed to print a character constant in the Unicode character set. Non-Latin-1 characters are escaped."
+					}
+				},
+				{
+					"name": {
+						"name": "write_latin1_char",
+						"arity": "1",
+						"since": "OTP R16B"
+					},
+					"fsummary": "Write an ISO Latin-1 character.",
+					"desc": {
+						"p": "Returns the list of characters needed to print a character constant in the ISO Latin-1 character set."
+					}
+				},
+				{
+					"name": {
+						"name": "write_latin1_string",
+						"arity": "1",
+						"since": "OTP R16B"
+					},
+					"fsummary": "Write an ISO Latin-1 string.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Latin1String"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "write_string",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Write a string.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "String"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "write_string_as_latin1",
+						"arity": "1",
+						"since": "OTP R16B"
+					},
+					"fsummary": "Write a string.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "String"
+							}
+						}
+					}
+				}
+			]
+		}
+	}
+}

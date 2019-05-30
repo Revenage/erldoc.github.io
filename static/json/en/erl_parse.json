@@ -1,0 +1,619 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2016"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "erl_parse",
+			"prepared": "Robert",
+			"responsible": "Bjarne Dcker",
+			"docno": "1",
+			"approved": "Bjarne Dcker",
+			"checked": {},
+			"date": "1997-01-24",
+			"rev": "B",
+			"file": "erl_parse.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "erl_parse"
+		},
+		"modulesummary": "The Erlang parser.",
+		"description": {
+			"p": {
+				"seealso": [
+					{
+						"marker": "erts:absform",
+						"$t": "ERTS User's Guide"
+					},
+					{
+						"marker": "erl_scan",
+						"c": "erl_scan(3)"
+					}
+				],
+				"em": "dot"
+			}
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": "abstract_clause()",
+					"desc": {
+						"p": "Abstract form of an Erlang clause."
+					}
+				},
+				{
+					"name": "abstract_expr()",
+					"desc": {
+						"p": "Abstract form of an Erlang expression."
+					}
+				},
+				{
+					"name": "abstract_form()",
+					"desc": {
+						"p": "Abstract form of an Erlang form."
+					}
+				},
+				{
+					"name": "abstract_type()",
+					"desc": {
+						"p": "Abstract form of an Erlang type."
+					}
+				},
+				{
+					"name": {
+						"name": "erl_parse_tree"
+					}
+				},
+				{
+					"name": {
+						"name": "error_description"
+					}
+				},
+				{
+					"name": {
+						"name": "error_info"
+					}
+				},
+				{
+					"name": {
+						"name": "form_info"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"{error, error_info()}",
+								"{warning, error_info()}",
+								"{eof, line()}"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "token"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "abstract",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Convert an Erlang term into an abstract form.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Data"
+									},
+									{
+										"anno": "AbsTerm"
+									}
+								],
+								"seealso": {
+									"marker": "#normalise/1",
+									"c": "normalise/1"
+								}
+							},
+							{
+								"c": [
+									"erl_parse:abstract(T)",
+									"erl_parse:abstract(T, 0)"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "abstract",
+						"arity": "2",
+						"since": "OTP R16B01"
+					},
+					"fsummary": "Convert an Erlang term into an abstract form.",
+					"type": {
+						"name": "encoding_func"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Data"
+									},
+									{
+										"anno": "AbsTerm"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "Line"
+									},
+									{
+										"anno": "AbsTerm"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "Encoding"
+									},
+									"none",
+									"encoding_func()",
+									"true"
+								],
+								"seealso": {
+									"marker": "epp#default_encoding/0",
+									"c": "epp:default_encoding/0"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "anno_from_term",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return annotations as terms.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Term"
+								},
+								"erl_parse",
+								"T",
+								"erl_parse",
+								"erl_parse",
+								"T",
+								{
+									"anno": "Term"
+								}
+							],
+							"seealso": {
+								"marker": "erl_anno#from_term/1",
+								"c": "erl_anno:from_term(T)"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "anno_to_term",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the representation of annotations.",
+					"desc": {
+						"p": {
+							"c": [
+								"Anno",
+								"erl_parse",
+								{
+									"anno": "Abstr"
+								},
+								"erl_parse"
+							],
+							"seealso": {
+								"marker": "erl_anno#to_term/1",
+								"c": "erl_anno:to_term(Anno)"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "fold_anno",
+						"arity": "3",
+						"since": "OTP 18.0"
+					},
+					"fsummary": {
+						"c": "erl_parse"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Fun"
+								},
+								"erl_parse",
+								{
+									"anno": "Abstr"
+								},
+								{
+									"anno": "Fun"
+								},
+								{
+									"anno": "AccIn"
+								},
+								{
+									"anno": "AccOut"
+								},
+								"erl_parse"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"since": "",
+						"$t": "format_error(ErrorDescriptor) -> Chars"
+					},
+					"fsummary": "Format an error descriptor.",
+					"type": {
+						"v": [
+							{
+								"seealso": {
+									"marker": "#type-error_info",
+									"$t": "error_description()"
+								}
+							},
+							"Chars = [char() | Chars]"
+						]
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"ErrorDescriptor",
+								"ErrorInfo"
+							],
+							"seealso": {
+								"marker": "#errorinfo",
+								"$t": "Error Information"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "map_anno",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": {
+						"c": "erl_parse"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"erl_parse",
+								{
+									"anno": "Abstr"
+								},
+								{
+									"anno": "Fun"
+								},
+								"erl_parse",
+								"erl_parse"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "mapfold_anno",
+						"arity": "3",
+						"since": "OTP 18.0"
+					},
+					"fsummary": {
+						"c": "erl_parse"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"erl_parse",
+								{
+									"anno": "Abstr"
+								},
+								{
+									"anno": "Fun"
+								},
+								"erl_parse",
+								{
+									"anno": "Fun"
+								},
+								{
+									"anno": "AccIn"
+								},
+								{
+									"anno": "AccOut"
+								},
+								"erl_parse",
+								"erl_parse"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "new_anno",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Create new annotations.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Term"
+								},
+								"erl_parse",
+								"erl_parse",
+								"erl_parse",
+								"L",
+								{
+									"anno": "Term"
+								}
+							],
+							"seealso": [
+								{
+									"marker": "erl_anno#type-location",
+									"$t": "locations"
+								},
+								{
+									"marker": "erl_anno#new/1",
+									"c": "erl_anno:new(L)"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "normalise",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Convert abstract form to an Erlang term.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "AbsTerm"
+							},
+							"seealso": {
+								"marker": "#abstract/1",
+								"c": "abstract/1"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "parse_exprs",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Parse Erlang expressions.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Tokens"
+							}
+						},
+						"taglist": {
+							"tag": [
+								{
+									"c": {
+										"anno": "ExprList"
+									}
+								},
+								{
+									"c": {
+										"anno": "ErrorInfo"
+									}
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": {
+											"anno": "ExprList"
+										}
+									}
+								},
+								{
+									"p": "An error occurred."
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "parse_form",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Parse an Erlang form.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Tokens"
+							}
+						},
+						"taglist": {
+							"tag": [
+								{
+									"c": {
+										"anno": "AbsForm"
+									}
+								},
+								{
+									"c": {
+										"anno": "ErrorInfo"
+									}
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": {
+											"anno": "AbsForm"
+										}
+									}
+								},
+								{
+									"p": "An error occurred."
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "parse_term",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Parse an Erlang term.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Tokens"
+							}
+						},
+						"taglist": {
+							"tag": [
+								{
+									"c": {
+										"anno": "Term"
+									}
+								},
+								{
+									"c": {
+										"anno": "ErrorInfo"
+									}
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": {
+											"anno": "Term"
+										}
+									}
+								},
+								{
+									"p": "An error occurred."
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "tokens",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "tokens",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Generate a list of tokens for an expression.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "AbsTerm"
+								},
+								{
+									"anno": "MoreTokens"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		"section": [
+			{
+				"marker": {
+					"id": "errorinfo"
+				},
+				"title": "Error Information",
+				"p": [
+					{
+						"c": [
+							"ErrorInfo",
+							"ErrorInfo"
+						]
+					},
+					"A string describing the error is obtained with the following call:"
+				],
+				"code": [
+					{
+						"type": "none",
+						"$t": "{ErrorLine, Module, ErrorDescriptor}"
+					},
+					{
+						"type": "none",
+						"$t": "Module:format_error(ErrorDescriptor)"
+					}
+				]
+			},
+			{
+				"title": "See Also",
+				"p": {
+					"seealso": [
+						{
+							"marker": "erl_anno",
+							"c": "erl_anno(3)"
+						},
+						{
+							"marker": "erl_scan",
+							"c": "erl_scan(3)"
+						},
+						{
+							"marker": "io",
+							"c": "io(3)"
+						},
+						{
+							"marker": "erts:absform",
+							"$t": "The Abstract Format"
+						}
+					]
+				}
+			}
+		]
+	}
+}

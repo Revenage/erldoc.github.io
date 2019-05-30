@@ -1,0 +1,186 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2016"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "pool",
+			"prepared": {},
+			"docno": {},
+			"date": {},
+			"rev": {}
+		},
+		"module": {
+			"since": "",
+			"$t": "pool"
+		},
+		"modulesummary": "Load distribution facility.",
+		"description": {
+			"p": [
+				"This module can be used to run a set of Erlang nodes as a pool of computational processors. It is organized as a master and a set of slave nodes and includes the following features:",
+				{
+					"c": "statistics(run_queue)"
+				},
+				{
+					"seealso": {
+						"marker": "slave",
+						"c": "slave(3)"
+					}
+				},
+				"If the master node fails, the entire pool exits."
+			],
+			"list": {
+				"type": "bulleted",
+				"item": [
+					"The slave nodes send regular reports to the master about their current load.",
+					"Queries can be sent to the master to determine which node will have the least load."
+				]
+			}
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "attach",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Ensure that a pool master is running.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Node"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "get_node",
+						"arity": "0",
+						"since": ""
+					},
+					"fsummary": "Return the node with the expected lowest future load.",
+					"desc": {
+						"p": "Returns the node with the expected lowest future load."
+					}
+				},
+				{
+					"name": {
+						"name": "get_nodes",
+						"arity": "0",
+						"since": ""
+					},
+					"fsummary": "Return a list of the current member nodes of the pool.",
+					"desc": {
+						"p": "Returns a list of the current member nodes of the pool."
+					}
+				},
+				{
+					"name": {
+						"name": "pspawn",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Spawn a process on the pool node with expected lowest future load.",
+					"desc": {
+						"p": "Spawns a process on the pool node that is expected to have the lowest future load."
+					}
+				},
+				{
+					"name": {
+						"name": "pspawn_link",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Spawn and link to a process on the pool node with expected lowest future load.",
+					"desc": {
+						"p": "Spawns and links to a process on the pool node that is expected to have the lowest future load."
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "start",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "start",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": ">Start a new pool.",
+					"desc": {
+						"p": [
+							{
+								"c": ".hosts.erlang",
+								"seealso": {
+									"marker": "#files",
+									"$t": "Files"
+								}
+							},
+							{
+								"seealso": {
+									"marker": "slave#start/2",
+									"c": "slave:start/2,3"
+								},
+								"c": [
+									{
+										"anno": "Name"
+									},
+									{
+										"anno": "Args"
+									},
+									{
+										"anno": "Name"
+									},
+									{
+										"anno": "Args"
+									}
+								]
+							},
+							"Access rights must be set so that all nodes in the pool have the authority to access each other.",
+							"The function is synchronous and all the nodes, and all the system servers, are running when it returns a value."
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "stop",
+						"arity": "0",
+						"since": ""
+					},
+					"fsummary": "Stop the pool and kill all the slave nodes.",
+					"desc": {
+						"p": "Stops the pool and kills all the slave nodes."
+					}
+				}
+			]
+		},
+		"section": {
+			"marker": {
+				"id": "files"
+			},
+			"title": "Files",
+			"p": [
+				{
+					"c": ".hosts.erlang",
+					"seealso": {
+						"marker": "kernel:net_adm#host_file/0",
+						"c": "net_adm:host_file/0"
+					}
+				},
+				{
+					"c": "$HOME/.erlang.slave.out.HOST"
+				}
+			]
+		}
+	}
+}

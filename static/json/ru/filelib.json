@@ -1,0 +1,492 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2003",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "filelib",
+			"prepared": "Bjorn Gustavsson",
+			"responsible": "Bjorn Gustavsson",
+			"docno": "1",
+			"approved": "Kenneth Lundin",
+			"checked": {},
+			"date": "2003-01-21",
+			"rev": "A",
+			"file": "filelib.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "filelib"
+		},
+		"modulesummary": "File utilities, such as wildcard matching of filenames.",
+		"description": {
+			"p": [
+				{
+					"seealso": {
+						"marker": "kernel:file",
+						"c": "file"
+					}
+				},
+				"This module does not support \"raw\" filenames (that is, files whose names do not comply with the expected encoding). Such files are ignored by the functions in this module.",
+				{
+					"seealso": {
+						"marker": "kernel:file",
+						"c": "file"
+					}
+				}
+			],
+			"note": {
+				"p": [
+					"Functionality in this module generally assumes valid input and	does not necessarily fail on input that does not use a valid	encoding, but may instead very likely produce invalid output.",
+					{
+						"em": "rejected"
+					}
+				]
+			},
+			"warning": {
+				"p": "Currently null characters at the end of the filename will be accepted by primitive file operations. Such filenames are however still documented as invalid. The implementation will also change in the future and reject such filenames."
+			}
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "filename"
+					}
+				},
+				{
+					"name": {
+						"name": "dirname"
+					}
+				},
+				{
+					"name": {
+						"name": "dirname_all"
+					}
+				},
+				{
+					"name": {
+						"name": "filename_all"
+					}
+				},
+				{
+					"name": {
+						"name": "find_file_rule"
+					}
+				},
+				{
+					"name": {
+						"name": "find_source_rule"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "ensure_dir",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Ensure that all parent directories for a file or directory exist.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Name"
+								}
+							},
+							{
+								"c": [
+									"ok",
+									{
+										"anno": "Reason"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "file_size",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the size in bytes of a file.",
+					"desc": {
+						"p": "Returns the size of the specified file."
+					}
+				},
+				{
+					"name": {
+						"name": "fold_files",
+						"arity": "5",
+						"since": ""
+					},
+					"fsummary": "Fold over all files matching a regular expression.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Fun"
+									},
+									{
+										"anno": "F"
+									},
+									{
+										"anno": "Dir"
+									},
+									{
+										"anno": "RegExp"
+									},
+									{
+										"anno": "Recursive"
+									},
+									"true",
+									"Dir"
+								],
+								"seealso": {
+									"marker": "re",
+									"c": "re"
+								}
+							},
+							{
+								"c": "fun()"
+							},
+							{
+								"seealso": {
+									"marker": "kernel:file",
+									"c": "file"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "is_dir",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {
+						"c": "Name"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Name"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "is_file",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {
+						"c": "Name"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Name"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "is_regular",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {
+						"c": "Name"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Name"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "last_modified",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the local date and time when a file was last modified.",
+					"desc": {
+						"p": {
+							"c": "0"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "wildcard",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Match filenames using Unix-style wildcards.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Wildcard"
+								}
+							},
+							"The wildcard string looks like an ordinary filename, except that the following \"wildcard characters\" are interpreted in a special way:",
+							"Other characters represent themselves. Only filenames that have exactly the same character in the same position match. Matching is case-sensitive, for example, \"a\" does not match \"A\".",
+							{
+								"c": "/"
+							},
+							{
+								"c": [
+									"\\",
+									"\\",
+									"\\\\",
+									"?"
+								]
+							},
+							"Notice that multiple \"*\" characters are allowed (as in Unix wildcards, but opposed to Windows/DOS wildcards).",
+							{
+								"em": "Examples:"
+							},
+							"The following examples assume that the current directory is the top of an Erlang/OTP installation.",
+							{
+								"c": ".beam"
+							},
+							{
+								"c": [
+									".erl",
+									".hrl",
+									"src"
+								]
+							},
+							{
+								"c": [
+									".hrl",
+									"src",
+									"include"
+								]
+							},
+							{
+								"c": [
+									".erl",
+									".hrl",
+									"src",
+									"include"
+								]
+							},
+							{
+								"c": [
+									".erl",
+									".hrl"
+								]
+							}
+						],
+						"taglist": {
+							"tag": [
+								"?",
+								"*",
+								"**",
+								"[Character1,Character2,...]",
+								"{Item,...}"
+							],
+							"item": [
+								{
+									"p": "Matches one character."
+								},
+								{
+									"p": "Matches any number of characters up to the end of the filename, the next dot, or the next slash."
+								},
+								{
+									"p": {
+										"c": "*"
+									}
+								},
+								{
+									"p": {
+										"c": "[A-Z]"
+									}
+								},
+								{
+									"p": "Alternation. Matches one of the alternatives."
+								}
+							]
+						},
+						"code": [
+							{
+								"type": "none",
+								"$t": "filelib:wildcard(\"lib/*/ebin/*.beam\")."
+							},
+							{
+								"type": "none",
+								"$t": "filelib:wildcard(\"lib/*/src/*.?rl\")"
+							},
+							{
+								"type": "none",
+								"$t": "filelib:wildcard(\"lib/*/src/*.{erl,hrl}\")"
+							},
+							{
+								"type": "none",
+								"$t": "filelib:wildcard(\"lib/*/{src,include}/*.hrl\")."
+							},
+							{
+								"type": "none",
+								"$t": "filelib:wildcard(\"lib/*/{src,include}/*.{erl,hrl}\")"
+							},
+							{
+								"type": "none",
+								"$t": "filelib:wildcard(\"lib/**/*.{erl,hrl}\")"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "wildcard",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Match filenames using Unix-style wildcards starting at a specified directory.",
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#wildcard/1",
+								"c": "wildcard/1"
+							},
+							"c": {
+								"anno": "Cwd"
+							}
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "find_file",
+							"arity": "2",
+							"since": "OTP 20.0"
+						},
+						{
+							"name": "find_file",
+							"arity": "3",
+							"since": "OTP 20.0"
+						}
+					],
+					"fsummary": "Find a file relative to a given directory.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"{\"ebin\", \"src\"}",
+									"\"ebin\"",
+									"\"src\""
+								]
+							},
+							{
+								"c": {
+									"anno": "Rules"
+								},
+								"seealso": {
+									"marker": "kernel:kernel_app#source_search_rules",
+									"c": "source_search_rules"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "find_source",
+						"arity": "1",
+						"since": "OTP 20.0"
+					},
+					"fsummary": "Find the source file for a given object file.",
+					"desc": {
+						"p": {
+							"c": [
+								"find_source(Base, Dir)",
+								"Dir",
+								{
+									"anno": "FilePath"
+								},
+								"Base",
+								{
+									"anno": "FilePath"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "find_source",
+							"arity": "2",
+							"since": "OTP 20.0"
+						},
+						{
+							"name": "find_source",
+							"arity": "3",
+							"since": "OTP 20.0"
+						}
+					],
+					"fsummary": "Find a source file relative to a given directory.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									".beam",
+									".erl",
+									"\"ebin\"",
+									"\"src\"",
+									"\"src/*\""
+								],
+								"seealso": {
+									"marker": "#find_file/3",
+									"c": "find_file/3"
+								}
+							},
+							{
+								"c": {
+									"anno": "Rules"
+								},
+								"seealso": {
+									"marker": "kernel:kernel_app#source_search_rules",
+									"c": "source_search_rules"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	}
+}

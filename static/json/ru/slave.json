@@ -1,0 +1,301 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2016"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "slave",
+			"prepared": {},
+			"docno": {},
+			"date": {},
+			"rev": {}
+		},
+		"module": {
+			"since": "",
+			"$t": "slave"
+		},
+		"modulesummary": "Functions for starting and controlling slave nodes.",
+		"description": {
+			"p": [
+				"This module provides functions for starting Erlang slave nodes. All slave nodes that are started by a master terminate automatically when the master terminates. All terminal output produced at the slave is sent back to the master node. File I/O is done through the master.",
+				{
+					"c": [
+						"ssh",
+						"ssh",
+						"ssh",
+						"ssh"
+					]
+				},
+				{
+					"c": "ssh",
+					"seealso": {
+						"marker": "erts:erl",
+						"c": "erl(1)"
+					}
+				},
+				{
+					"c": [
+						"-rsh",
+						"\"$RSH\" \"$REMOTE_HOSTNAME\" erl -detached -noinput ...",
+						"erl"
+					]
+				},
+				"The slave node is to use the same file system at the master. At least, Erlang/OTP is to be installed in the same place on both computers and the same version of Erlang is to be used.",
+				"A node running on Windows can only start slave nodes on the host on which it is running.",
+				"The master node must be alive."
+			],
+			"pre": "-rsh Program"
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"since": "",
+						"$t": "pseudo([Master | ServerList]) -> ok"
+					},
+					"fsummary": "Start a number of pseudo servers.",
+					"type": {
+						"v": [
+							"Master = node()",
+							"ServerList = [atom()]"
+						]
+					},
+					"desc": {
+						"p": {
+							"c": "pseudo(Master, ServerList)"
+						},
+						"pre": "% erl -name abc -s slave pseudo klacke@super x --"
+					}
+				},
+				{
+					"name": {
+						"name": "pseudo",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Start a number of pseudo servers.",
+					"desc": {
+						"p": [
+							"Starts a number of pseudo servers. A pseudo server is a server with a registered name that does nothing but pass on all message to the real server that executes at a master node. A pseudo server is an intermediary that only has the same registered name as the real server.",
+							{
+								"c": [
+									"N",
+									"pxw",
+									"pxw_server"
+								]
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "rpc:call(N, slave, pseudo, [node(), [pxw_server]])."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "relay",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Run a pseudo server.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Pid"
+							}
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "start",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "start",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "start",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": "Start a slave node on a host.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Host"
+								}
+							},
+							{
+								"c": {
+									"anno": [
+										"Name",
+										"Host"
+									]
+								}
+							},
+							{
+								"c": "user"
+							},
+							{
+								"c": [
+									{
+										"anno": "Args"
+									},
+									"erl"
+								],
+								"seealso": {
+									"marker": "erts:erl",
+									"c": "erl(1)"
+								}
+							},
+							{
+								"c": [
+									"H",
+									"Name@H"
+								]
+							},
+							"The following code is executed to achieve this:",
+							{
+								"c": [
+									{
+										"anno": "Node"
+									},
+									{
+										"anno": "Node"
+									},
+									{
+										"anno": "Reason"
+									},
+									{
+										"anno": "Reason"
+									}
+								]
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"c": "Dir"
+								},
+								{
+									"c": "M"
+								},
+								{
+									"c": "DISPLAY"
+								}
+							]
+						},
+						"code": {
+							"type": "none",
+							"$t": "E = \" -env DISPLAY \" ++ net_adm:localhost() ++ \":0 \",Arg = \"-mnesia_dir \" ++ M ++ \" -pa \" ++ Dir ++ E,slave:start(H, Name, Arg)."
+						},
+						"taglist": {
+							"tag": [
+								{
+									"c": "timeout"
+								},
+								{
+									"c": "no_rsh"
+								},
+								{
+									"c": {
+										"anno": "Node"
+									}
+								}
+							],
+							"item": [
+								{
+									"$t": "",
+									"p": "The master node failed to get in contact with the slave node. This can occur in a number of circumstances:",
+									"list": {
+										"type": "bulleted",
+										"item": [
+											"Erlang/OTP is not installed on the remote host.",
+											"The file system on the other host has a different structure to the the master.",
+											"The Erlang nodes have different cookies."
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"ssh",
+											"-rsh"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": {
+											"anno": [
+												"Name",
+												"Host"
+											]
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "start_link",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "start_link",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "start_link",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": "Start and link to a slave node on a host.",
+					"desc": {
+						"p": [
+							{
+								"c": "start/1,2,3"
+							},
+							{
+								"seealso": {
+									"marker": "#start/1",
+									"c": "start/1,2,3"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "stop",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Stop (kill) a node.",
+					"desc": {
+						"p": "Stops (kills) a node."
+					}
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,1458 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "gen_server",
+			"prepared": {},
+			"docno": {},
+			"date": {},
+			"rev": {}
+		},
+		"module": {
+			"since": "",
+			"$t": "gen_server"
+		},
+		"modulesummary": "Generic server behavior.",
+		"description": {
+			"p": [
+				{
+					"c": "gen_server",
+					"seealso": {
+						"marker": "doc/design_principles:gen_server_concepts",
+						"$t": "gen_server Behaviour"
+					}
+				},
+				{
+					"c": "gen_server"
+				},
+				{
+					"c": "gen_server"
+				},
+				{
+					"c": [
+						"gen_server",
+						"sys",
+						"gen_server"
+					],
+					"seealso": {
+						"marker": "sys",
+						"c": "sys(3)"
+					}
+				},
+				{
+					"c": "gen_server"
+				},
+				{
+					"c": "gen_server"
+				},
+				{
+					"c": [
+						"gen_server",
+						"'hibernate'"
+					],
+					"seealso": {
+						"marker": "erts:erlang#hibernate/3",
+						"c": "erlang:hibernate/3"
+					}
+				},
+				{
+					"c": [
+						"gen_server",
+						"{continue,Continue}",
+						"handle_continue/2"
+					]
+				}
+			],
+			"pre": "gen_server module Callback module----------------- ---------------gen_server:startgen_server:start_link -----> Module:init/1gen_server:stop -----> Module:terminate/2gen_server:callgen_server:multi_call -----> Module:handle_call/3gen_server:castgen_server:abcast -----> Module:handle_cast/2- -----> Module:handle_info/2- -----> Module:handle_continue/2- -----> Module:terminate/2- -----> Module:code_change/3"
+		},
+		"funcs": [
+			{
+				"func": [
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "abcast(Name, Request) -> abcast"
+							},
+							{
+								"since": "",
+								"$t": "abcast(Nodes, Name, Request) -> abcast"
+							}
+						],
+						"fsummary": "Send an asynchronous request to many generic servers.",
+						"type": {
+							"v": [
+								"Nodes = [Node]",
+								"Node = atom()",
+								"Name = atom()",
+								"Request = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_server",
+										"Name",
+										"gen_server",
+										"Name",
+										"gen_server"
+									],
+									"seealso": {
+										"marker": "#Module:handle_cast/2",
+										"c": "Module:handle_cast/2"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#multi_call/2",
+										"c": "multi_call/2,3,4"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "call(ServerRef, Request) -> Reply"
+							},
+							{
+								"since": "",
+								"$t": "call(ServerRef, Request, Timeout) -> Reply"
+							}
+						],
+						"fsummary": "Make a synchronous call to a generic server.",
+						"type": {
+							"v": [
+								"ServerRef = Name | {Name,Node} | {global,GlobalName}",
+								"| {via,Module,ViaName} | pid()",
+								"Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Request = term()",
+								"Timeout = int()>0 | infinity",
+								"Reply = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"ServerRef",
+										"gen_server",
+										"gen_server"
+									],
+									"seealso": {
+										"marker": "#Module:handle_call/3",
+										"c": "Module:handle_call/3"
+									}
+								},
+								{
+									"c": "ServerRef"
+								},
+								{
+									"c": [
+										"Request",
+										"Module:handle_call/3"
+									]
+								},
+								{
+									"c": [
+										"Timeout",
+										"infinity"
+									]
+								},
+								{
+									"c": [
+										"Reply",
+										"Module:handle_call/3"
+									]
+								},
+								{
+									"c": "gen_server"
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									"The pid",
+									{
+										"c": [
+											"Name",
+											"gen_server"
+										]
+									},
+									{
+										"c": [
+											"{Name,Node}",
+											"gen_server"
+										]
+									},
+									{
+										"c": [
+											"{global,GlobalName}",
+											"gen_server"
+										]
+									},
+									{
+										"c": [
+											"{via,Module,ViaName}",
+											"gen_server"
+										]
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "cast(ServerRef, Request) -> ok"
+						},
+						"fsummary": "Send an asynchronous request to a generic server.",
+						"type": {
+							"v": [
+								"ServerRef = Name | {Name,Node} | {global,GlobalName}",
+								"| {via,Module,ViaName} | pid()",
+								"Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Request = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"ServerRef",
+										"gen_server",
+										"ok",
+										"gen_server",
+										"gen_server"
+									],
+									"seealso": {
+										"marker": "#Module:handle_cast/2",
+										"c": "Module:handle_cast/2"
+									}
+								},
+								{
+									"c": "ServerRef",
+									"seealso": {
+										"marker": "#call/2",
+										"c": "call/2,3"
+									}
+								},
+								{
+									"c": [
+										"Request",
+										"Module:handle_cast/2"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "enter_loop(Module, Options, State)"
+							},
+							{
+								"since": "",
+								"$t": "enter_loop(Module, Options, State, ServerName)"
+							},
+							{
+								"since": "",
+								"$t": "enter_loop(Module, Options, State, Timeout)"
+							},
+							{
+								"since": "",
+								"$t": "enter_loop(Module, Options, State, ServerName, Timeout)"
+							}
+						],
+						"fsummary": {
+							"c": "gen_server"
+						},
+						"type": {
+							"v": [
+								"Module = atom()",
+								"Options = [Option]",
+								"Option = {debug,Dbgs} | {hibernate_after,HibernateAfterTimeout}",
+								"Dbgs = [Dbg]",
+								"Dbg = trace | log | statistics",
+								"| {log_to_file,FileName} | {install,{Func,FuncState}}",
+								"State = term()",
+								"ServerName = {local,Name} | {global,GlobalName}",
+								"| {via,Module,ViaName}",
+								"Name = atom()",
+								"GlobalName = ViaName = term()",
+								"Timeout = int() | infinity"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_server",
+										"gen_server",
+										"gen_server"
+									],
+									"em": "must",
+									"seealso": {
+										"marker": "proc_lib",
+										"c": "proc_lib(3)"
+									}
+								},
+								{
+									"c": "gen_server"
+								},
+								{
+									"c": [
+										"Module",
+										"Options",
+										"ServerName",
+										"ServerName"
+									],
+									"seealso": {
+										"marker": "#start_link/3",
+										"c": "start[_link]/3,4"
+									},
+									"em": "before"
+								},
+								{
+									"c": [
+										"State",
+										"Timeout",
+										"Module",
+										"init/1"
+									],
+									"seealso": {
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									}
+								},
+								{
+									"c": [
+										"proc_lib",
+										"ServerName"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "multi_call(Name, Request) -> Result"
+							},
+							{
+								"since": "",
+								"$t": "multi_call(Nodes, Name, Request) -> Result"
+							},
+							{
+								"since": "",
+								"$t": "multi_call(Nodes, Name, Request, Timeout) -> Result"
+							}
+						],
+						"fsummary": "Make a synchronous call to many generic servers.",
+						"type": {
+							"v": [
+								"Nodes = [Node]",
+								"Node = atom()",
+								"Name = atom()",
+								"Request = term()",
+								"Timeout = int()>=0 | infinity",
+								"Result = {Replies,BadNodes}",
+								"Replies = [{Node,Reply}]",
+								"Reply = term()",
+								"BadNodes = [Node]"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_server",
+										"Name",
+										"gen_server"
+									],
+									"seealso": {
+										"marker": "#Module:handle_call/3",
+										"c": "Module:handle_call/3"
+									}
+								},
+								{
+									"c": [
+										"{Replies,BadNodes}",
+										"Replies",
+										"{Node,Reply}",
+										"BadNodes",
+										"gen_server",
+										"Name"
+									]
+								},
+								{
+									"c": [
+										"Nodes",
+										"[node()|nodes()]"
+									]
+								},
+								{
+									"c": [
+										"Name",
+										"gen_server"
+									]
+								},
+								{
+									"c": [
+										"Request",
+										"Module:handle_call/3"
+									]
+								},
+								{
+									"c": [
+										"Timeout",
+										"infinity",
+										"infinity",
+										"BadNodes"
+									]
+								},
+								{
+									"c": [
+										"Reply",
+										"gen_server",
+										"Node",
+										"{Node,Reply}",
+										"Replies",
+										"Reply",
+										"Module:handle_call/3"
+									]
+								},
+								"To prevent late answers (after the time-out) from polluting the message queue of the caller, a middleman process is used to do the calls. Late answers are then discarded when they arrive to a terminated process."
+							],
+							"warning": {
+								"p": [
+									{
+										"c": [
+											"gen_server",
+											"Timeout"
+										]
+									},
+									"This problem does not exist if all nodes are Erlang nodes."
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "reply(Client, Reply) -> Result"
+						},
+						"fsummary": "Send a reply to a client.",
+						"type": {
+							"v": [
+								"Client - see below",
+								"Reply = term()",
+								"Result = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "gen_server",
+									"seealso": [
+										{
+											"marker": "#call/2",
+											"c": "call/2,3"
+										},
+										{
+											"marker": "#multi_call/2",
+											"c": "multi_call/2,3,4"
+										},
+										{
+											"marker": "#Module:handle_call/3",
+											"c": "Module:handle_call/3"
+										}
+									]
+								},
+								{
+									"c": [
+										"Client",
+										"From",
+										"Reply",
+										"call/2,3",
+										"multi_call/2,3,4"
+									]
+								},
+								{
+									"c": "Result"
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "start(Module, Args, Options) -> Result"
+							},
+							{
+								"since": "",
+								"$t": "start(ServerName, Module, Args, Options) -> Result"
+							}
+						],
+						"fsummary": {
+							"c": "gen_server"
+						},
+						"type": {
+							"v": [
+								"ServerName = {local,Name} | {global,GlobalName}",
+								"| {via,Module,ViaName}",
+								"Name = atom()",
+								"GlobalName = ViaName = term()",
+								"Module = atom()",
+								"Args = term()",
+								"Options = [Option]",
+								"Option = {debug,Dbgs} | {timeout,Time} | {hibernate_after,HibernateAfterTimeout} | {spawn_opt,SOpts}",
+								"Dbgs = [Dbg]",
+								"Dbg = trace | log | statistics | {log_to_file,FileName} | {install,{Func,FuncState}}",
+								"SOpts = [term()]",
+								"Result = {ok,Pid} | ignore | {error,Error}",
+								"Pid = pid()",
+								"Error = {already_started,Pid} | term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_server",
+										"gen_server"
+									]
+								},
+								{
+									"seealso": {
+										"marker": "#start_link/3",
+										"c": "start_link/3,4"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "",
+								"$t": "start_link(Module, Args, Options) -> Result"
+							},
+							{
+								"since": "",
+								"$t": "start_link(ServerName, Module, Args, Options) -> Result"
+							}
+						],
+						"fsummary": {
+							"c": "gen_server"
+						},
+						"type": {
+							"v": [
+								"ServerName = {local,Name} | {global,GlobalName}",
+								"| {via,Module,ViaName}",
+								"Name = atom()",
+								"GlobalName = ViaName = term()",
+								"Module = atom()",
+								"Args = term()",
+								"Options = [Option]",
+								"Option = {debug,Dbgs} | {timeout,Time} | {hibernate_after,HibernateAfterTimeout} | {spawn_opt,SOpts}",
+								"Dbgs = [Dbg]",
+								"Dbg = trace | log | statistics | {log_to_file,FileName} | {install,{Func,FuncState}}",
+								"SOpts = [term()]",
+								"Result = {ok,Pid} | ignore | {error,Error}",
+								"Pid = pid()",
+								"Error = {already_started,Pid} | term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_server",
+										"gen_server"
+									]
+								},
+								{
+									"c": [
+										"gen_server",
+										"start_link/3,4",
+										"Module:init/1"
+									],
+									"seealso": {
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									}
+								},
+								{
+									"c": "Module"
+								},
+								{
+									"c": "Args",
+									"seealso": {
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									}
+								},
+								{
+									"c": [
+										"gen_server",
+										"{ok,Pid}",
+										"Pid",
+										"gen_server",
+										"ServerName",
+										"{error,{already_started,Pid}}",
+										"Pid"
+									]
+								},
+								{
+									"c": [
+										"Module:init/1",
+										"Reason",
+										"{error,Reason}",
+										"Module:init/1",
+										"{stop,Reason}",
+										"ignore",
+										"{error,Reason}",
+										"ignore"
+									]
+								}
+							],
+							"list": [
+								{
+									"type": "bulleted",
+									"item": [
+										{
+											"p": {
+												"c": [
+													"ServerName={local,Name}",
+													"gen_server",
+													"Name",
+													"register/2"
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													"ServerName={global,GlobalName}",
+													"gen_server",
+													"GlobalName",
+													"gen_server"
+												],
+												"seealso": {
+													"marker": "kernel:global#register_name/2",
+													"c": "global:register_name/2"
+												}
+											}
+										},
+										{
+											"p": {
+												"c": [
+													"ServerName={via,Module,ViaName}",
+													"gen_server",
+													"Module",
+													"Module",
+													"register_name/2",
+													"unregister_name/1",
+													"whereis_name/1",
+													"send/2",
+													"{via,global,GlobalName}"
+												],
+												"seealso": {
+													"marker": "kernel:global",
+													"c": "global"
+												}
+											}
+										}
+									]
+								},
+								{
+									"type": "bulleted",
+									"item": [
+										{
+											"p": {
+												"c": [
+													"{timeout,Time}",
+													"gen_server",
+													"Time",
+													"{error,timeout}"
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													"{hibernate_after,HibernateAfterTimeout}",
+													"gen_server",
+													"HibernateAfterTimeout"
+												],
+												"seealso": {
+													"marker": "proc_lib#hibernate/3",
+													"c": "proc_lib:hibernate/3"
+												}
+											}
+										},
+										{
+											"p": {
+												"c": [
+													"{debug,Dbgs}",
+													"sys",
+													"Dbgs"
+												],
+												"seealso": {
+													"marker": "sys",
+													"c": "sys(3)"
+												}
+											}
+										},
+										{
+											"p": {
+												"c": [
+													"{spawn_opt,SOpts}",
+													"SOpts",
+													"spawn_opt",
+													"gen_server"
+												],
+												"seealso": {
+													"marker": "erts:erlang#spawn_opt/2",
+													"c": "spawn_opt/2"
+												}
+											}
+										}
+									]
+								}
+							],
+							"note": {
+								"p": {
+									"c": [
+										"monitor",
+										"badarg"
+									]
+								}
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "OTP 18.0",
+								"$t": "stop(ServerRef) -> ok"
+							},
+							{
+								"since": "OTP 18.0",
+								"$t": "stop(ServerRef, Reason, Timeout) -> ok"
+							}
+						],
+						"fsummary": "Synchronously stop a generic server.",
+						"type": {
+							"v": [
+								"ServerRef = Name | {Name,Node} | {global,GlobalName}",
+								"| {via,Module,ViaName} | pid()",
+								"Node = atom()",
+								"GlobalName = ViaName = term()",
+								"Reason = term()",
+								"Timeout = int()>0 | infinity"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"Reason",
+										"gen_server"
+									],
+									"seealso": {
+										"marker": "#Module:terminate/2",
+										"c": "Module:terminate/2"
+									}
+								},
+								{
+									"c": [
+										"ok",
+										"normal",
+										"shutdown",
+										"{shutdown,Term}",
+										"Reason",
+										"normal"
+									],
+									"seealso": {
+										"marker": "kernel:logger",
+										"c": "logger(3)"
+									}
+								},
+								{
+									"c": [
+										"Timeout",
+										"infinity",
+										"infinity",
+										"timeout"
+									]
+								},
+								{
+									"c": "noproc"
+								}
+							]
+						}
+					}
+				]
+			},
+			{
+				"func": [
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:code_change(OldVsn, State, Extra) -> {ok, NewState} | {error, Reason}"
+						},
+						"fsummary": "Update the internal state during upgrade/downgrade.",
+						"type": {
+							"v": [
+								"OldVsn = Vsn | {down, Vsn}",
+								"Vsn = term()",
+								"State = NewState = term()",
+								"Extra = term()",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": [
+										"Change={advanced,Extra}",
+										"appup",
+										"code_change/3",
+										"undef"
+									]
+								}
+							},
+							"p": [
+								{
+									"c": [
+										"gen_server",
+										"{update,Module,Change,...}",
+										"Change={advanced,Extra}",
+										"appup"
+									],
+									"seealso": {
+										"marker": "doc/design_principles:release_handling#instr",
+										"$t": "Release Handling Instructions"
+									}
+								},
+								{
+									"c": [
+										"OldVsn",
+										"Vsn",
+										"OldVsn",
+										"{down,Vsn}",
+										"Vsn",
+										"vsn",
+										"Module"
+									]
+								},
+								{
+									"c": [
+										"State",
+										"gen_server"
+									]
+								},
+								{
+									"c": [
+										"Extra",
+										"{advanced,Extra}"
+									]
+								},
+								"If successful, the function must return the updated internal state.",
+								{
+									"c": "{error,Reason}"
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "OTP R13B04",
+							"$t": "Module:format_status(Opt, [PDict, State]) -> Status"
+						},
+						"fsummary": {
+							"c": "gen_server"
+						},
+						"type": {
+							"v": [
+								"Opt = normal | terminate",
+								"PDict = [{Key, Value}]",
+								"State = term()",
+								"Status = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": "gen_server"
+								}
+							},
+							"p": [
+								{
+									"c": "gen_server"
+								},
+								{
+									"c": [
+										"gen_server",
+										"sys:get_status/1,2",
+										"format_status/2",
+										"gen_server"
+									]
+								},
+								{
+									"c": [
+										"PDict",
+										"gen_server"
+									]
+								},
+								{
+									"c": [
+										"State",
+										"gen_server"
+									]
+								},
+								{
+									"c": [
+										"Status",
+										"gen_server",
+										"Status",
+										"sys:get_status/1,2",
+										"Opt",
+										"normal",
+										"Status",
+										"[{data, [{\"State\", Term}]}]",
+										"Term",
+										"gen_server",
+										"sys:get_status/1,2"
+									]
+								},
+								"One use for this function is to return compact alternative state representations to avoid that large state terms are printed in log files."
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"seealso": {
+												"marker": "sys#get_status/1",
+												"c": "sys:get_status/1,2"
+											},
+											"c": [
+												"gen_server",
+												"Opt",
+												"normal"
+											]
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"gen_server",
+												"Opt",
+												"terminate"
+											]
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:handle_call(Request, From, State) -> Result"
+						},
+						"fsummary": "Handle a synchronous request.",
+						"type": {
+							"v": [
+								"Request = term()",
+								"From = {pid(),Tag}",
+								"State = term()",
+								"Result = {reply,Reply,NewState} | {reply,Reply,NewState,Timeout}",
+								"| {reply,Reply,NewState,hibernate}",
+								"| {reply,Reply,NewState,{continue,Continue}}",
+								"| {noreply,NewState} | {noreply,NewState,Timeout}",
+								"| {noreply,NewState,hibernate}",
+								"| {noreply,NewState,{continue,Continue}}",
+								"| {stop,Reason,Reply,NewState} | {stop,Reason,NewState}",
+								"Reply = term()",
+								"NewState = term()",
+								"Timeout = int()>=0 | infinity",
+								"Continue = term()",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "gen_server",
+									"seealso": [
+										{
+											"marker": "#call/2",
+											"c": "call/2,3"
+										},
+										{
+											"marker": "#multi_call/2",
+											"c": "multi_call/2,3,4"
+										}
+									]
+								},
+								{
+									"c": [
+										"Request",
+										"Request",
+										"call",
+										"multi_call"
+									]
+								},
+								{
+									"c": [
+										"From",
+										"{Pid,Tag}",
+										"Pid",
+										"Tag"
+									]
+								},
+								{
+									"c": [
+										"State",
+										"gen_server"
+									]
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"p": [
+											{
+												"c": [
+													"{reply,Reply,NewState}",
+													"{reply,Reply,NewState,Timeout}",
+													"{reply,Reply,NewState,hibernate}",
+													"Reply",
+													"From",
+													"call/2,3",
+													"multi_call/2,3,4",
+													"gen_server",
+													"NewState"
+												]
+											},
+											{
+												"c": [
+													"Timeout",
+													"hibernate"
+												],
+												"seealso": {
+													"marker": "#Module:init/1",
+													"c": "Module:init/1"
+												}
+											}
+										]
+									},
+									{
+										"p": {
+											"c": [
+												"{noreply,NewState}",
+												"{noreply,NewState,Timeout}",
+												"{noreply,NewState,hibernate}",
+												"gen_server",
+												"NewState",
+												"From"
+											],
+											"seealso": {
+												"marker": "#reply/2",
+												"c": "reply/2"
+											}
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"{stop,Reason,Reply,NewState}",
+												"Reply",
+												"From"
+											]
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"{stop,Reason,NewState}",
+												"From",
+												"gen_server",
+												"Module:terminate(Reason,NewState)"
+											],
+											"seealso": {
+												"marker": "#reply/2",
+												"c": "reply/2"
+											}
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:handle_cast(Request, State) -> Result"
+						},
+						"fsummary": "Handle an asynchronous request.",
+						"type": {
+							"v": [
+								"Request = term()",
+								"State = term()",
+								"Result = {noreply,NewState} | {noreply,NewState,Timeout}",
+								"| {noreply,NewState,hibernate}",
+								"| {noreply,NewState,{continue,Continue}}",
+								"| {stop,Reason,NewState}",
+								"NewState = term()",
+								"Timeout = int()>=0 | infinity",
+								"Continue = term()",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "gen_server",
+									"seealso": [
+										{
+											"marker": "#cast/2",
+											"c": "cast/2"
+										},
+										{
+											"marker": "#abcast/2",
+											"c": "abcast/2,3"
+										}
+									]
+								},
+								{
+									"seealso": {
+										"marker": "#Module:handle_call/3",
+										"c": "Module:handle_call/3"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "OTP 21.0",
+							"$t": "Module:handle_continue(Continue, State) -> Result"
+						},
+						"fsummary": "Handle a continue instruction.",
+						"type": {
+							"v": [
+								"Continue = term()",
+								"State = term()",
+								"Result = {noreply,NewState} | {noreply,NewState,Timeout}",
+								"| {noreply,NewState,hibernate}",
+								"| {noreply,NewState,{continue,Continue}}",
+								"| {stop,Reason,NewState}",
+								"NewState = term()",
+								"Timeout = int()>=0 | infinity",
+								"Continue = term()",
+								"Reason = normal | term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": [
+										"{continue,Continue}",
+										"undef"
+									]
+								}
+							},
+							"p": [
+								{
+									"c": [
+										"gen_server",
+										"{continue, Continue}",
+										"handle_continue/2"
+									]
+								},
+								{
+									"seealso": {
+										"marker": "#Module:handle_call/3",
+										"c": "Module:handle_call/3"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:handle_info(Info, State) -> Result"
+						},
+						"fsummary": "Handle an incoming message.",
+						"type": {
+							"v": [
+								"Info = timeout | term()",
+								"State = term()",
+								"Result = {noreply,NewState} | {noreply,NewState,Timeout}",
+								"| {noreply,NewState,hibernate}",
+								"| {noreply,NewState,{continue,Continue}}",
+								"| {stop,Reason,NewState}",
+								"NewState = term()",
+								"Timeout = int()>=0 | infinity",
+								"Reason = normal | term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": [
+										"gen_server",
+										"Info",
+										"{noreply, State}"
+									]
+								}
+							},
+							"p": [
+								{
+									"c": "gen_server"
+								},
+								{
+									"c": [
+										"Info",
+										"timeout"
+									]
+								},
+								{
+									"seealso": {
+										"marker": "#Module:handle_call/3",
+										"c": "Module:handle_call/3"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:init(Args) -> Result"
+						},
+						"fsummary": "Initialize process and internal state.",
+						"type": {
+							"v": [
+								"Args = term()",
+								"Result = {ok,State} | {ok,State,Timeout} | {ok,State,hibernate}",
+								"| {ok,State,{continue,Continue}} | {stop,Reason} | ignore",
+								"State = term()",
+								"Timeout = int()>=0 | infinity",
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "gen_server",
+									"seealso": [
+										{
+											"marker": "#start/3",
+											"c": "start/3,4"
+										},
+										{
+											"marker": "#start_link/3",
+											"c": "start_link/3,4"
+										}
+									]
+								},
+								{
+									"c": [
+										"Args",
+										"Args"
+									]
+								},
+								{
+									"c": [
+										"{ok,State}",
+										"{ok,State,Timeout}",
+										"{ok,State,hibernate}",
+										"State",
+										"gen_server"
+									]
+								},
+								{
+									"c": [
+										"Timeout",
+										"timeout",
+										"infinity"
+									],
+									"seealso": {
+										"marker": "#Module:handle_info/2",
+										"c": "Module:handle_info/2"
+									}
+								},
+								{
+									"c": "hibernate",
+									"seealso": {
+										"marker": "proc_lib#hibernate/3",
+										"c": "proc_lib:hibernate/3"
+									}
+								},
+								{
+									"c": [
+										"{stop,Reason}",
+										"Reason",
+										"ignore"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "",
+							"$t": "Module:terminate(Reason, State)"
+						},
+						"fsummary": "Clean up before termination.",
+						"type": {
+							"v": [
+								"Reason = normal | shutdown | {shutdown,term()} | term()",
+								"State = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": "gen_server"
+								}
+							},
+							"p": [
+								{
+									"c": [
+										"gen_server",
+										"gen_server",
+										"Reason"
+									],
+									"seealso": {
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									}
+								},
+								{
+									"c": [
+										"Reason",
+										"State",
+										"gen_server"
+									]
+								},
+								{
+									"c": [
+										"Reason",
+										"gen_server",
+										"{stop,..}",
+										"Reason",
+										"Reason"
+									]
+								},
+								{
+									"c": [
+										"gen_server",
+										"Reason=shutdown"
+									]
+								},
+								{
+									"c": [
+										"gen_server",
+										"'EXIT'",
+										"Reason",
+										"'EXIT'"
+									],
+									"em": "not"
+								},
+								{
+									"c": "gen_server"
+								},
+								{
+									"c": [
+										"normal",
+										"shutdown",
+										"{shutdown,Term}",
+										"gen_server"
+									],
+									"seealso": {
+										"marker": "kernel:logger",
+										"c": "logger(3)"
+									}
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"c": "gen_server"
+										}
+									},
+									{
+										"p": {
+											"c": "brutal_kill"
+										}
+									}
+								]
+							}
+						}
+					}
+				]
+			}
+		],
+		"section": [
+			{
+				"title": "Callback Functions",
+				"p": {
+					"c": "gen_server"
+				}
+			},
+			{
+				"title": "See Also",
+				"p": {
+					"seealso": [
+						{
+							"marker": "gen_event",
+							"c": "gen_event(3)"
+						},
+						{
+							"marker": "gen_statem",
+							"c": "gen_statem(3)"
+						},
+						{
+							"marker": "proc_lib",
+							"c": "proc_lib(3)"
+						},
+						{
+							"marker": "supervisor",
+							"c": "supervisor(3)"
+						},
+						{
+							"marker": "sys",
+							"c": "sys(3)"
+						}
+					]
+				}
+			}
+		]
+	}
+}

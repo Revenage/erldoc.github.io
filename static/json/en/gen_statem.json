@@ -1,0 +1,3486 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2016",
+					"2019"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "gen_statem",
+			"prepared": {},
+			"docno": {},
+			"date": {},
+			"rev": {}
+		},
+		"module": {
+			"since": "OTP 19.0",
+			"$t": "gen_statem"
+		},
+		"modulesummary": "Generic state machine behavior.",
+		"description": {
+			"p": [
+				{
+					"c": "gen_statem",
+					"seealso": {
+						"marker": "gen_fsm",
+						"c": "gen_fsm"
+					}
+				},
+				{
+					"c": "gen_statem"
+				},
+				{
+					"c": "gen_statem",
+					"seealso": [
+						{
+							"marker": "doc/design_principles:statem",
+							"c": "gen_statem"
+						},
+						{
+							"marker": "doc/design_principles:users_guide",
+							"$t": "OTP Design Principles"
+						}
+					]
+				},
+				{
+					"c": "gen_statem",
+					"seealso": {
+						"marker": "gen_fsm",
+						"c": "gen_fsm"
+					}
+				},
+				{
+					"seealso": {
+						"marker": "#type-callback_mode",
+						"em": "callback modes"
+					}
+				},
+				{
+					"c": [
+						"gen_statem",
+						"gen_fsm",
+						"gen_statem"
+					],
+					"seealso": [
+						{
+							"marker": "gen_fsm",
+							"c": "gen_fsm"
+						},
+						{
+							"marker": "gen_fsm#Migration to gen_statem",
+							"$t": "rewrite from"
+						}
+					]
+				},
+				{
+					"c": "gen_statem",
+					"seealso": {
+						"marker": "doc/design_principles:statem",
+						"$t": "OTP Design Principles"
+					}
+				},
+				{
+					"c": "gen_statem"
+				},
+				{
+					"seealso": {
+						"marker": "#type-event_type",
+						"$t": "types"
+					}
+				},
+				{
+					"c": "gen_statem",
+					"seealso": {
+						"marker": "erts:erlang#throw/1",
+						"c": "throw"
+					}
+				},
+				{
+					"em": "state callback",
+					"seealso": [
+						{
+							"marker": "#type-state",
+							"$t": "state"
+						},
+						{
+							"marker": "#type-callback_mode",
+							"em": "callback mode"
+						},
+						{
+							"marker": "#Module:callback_mode/0",
+							"c": "Module:callback_mode/0"
+						}
+					],
+					"c": "gen_statem"
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#type-callback_mode",
+							"em": "callback mode"
+						},
+						{
+							"marker": "#Module:StateName/3",
+							"c": "Module:StateName/3"
+						},
+						{
+							"marker": "#Module:terminate/3",
+							"c": "Module:terminate/3"
+						}
+					],
+					"c": [
+						"state_functions",
+						"gen_statem",
+						"terminate"
+					],
+					"em": "state callback"
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#type-callback_mode",
+							"em": "callback mode"
+						},
+						{
+							"marker": "#Module:handle_event/4",
+							"c": "Module:handle_event/4"
+						}
+					],
+					"c": "handle_event_function",
+					"em": "state callback"
+				},
+				{
+					"c": [
+						"gen_statem",
+						"gen_statem",
+						"NextState =/= State"
+					],
+					"seealso": [
+						{
+							"marker": "#state callback",
+							"em": "state callback"
+						},
+						{
+							"marker": "#state callback",
+							"em": "state callback"
+						}
+					],
+					"em": [
+						"state transition",
+						"state transition",
+						"state change"
+					]
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#state callback",
+							"em": "state callback"
+						},
+						{
+							"marker": "#type-action",
+							"em": "transition actions"
+						},
+						{
+							"marker": "#call/2",
+							"c": "gen_statem:call/2,3"
+						}
+					],
+					"c": "gen_statem",
+					"em": "state transition"
+				},
+				{
+					"em": [
+						"transition actions",
+						"state change"
+					],
+					"c": "gen_statem"
+				},
+				{
+					"c": "gen_statem"
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#state callback",
+							"em": "state callback"
+						},
+						{
+							"marker": "#type-action",
+							"em": "transition actions"
+						},
+						{
+							"marker": "#state callback",
+							"em": "state callback"
+						},
+						{
+							"marker": "#type-event_type",
+							"c": "event_type()"
+						}
+					],
+					"c": [
+						"next_event",
+						"internal"
+					]
+				},
+				{
+					"seealso": {
+						"marker": "gen_fsm",
+						"c": "gen_fsm"
+					}
+				},
+				{
+					"c": "gen_statem",
+					"seealso": [
+						{
+							"marker": "#state callback",
+							"em": "state callback"
+						},
+						{
+							"marker": "#type-state_enter",
+							"c": "state_enter()"
+						}
+					],
+					"em": [
+						"state transition",
+						"state transition",
+						"state transition"
+					]
+				},
+				{
+					"em": "state transition",
+					"seealso": {
+						"marker": "#type-transition_option",
+						"c": "transition_option()"
+					}
+				},
+				{
+					"c": [
+						"gen_statem",
+						"sys",
+						"gen_statem"
+					],
+					"seealso": {
+						"marker": "sys",
+						"c": "sys"
+					}
+				},
+				{
+					"c": "gen_statem",
+					"seealso": {
+						"marker": "erts:erlang#process_flag/2",
+						"c": "process_flag(trap_exit, true)"
+					}
+				},
+				{
+					"c": "gen_statem"
+				},
+				{
+					"c": [
+						"gen_statem",
+						"hibernate"
+					],
+					"seealso": [
+						{
+							"marker": "proc_lib#hibernate/3",
+							"c": "proc_lib:hibernate/3"
+						},
+						{
+							"marker": "#state callback",
+							"em": "state callback"
+						},
+						{
+							"marker": "#Module:init/1",
+							"c": "Module:init/1"
+						},
+						{
+							"marker": "#type-action",
+							"c": "Actions"
+						},
+						{
+							"marker": "erts:erlang#hibernate/3",
+							"c": "erlang:hibernate/3"
+						}
+					]
+				},
+				{
+					"seealso": [
+						{
+							"marker": "#type-enter_loop_opt",
+							"c": "{hibernate_after, Timeout}"
+						},
+						{
+							"marker": "#start/3",
+							"c": "start/3,4"
+						},
+						{
+							"marker": "#start_link/3",
+							"c": "start_link/3,4"
+						},
+						{
+							"marker": "#enter_loop/4",
+							"c": "enter_loop/4,5,6"
+						}
+					]
+				}
+			],
+			"note": [
+				{
+					"p": {
+						"seealso": [
+							{
+								"marker": "#Module:init/1",
+								"c": "Module:init/1"
+							},
+							{
+								"marker": "#Module:callback_mode/0",
+								"c": "Module:callback_mode/0"
+							},
+							{
+								"marker": "#type-generic_timeout",
+								"c": "generic timeouts"
+							}
+						]
+					}
+				},
+				{
+					"p": {
+						"c": "gen_statem",
+						"em": [
+							"state callback",
+							"state change"
+						]
+					}
+				}
+			],
+			"list": [
+				{
+					"type": "bulleted",
+					"item": [
+						"Co-located state code",
+						"Arbitrary term state",
+						"Event postponing",
+						"Self-generated events",
+						"State time-out",
+						"Multiple generic named time-outs",
+						"Absolute time-out time",
+						"Automatic state enter calls",
+						{
+							"c": "sys"
+						},
+						{
+							"c": "sys"
+						}
+					]
+				},
+				{
+					"type": "bulleted",
+					"item": [
+						{
+							"p": {
+								"seealso": {
+									"marker": "gen_fsm",
+									"c": "gen_fsm"
+								}
+							}
+						},
+						{
+							"p": "One without restriction on the state data type that uses one callback function for all states"
+						}
+					]
+				}
+			],
+			"pre": "gen_statem module Callback module----------------- ---------------gen_statem:startgen_statem:start_link -----> Module:init/1Server start or code change -----> Module:callback_mode/0gen_statem:stop -----> Module:terminate/3gen_statem:callgen_statem:casterlang:senderlang:'!' -----> Module:StateName/3 Module:handle_event/4- -----> Module:terminate/3- -----> Module:code_change/4",
+			"marker": {
+				"id": "state callback"
+			}
+		},
+		"section": [
+			{
+				"title": "Example",
+				"p": [
+					{
+						"seealso": {
+							"marker": "#type-callback_mode",
+							"em": "callback mode"
+						},
+						"c": "state_functions"
+					},
+					{
+						"c": "pushbutton.erl"
+					},
+					"The following is a shell session when running it:",
+					{
+						"seealso": {
+							"marker": "#type-callback_mode",
+							"em": "callback mode"
+						},
+						"c": [
+							"handle_event_function",
+							"init/1",
+							"pushbutton.erl"
+						]
+					}
+				],
+				"code": [
+					{
+						"type": "erl",
+						"$t": "-module(pushbutton).-behaviour(gen_statem).-export([start/0,push/0,get_count/0,stop/0]).-export([terminate/3,code_change/4,init/1,callback_mode/0]).-export([on/3,off/3]).name() -> pushbutton_statem. % The registered server name%% API. This example uses a registered name name()%% and does not link to the caller.start() -> gen_statem:start({local,name()}, ?MODULE, [], []).push() -> gen_statem:call(name(), push).get_count() -> gen_statem:call(name(), get_count).stop() -> gen_statem:stop(name()).%% Mandatory callback functionsterminate(_Reason, _State, _Data) -> void.code_change(_Vsn, State, Data, _Extra) -> {ok,State,Data}.init([]) -> %% Set the initial state + data. Data is used only as a counter. State = off, Data = 0, {ok,State,Data}.callback_mode() -> state_functions.%%% state callback(s)off({call,From}, push, Data) -> %% Go to 'on', increment count and reply %% that the resulting status is 'on' {next_state,on,Data+1,[{reply,From,on}]};off(EventType, EventContent, Data) -> handle_event(EventType, EventContent, Data).on({call,From}, push, Data) -> %% Go to 'off' and reply that the resulting status is 'off' {next_state,off,Data,[{reply,From,off}]};on(EventType, EventContent, Data) -> handle_event(EventType, EventContent, Data).%% Handle events common to all stateshandle_event({call,From}, get_count, Data) -> %% Reply with the current count {keep_state,Data,[{reply,From,Data}]};handle_event(_, _, Data) -> %% Ignore all other events {keep_state,Data}."
+					},
+					{
+						"type": "erl",
+						"$t": "callback_mode() -> handle_event_function.%%% state callback(s)handle_event({call,From}, push, off, Data) -> %% Go to 'on', increment count and reply %% that the resulting status is 'on' {next_state,on,Data+1,[{reply,From,on}]};handle_event({call,From}, push, on, Data) -> %% Go to 'off' and reply that the resulting status is 'off' {next_state,off,Data,[{reply,From,off}]};%%%% Event handling common to all stateshandle_event({call,From}, get_count, State, Data) -> %% Reply with the current count {next_state,State,Data,[{reply,From,Data}]};handle_event(_, _, State, Data) -> %% Ignore all other events {next_state,State,Data}."
+					}
+				],
+				"pre": "1> pushbutton:start().{ok,<0.36.0>}2> pushbutton:get_count().03> pushbutton:push().on4> pushbutton:get_count().15> pushbutton:push().off6> pushbutton:get_count().17> pushbutton:stop().ok8> pushbutton:push().** exception exit: {noproc,{gen_statem,call,[pushbutton_statem,push,infinity]}} in function gen:do_for_proc/2 (gen.erl, line 261) in call from gen_statem:call/3 (gen_statem.erl, line 386)"
+			},
+			{
+				"title": "Callback Functions",
+				"p": {
+					"c": "gen_statem"
+				}
+			},
+			{
+				"title": "See Also",
+				"p": {
+					"seealso": [
+						{
+							"marker": "gen_event",
+							"c": "gen_event(3)"
+						},
+						{
+							"marker": "gen_fsm",
+							"c": "gen_fsm(3)"
+						},
+						{
+							"marker": "gen_server",
+							"c": "gen_server(3)"
+						},
+						{
+							"marker": "proc_lib",
+							"c": "proc_lib(3)"
+						},
+						{
+							"marker": "supervisor",
+							"c": "supervisor(3)"
+						},
+						{
+							"marker": "sys",
+							"c": "sys(3)"
+						}
+					]
+				}
+			}
+		],
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "server_name"
+					},
+					"desc": {
+						"p": {
+							"c": "gen_statem",
+							"seealso": [
+								{
+									"marker": "#start_link/3",
+									"c": "start_link/3"
+								},
+								{
+									"marker": "#type-server_ref",
+									"c": "server_ref()"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "server_ref"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": "gen_statem",
+								"seealso": [
+									{
+										"marker": "#call/2",
+										"c": "call/2"
+									},
+									{
+										"marker": "#type-server_name",
+										"c": "server_name()"
+									}
+								]
+							},
+							"It can be:"
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "pid() | LocalName"
+								},
+								{
+									"c": "{Name,Node}"
+								},
+								{
+									"c": "{global,GlobalName}"
+								},
+								{
+									"c": "{via,RegMod,ViaName}"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": "gen_statem"
+									}
+								},
+								{
+									"p": {
+										"c": "gen_statem"
+									}
+								},
+								{
+									"p": {
+										"c": "gen_statem",
+										"seealso": {
+											"marker": "kernel:global",
+											"c": "global"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"gen_statem",
+											"RegMod",
+											"register_name/2",
+											"unregister_name/1",
+											"whereis_name/1",
+											"send/2",
+											"{via,global,GlobalName}",
+											"{global,GlobalName}"
+										],
+										"seealso": {
+											"marker": "kernel:global",
+											"c": "global"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "start_opt"
+					},
+					"desc": {
+						"p": {
+							"c": "gen_statem",
+							"seealso": {
+								"marker": "#start_link/3",
+								"c": "start_link/3"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "start_ret"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#start_link/3",
+								"c": "start_link/3"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "enter_loop_opt"
+					},
+					"desc": {
+						"p": {
+							"c": "gen_statem",
+							"seealso": {
+								"marker": "#enter_loop/4",
+								"c": "enter_loop/4-6"
+							}
+						},
+						"taglist": {
+							"tag": [
+								{
+									"c": "hibernate_after"
+								},
+								{
+									"c": "debug"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": [
+											"HibernateAfterTimeout",
+											"gen_statem",
+											"HibernateAfterTimeout"
+										],
+										"seealso": {
+											"marker": "proc_lib#hibernate/3",
+											"c": "proc_lib:hibernate/3"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": {
+											"anno": "Dbgs"
+										},
+										"seealso": {
+											"marker": "sys",
+											"c": "sys"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "from"
+					},
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "#type-action",
+									"c": "action()"
+								},
+								{
+									"marker": "#call/2",
+									"c": "call/2"
+								}
+							],
+							"c": [
+								"{reply,From,Reply}",
+								"gen_statem"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "state"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#type-callback_mode",
+								"em": "callback mode"
+							},
+							"c": [
+								"handle_event_function",
+								"NextState =/= State"
+							],
+							"em": "state change"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "state_name"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#type-callback_mode",
+								"em": "callback mode"
+							},
+							"c": [
+								"state_functions",
+								"NextState =/= State"
+							],
+							"em": "state change"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "data"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#type-state",
+								"c": "state()"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "event_type"
+					},
+					"desc": {
+						"p": [
+							{
+								"seealso": [
+									{
+										"marker": "#type-external_event_type",
+										"$t": "external"
+									},
+									{
+										"marker": "#type-timeout_event_type",
+										"$t": "timeout"
+									}
+								],
+								"c": "internal"
+							},
+							{
+								"c": "internal",
+								"em": "transition action",
+								"seealso": {
+									"marker": "#type-action",
+									"c": "next_event"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "external_event_type"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "From"
+								},
+								"cast",
+								"info",
+								"info",
+								"gen_statem"
+							],
+							"seealso": [
+								{
+									"marker": "#call/2",
+									"$t": "Calls"
+								},
+								{
+									"marker": "#cast/2",
+									"$t": "casts"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "timeout_event_type"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#type-timeout_action",
+								"$t": "timeout_action()"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "callback_mode_result"
+					},
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "#Module:callback_mode/0",
+									"c": "Module:callback_mode/0"
+								},
+								{
+									"marker": "#type-callback_mode",
+									"em": "callback mode"
+								},
+								{
+									"marker": "#type-state_enter",
+									"em": "state enter calls"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "callback_mode"
+					},
+					"desc": {
+						"p": {
+							"em": "callback mode",
+							"c": "gen_statem",
+							"seealso": {
+								"marker": "#Module:callback_mode/0",
+								"c": "Module:callback_mode/0"
+							}
+						},
+						"taglist": {
+							"tag": [
+								{
+									"c": "state_functions"
+								},
+								{
+									"c": "handle_event_function"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"seealso": [
+											{
+												"marker": "#type-state_name",
+												"c": "state_name()"
+											},
+											{
+												"marker": "#Module:StateName/3",
+												"c": "Module:StateName/3"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"seealso": {
+											"marker": "#Module:handle_event/4",
+											"c": "Module:handle_event/4"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "state_enter"
+					},
+					"desc": {
+						"p": [
+							{
+								"em": "state enter calls",
+								"c": "gen_statem",
+								"seealso": {
+									"marker": "#Module:callback_mode/0",
+									"c": "Module:callback_mode/0"
+								}
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#Module:callback_mode/0",
+										"c": "Module:callback_mode/0"
+									},
+									{
+										"marker": "#state callback",
+										"$t": "state callback"
+									},
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									},
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									},
+									{
+										"marker": "#Module:StateName/3",
+										"c": "Module:StateName/3"
+									},
+									{
+										"marker": "#Module:handle_event/4",
+										"c": "Module:handle_event/4"
+									},
+									{
+										"marker": "#type-state_callback_result",
+										"c": "repeat_state"
+									},
+									{
+										"marker": "#type-state_callback_result",
+										"c": "repeat_state_and_data"
+									}
+								],
+								"c": [
+									"state_enter",
+									"gen_statem",
+									"(enter, OldState, Data)"
+								],
+								"em": [
+									"state change",
+									"state callback"
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#Module:callback_mode/0",
+									"c": "Module:callback_mode/0"
+								},
+								"em": "state enter calls"
+							},
+							{
+								"seealso": {
+									"marker": "#Module:code_change/4",
+									"c": "Module:code_change/4"
+								},
+								"em": [
+									"state change",
+									"state enter call"
+								]
+							},
+							{
+								"em": [
+									"state enter call",
+									"will",
+									"state change",
+									"state enter call"
+								],
+								"c": "OldState =:= State"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "transition_option"
+					},
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "#type-action",
+									"$t": "actions"
+								},
+								{
+									"marker": "#state callback",
+									"em": "state callback"
+								}
+							],
+							"em": [
+								"state transition",
+								"state transition",
+								"state transition"
+							]
+						},
+						"list": {
+							"type": "ordered",
+							"item": [
+								{
+									"p": [
+										{
+											"seealso": [
+												{
+													"marker": "#type-state_enter",
+													"em": "state enter calls"
+												},
+												{
+													"marker": "#type-state_callback_result",
+													"c": "repeat_state"
+												},
+												{
+													"marker": "#type-state_callback_result",
+													"c": "repeat_state_and_data"
+												},
+												{
+													"marker": "#type-state_enter",
+													"c": "(enter, OldState, Data)"
+												}
+											],
+											"c": "gen_statem"
+										},
+										{
+											"seealso": {
+												"marker": "#type-enter_action",
+												"$t": "actions"
+											}
+										},
+										{
+											"em": "state enter call",
+											"c": [
+												"repeat_*",
+												"Data"
+											]
+										}
+									]
+								},
+								{
+									"p": {
+										"seealso": {
+											"marker": "#type-action",
+											"$t": "actions"
+										}
+									}
+								},
+								{
+									"p": {
+										"seealso": {
+											"marker": "#type-postpone",
+											"c": "postpone()"
+										},
+										"c": "true"
+									}
+								},
+								{
+									"p": {
+										"em": "state change"
+									}
+								},
+								{
+									"p": {
+										"seealso": {
+											"marker": "#type-action",
+											"c": "action()"
+										},
+										"c": "next_event"
+									}
+								},
+								{
+									"p": [
+										{
+											"seealso": [
+												{
+													"marker": "#type-event_timeout",
+													"c": "event_timeout()"
+												},
+												{
+													"marker": "#type-generic_timeout",
+													"c": "generic_timeout()"
+												},
+												{
+													"marker": "#type-state_timeout",
+													"c": "state_timeout()"
+												}
+											]
+										},
+										{
+											"seealso": {
+												"marker": "#type-event_timeout",
+												"c": "event_timeout()"
+											}
+										},
+										{
+											"em": "state change",
+											"seealso": {
+												"marker": "#type-state_timeout",
+												"c": "state_timeout()"
+											}
+										}
+									]
+								},
+								{
+									"p": {
+										"seealso": {
+											"marker": "#state callback",
+											"em": "state callback"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"gen_statem",
+											"receive",
+											"true",
+											"gen_statem",
+											"gen_statem"
+										],
+										"seealso": [
+											{
+												"marker": "#type-hibernate",
+												"c": "hibernate()"
+											},
+											{
+												"marker": "#state callback",
+												"em": "state callback"
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "postpone"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								"NextState =/= State"
+							],
+							"em": "state change"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "hibernate"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								"gen_statem",
+								"receive"
+							],
+							"seealso": {
+								"marker": "proc_lib#hibernate/3",
+								"c": "proc_lib:hibernate/3"
+							}
+						},
+						"note": {
+							"p": {
+								"seealso": {
+									"marker": "erts:erlang#garbage_collect/0",
+									"c": "erlang:garbage_collect/0"
+								},
+								"c": "gen_statem"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "event_timeout"
+					},
+					"desc": {
+						"p": [
+							{
+								"seealso": [
+									{
+										"marker": "#type-enter_action",
+										"c": "enter_action()"
+									},
+									{
+										"marker": "#type-event_type",
+										"c": "event_type()"
+									},
+									{
+										"marker": "erts:erlang#start_timer/4",
+										"c": "erlang:start_timer/4"
+									},
+									{
+										"marker": "#type-timeout_option",
+										"c": "Options"
+									}
+								],
+								"c": [
+									"timeout",
+									"timeout",
+									"Time",
+									"erlang:start_timer/4",
+									"Options"
+								]
+							},
+							"Any event that arrives cancels this time-out. Note that a retried or inserted event counts as arrived. So does a state time-out zero event, if it was generated before this time-out is requested.",
+							{
+								"c": [
+									"Time",
+									"infinity"
+								]
+							},
+							{
+								"c": [
+									"Time",
+									"0"
+								]
+							},
+							"Note that it is not possible nor needed to cancel this time-out, as it is cancelled automatically by any other event."
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "generic_timeout"
+					},
+					"desc": {
+						"p": [
+							{
+								"seealso": [
+									{
+										"marker": "#type-enter_action",
+										"c": "enter_action()"
+									},
+									{
+										"marker": "#type-event_type",
+										"c": "event_type()"
+									},
+									{
+										"marker": "erts:erlang#start_timer/4",
+										"c": "erlang:start_timer/4"
+									},
+									{
+										"marker": "#type-timeout_option",
+										"c": "Options"
+									}
+								],
+								"c": [
+									"{timeout,Name}",
+									"{timeout,Name}",
+									"Time",
+									"erlang:start_timer/4",
+									"Options"
+								]
+							},
+							{
+								"c": [
+									"Time",
+									"infinity"
+								]
+							},
+							{
+								"c": [
+									"Time",
+									"0"
+								]
+							},
+							{
+								"c": [
+									"Name",
+									"infinity"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "state_timeout"
+					},
+					"desc": {
+						"p": [
+							{
+								"seealso": [
+									{
+										"marker": "#type-enter_action",
+										"c": "enter_action()"
+									},
+									{
+										"marker": "#type-event_type",
+										"c": "event_type()"
+									},
+									{
+										"marker": "erts:erlang#start_timer/4",
+										"c": "erlang:start_timer/4"
+									},
+									{
+										"marker": "#type-timeout_option",
+										"c": "Options"
+									}
+								],
+								"c": [
+									"state_timeout",
+									"state_timeout",
+									"Time",
+									"erlang:start_timer/4",
+									"Options"
+								]
+							},
+							{
+								"c": [
+									"Time",
+									"infinity"
+								]
+							},
+							{
+								"c": [
+									"Time",
+									"0"
+								]
+							},
+							{
+								"c": "infinity"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "timeout_option"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"Abs",
+									"true",
+									"false"
+								],
+								"seealso": {
+									"marker": "erts:erlang#start_timer/4",
+									"c": "erlang:start_timer/4"
+								}
+							},
+							""
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "action"
+					},
+					"desc": {
+						"p": [
+							{
+								"em": "transition actions",
+								"seealso": [
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									},
+									{
+										"marker": "#type-event_type",
+										"$t": "event"
+									},
+									{
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									},
+									{
+										"marker": "#enter_loop/5",
+										"c": "enter_loop/5,6"
+									}
+								]
+							},
+							"Actions are executed in the containing list order.",
+							{
+								"seealso": [
+									{
+										"marker": "#type-transition_option",
+										"$t": "transition options"
+									},
+									{
+										"marker": "#type-postpone",
+										"c": "postpone()"
+									}
+								],
+								"c": "postpone()"
+							}
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "postpone"
+								},
+								{
+									"c": "next_event"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"seealso": [
+											{
+												"marker": "#type-transition_option",
+												"c": "transition_option()"
+											},
+											{
+												"marker": "#type-postpone",
+												"c": "postpone()"
+											},
+											{
+												"marker": "#Module:init/1",
+												"c": "Module:init/1"
+											},
+											{
+												"marker": "#enter_loop/5",
+												"c": "enter_loop/5,6"
+											}
+										],
+										"em": "state transition"
+									}
+								},
+								{
+									"p": [
+										{
+											"seealso": {
+												"marker": "#type-transition_option",
+												"c": "transition_option()"
+											},
+											"c": [
+												{
+													"anno": "EventType"
+												},
+												{
+													"anno": "EventContent"
+												}
+											]
+										},
+										{
+											"c": "next_event"
+										},
+										{
+											"seealso": {
+												"marker": "#type-event_type",
+												"c": "internal"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "enter_action"
+					},
+					"desc": {
+						"p": [
+							{
+								"em": "transition actions",
+								"seealso": [
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									},
+									{
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									},
+									{
+										"marker": "#enter_loop/5",
+										"c": "enter_loop/5,6"
+									}
+								]
+							},
+							"Actions are executed in the containing list order.",
+							{
+								"seealso": [
+									{
+										"marker": "#type-transition_option",
+										"$t": "transition options"
+									},
+									{
+										"marker": "#type-event_timeout",
+										"c": "event_timeout()"
+									}
+								],
+								"c": "event_timeout()"
+							}
+						],
+						"taglist": {
+							"tag": {
+								"c": "hibernate"
+							},
+							"item": {
+								"p": {
+									"seealso": [
+										{
+											"marker": "#type-transition_option",
+											"c": "transition_option()"
+										},
+										{
+											"marker": "#type-hibernate",
+											"c": "hibernate()"
+										}
+									],
+									"em": "state transition"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "timeout_action"
+					},
+					"desc": {
+						"p": [
+							{
+								"em": "transition actions",
+								"seealso": [
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									},
+									{
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									},
+									{
+										"marker": "#enter_loop/5",
+										"c": "enter_loop/5,6"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#type-transition_option",
+									"$t": "transition options"
+								}
+							}
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "Time"
+								},
+								{
+									"c": "timeout"
+								},
+								{
+									"c": {
+										"anno": "Name"
+									}
+								},
+								{
+									"c": "state_timeout"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": [
+											"{timeout,Time,Time}",
+											"{next_state,NextState,NewData,Time}",
+											"gen_fsm"
+										],
+										"seealso": {
+											"marker": "#state callback",
+											"em": "state callback"
+										}
+									}
+								},
+								{
+									"p": {
+										"seealso": [
+											{
+												"marker": "#type-transition_option",
+												"c": "transition_option()"
+											},
+											{
+												"marker": "#type-event_timeout",
+												"c": "event_timeout()"
+											},
+											{
+												"marker": "#type-timeout_option",
+												"c": {
+													"anno": "Options"
+												}
+											}
+										],
+										"c": [
+											{
+												"anno": "Time"
+											},
+											{
+												"anno": "EventContent"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"seealso": [
+											{
+												"marker": "#type-transition_option",
+												"c": "transition_option()"
+											},
+											{
+												"marker": "#type-generic_timeout",
+												"c": "generic_timeout()"
+											},
+											{
+												"marker": "#type-timeout_option",
+												"c": {
+													"anno": "Options"
+												}
+											}
+										],
+										"c": [
+											{
+												"anno": "Time"
+											},
+											{
+												"anno": "Name"
+											},
+											{
+												"anno": "EventContent"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"seealso": [
+											{
+												"marker": "#type-transition_option",
+												"c": "transition_option()"
+											},
+											{
+												"marker": "#type-state_timeout",
+												"c": "state_timeout()"
+											},
+											{
+												"marker": "#type-timeout_option",
+												"c": {
+													"anno": "Options"
+												}
+											}
+										],
+										"c": [
+											{
+												"anno": "Time"
+											},
+											{
+												"anno": "EventContent"
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "reply_action"
+					},
+					"desc": {
+						"p": [
+							{
+								"em": "transition action",
+								"seealso": [
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									},
+									{
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									},
+									{
+										"marker": "#enter_loop/5",
+										"c": "enter_loop/5,6"
+									}
+								]
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#type-transition_option",
+										"c": "transition_option()"
+									},
+									{
+										"marker": "#call/2",
+										"c": "call/2"
+									},
+									{
+										"marker": "#type-event_type",
+										"c": {
+											"anno": "From"
+										}
+									},
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									}
+								],
+								"c": {
+									"anno": "From"
+								}
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									},
+									{
+										"marker": "#enter_loop/5",
+										"c": "enter_loop/5,6"
+									},
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "init_result"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "State"
+									},
+									{
+										"anno": "Data"
+									},
+									"gen_statem"
+								],
+								"seealso": [
+									{
+										"marker": "#type-state",
+										"c": "state()"
+									},
+									{
+										"marker": "#type-data",
+										"c": "data()"
+									}
+								]
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#type-action",
+										"c": "Actions"
+									},
+									{
+										"marker": "#type-state",
+										"$t": "state"
+									},
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									}
+								],
+								"c": [
+									"postpone",
+									"false"
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "Reason"
+									},
+									"ignore"
+								],
+								"seealso": {
+									"marker": "#start_link/3",
+									"c": "start_link/3,4"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "state_enter_result"
+					},
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "State"
+							},
+							"seealso": {
+								"marker": "#type-state_enter",
+								"em": "state enter call"
+							}
+						},
+						"taglist": {
+							"tag": {
+								"c": "next_state"
+							},
+							"item": {
+								"p": {
+									"c": [
+										"gen_statem",
+										{
+											"anno": "State"
+										},
+										{
+											"anno": "NewData"
+										},
+										{
+											"anno": "Actions"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "event_handler_result"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "StateType"
+								},
+								"state_functions",
+								"handle_event_function"
+							],
+							"seealso": [
+								{
+									"marker": "#type-state_name",
+									"c": "state_name()"
+								},
+								{
+									"marker": "#type-callback_mode",
+									"em": "callback mode"
+								},
+								{
+									"marker": "#type-state",
+									"c": "state()"
+								},
+								{
+									"marker": "#type-callback_mode",
+									"em": "callback mode"
+								}
+							]
+						},
+						"taglist": {
+							"tag": {
+								"c": "next_state"
+							},
+							"item": {
+								"p": {
+									"c": [
+										"gen_statem",
+										{
+											"anno": "NextState"
+										},
+										{
+											"anno": "NewData"
+										},
+										{
+											"anno": "Actions"
+										},
+										{
+											"anno": "NextState"
+										}
+									],
+									"em": [
+										"state transition",
+										"state transition",
+										"state change"
+									]
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "state_callback_result"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "ActionType"
+								},
+								"seealso": [
+									{
+										"marker": "#type-enter_action",
+										"c": "enter_action()"
+									},
+									{
+										"marker": "#type-state_enter",
+										"em": "state enter call"
+									},
+									{
+										"marker": "#type-action",
+										"c": "action()"
+									}
+								]
+							},
+							{
+								"c": "gen_statem"
+							}
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": "keep_state"
+								},
+								{
+									"c": "keep_state_and_data"
+								},
+								{
+									"c": "repeat_state"
+								},
+								{
+									"c": "repeat_state_and_data"
+								},
+								{
+									"c": "stop"
+								},
+								{
+									"c": "stop_and_reply"
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": {
+											"anno": [
+												"NewData",
+												"Actions"
+											]
+										}
+									}
+								},
+								{
+									"p": {
+										"c": {
+											"anno": "Actions"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"gen_statem",
+											"repeat_state",
+											"keep_state"
+										],
+										"seealso": [
+											{
+												"marker": "#type-state_enter",
+												"em": "state enter calls"
+											},
+											{
+												"marker": "#type-transition_option",
+												"c": "transition_option()"
+											}
+										],
+										"em": "state enter call"
+									}
+								},
+								{
+									"p": {
+										"c": {
+											"anno": "Actions"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"gen_statem",
+											"Reason",
+											{
+												"anno": "NewData"
+											}
+										],
+										"seealso": {
+											"marker": "#Module:terminate/3",
+											"c": "Module:terminate/3"
+										}
+									}
+								},
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "Replies"
+											},
+											"gen_statem",
+											"Reason",
+											{
+												"anno": "NewData"
+											}
+										],
+										"seealso": {
+											"marker": "#Module:terminate/3",
+											"c": "Module:terminate/3"
+										}
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		"funcs": [
+			{
+				"func": [
+					{
+						"name": [
+							{
+								"name": "call",
+								"arity": "2",
+								"since": "OTP 19.0"
+							},
+							{
+								"name": "call",
+								"arity": "3",
+								"since": "OTP 19.0"
+							}
+						],
+						"fsummary": {
+							"c": "gen_statem"
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_statem",
+										"gen_statem",
+										"{call,From}",
+										{
+											"anno": "Request"
+										}
+									],
+									"seealso": [
+										{
+											"marker": "#type-server_ref",
+											"c": {
+												"anno": "ServerRef"
+											}
+										},
+										{
+											"marker": "#state callback",
+											"em": "state callback"
+										},
+										{
+											"marker": "#type-event_type",
+											"c": "event_type()"
+										}
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "Reply"
+										},
+										{
+											"anno": "Reply"
+										},
+										{
+											"anno": "Reply"
+										}
+									],
+									"seealso": [
+										{
+											"marker": "#state callback",
+											"em": "state callback"
+										},
+										{
+											"marker": "#type-action",
+											"c": "action()"
+										}
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "Timeout"
+										},
+										"infinity"
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "Timeout"
+										},
+										{
+											"anno": "T"
+										},
+										{
+											"anno": "T"
+										},
+										{
+											"anno": "T"
+										},
+										{
+											"anno": "T"
+										},
+										"T",
+										{
+											"anno": "T"
+										}
+									]
+								},
+								{
+									"c": "gen_statem"
+								}
+							],
+							"note": [
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "Timeout"
+											},
+											{
+												"anno": "Timeout"
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "T"
+											},
+											"{dirty_timeout,infinity}",
+											"infinity"
+										]
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "cast",
+							"arity": "2",
+							"since": "OTP 19.0"
+						},
+						"fsummary": {
+							"c": "gen_statem"
+						},
+						"desc": {
+							"p": {
+								"c": [
+									"gen_statem",
+									"ok",
+									"gen_statem",
+									"gen_statem",
+									"cast",
+									{
+										"anno": "Msg"
+									}
+								],
+								"seealso": [
+									{
+										"marker": "#type-server_ref",
+										"c": {
+											"anno": "ServerRef"
+										}
+									},
+									{
+										"marker": "#state callback",
+										"em": "state callback"
+									},
+									{
+										"marker": "#type-event_type",
+										"c": "event_type()"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "enter_loop",
+							"arity": "4",
+							"since": "OTP 19.1"
+						},
+						"fsummary": {
+							"c": "gen_statem"
+						},
+						"desc": {
+							"p": {
+								"seealso": [
+									{
+										"marker": "#enter_loop/6",
+										"c": "enter_loop/6"
+									},
+									{
+										"marker": "#type-server_name",
+										"c": "server_name()"
+									}
+								],
+								"c": "Actions = []"
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "enter_loop",
+							"arity": "5",
+							"since": "OTP 19.0"
+						},
+						"fsummary": {
+							"c": "gen_statem"
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Server_or_Actions"
+										},
+										"list()",
+										{
+											"anno": "Server_or_Actions"
+										}
+									],
+									"seealso": [
+										{
+											"marker": "#enter_loop/6",
+											"c": "enter_loop/6"
+										},
+										{
+											"marker": "#type-server_name",
+											"c": "server_name()"
+										}
+									]
+								},
+								{
+									"seealso": {
+										"marker": "#enter_loop/6",
+										"c": "enter_loop/6"
+									},
+									"c": [
+										{
+											"anno": "Server_or_Actions"
+										},
+										"Actions = []"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "enter_loop",
+							"arity": "6",
+							"since": "OTP 19.0"
+						},
+						"fsummary": {
+							"c": "gen_statem"
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_statem",
+										"gen_statem",
+										"gen_statem"
+									],
+									"em": "must",
+									"seealso": {
+										"marker": "proc_lib",
+										"c": "proc_lib"
+									}
+								},
+								{
+									"c": "gen_statem"
+								},
+								{
+									"c": [
+										{
+											"anno": "Module"
+										},
+										{
+											"anno": "Opts"
+										}
+									],
+									"seealso": {
+										"marker": "#start_link/3",
+										"c": "start[_link]/3,4"
+									}
+								},
+								{
+									"c": [
+										{
+											"anno": "Server"
+										},
+										"self()",
+										{
+											"anno": "Server"
+										}
+									],
+									"seealso": [
+										{
+											"marker": "#start_link/3",
+											"c": "start[_link]/3"
+										},
+										{
+											"marker": "#type-server_name",
+											"c": "server_name()"
+										},
+										{
+											"marker": "#start_link/4",
+											"c": "start[_link]/4"
+										},
+										{
+											"marker": "#type-server_name",
+											"c": "server_name()"
+										}
+									],
+									"em": "before"
+								},
+								{
+									"c": [
+										{
+											"anno": "State"
+										},
+										{
+											"anno": "Data"
+										},
+										{
+											"anno": "Actions"
+										}
+									],
+									"seealso": [
+										{
+											"marker": "#Module:init/1",
+											"c": "Module:init/1"
+										},
+										{
+											"marker": "#Module:init/1",
+											"c": "Module:init/1"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "proc_lib",
+											"c": "proc_lib"
+										},
+										{
+											"marker": "#type-server_name",
+											"c": "server_name()"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "reply",
+								"arity": "1",
+								"since": "OTP 19.0"
+							},
+							{
+								"name": "reply",
+								"arity": "2",
+								"since": "OTP 19.0"
+							}
+						],
+						"fsummary": "Reply to a caller.",
+						"desc": {
+							"p": [
+								{
+									"c": "gen_statem",
+									"seealso": [
+										{
+											"marker": "#call/2",
+											"c": "call/2"
+										},
+										{
+											"marker": "#state callback",
+											"em": "state callback"
+										}
+									]
+								},
+								{
+									"c": {
+										"anno": "From"
+									},
+									"seealso": [
+										{
+											"marker": "#type-event_type",
+											"c": {
+												"anno": "From"
+											}
+										},
+										{
+											"marker": "#state callback",
+											"em": "state callback"
+										},
+										{
+											"marker": "#type-reply_action",
+											"c": "reply_action()"
+										},
+										{
+											"marker": "#state callback",
+											"em": "state callback"
+										}
+									]
+								}
+							],
+							"note": {
+								"p": {
+									"seealso": {
+										"marker": "sys",
+										"c": "sys"
+									}
+								}
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "start",
+								"arity": "3",
+								"since": "OTP 19.0"
+							},
+							{
+								"name": "start",
+								"arity": "4",
+								"since": "OTP 19.0"
+							}
+						],
+						"fsummary": {
+							"c": "gen_statem"
+						},
+						"desc": {
+							"p": [
+								{
+									"c": "gen_statem",
+									"seealso": {
+										"marker": "proc_lib",
+										"c": "proc_lib"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#start_link/3",
+										"c": "start_link/3,4"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "start_link",
+								"arity": "3",
+								"since": "OTP 19.0"
+							},
+							{
+								"name": "start_link",
+								"arity": "4",
+								"since": "OTP 19.0"
+							}
+						],
+						"fsummary": {
+							"c": "gen_statem"
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_statem",
+										"gen_statem"
+									],
+									"seealso": {
+										"marker": "proc_lib",
+										"c": "proc_lib"
+									}
+								},
+								{
+									"c": [
+										"gen_statem",
+										"start_link/3,4"
+									],
+									"seealso": [
+										{
+											"marker": "#Module:init/1",
+											"c": "Module:init/1"
+										},
+										{
+											"marker": "#Module:init/1",
+											"c": "Module:init/1"
+										}
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "ServerName"
+										},
+										"gen_statem",
+										"gen_statem",
+										"start_link/3",
+										{
+											"anno": "ServerName"
+										},
+										"gen_statem"
+									],
+									"seealso": {
+										"marker": "#type-server_name",
+										"c": "server_name()"
+									}
+								},
+								{
+									"c": {
+										"anno": "Module"
+									}
+								},
+								{
+									"c": {
+										"anno": "Args"
+									},
+									"seealso": {
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									}
+								},
+								{
+									"c": [
+										"gen_statem",
+										"Pid",
+										"pid()",
+										"gen_statem",
+										{
+											"anno": "ServerName"
+										},
+										"Pid",
+										"pid()"
+									],
+									"seealso": [
+										{
+											"marker": "#type-start_ret",
+											"c": "{ok,Pid}"
+										},
+										{
+											"marker": "#type-start_ret",
+											"c": "{error,{already_started,Pid}}"
+										}
+									]
+								},
+								{
+									"c": [
+										"Module:init/1",
+										"Reason",
+										"Module:init/1"
+									],
+									"seealso": [
+										{
+											"marker": "#type-start_ret",
+											"c": "{error,Reason}"
+										},
+										{
+											"marker": "#type-start_ret",
+											"c": "{stop,Reason}"
+										},
+										{
+											"marker": "#type-start_ret",
+											"c": "ignore"
+										},
+										{
+											"marker": "#type-start_ret",
+											"c": "{error,Reason}"
+										},
+										{
+											"marker": "#type-start_ret",
+											"c": "ignore"
+										}
+									]
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"seealso": [
+												{
+													"marker": "#type-start_opt",
+													"c": "{timeout,Time}"
+												},
+												{
+													"marker": "#type-start_ret",
+													"c": "{error,timeout}"
+												}
+											],
+											"c": [
+												{
+													"anno": "Opts"
+												},
+												"gen_statem",
+												"Time"
+											]
+										}
+									},
+									{
+										"p": {
+											"seealso": [
+												{
+													"marker": "#type-enter_loop_opt",
+													"c": "{hibernate_after,HibernateAfterTimeout}"
+												},
+												{
+													"marker": "proc_lib#hibernate/3",
+													"c": "proc_lib:hibernate/3"
+												}
+											],
+											"c": [
+												"gen_statem",
+												"HibernateAfterTimeout"
+											]
+										}
+									},
+									{
+										"p": {
+											"seealso": [
+												{
+													"marker": "#type-enter_loop_opt",
+													"c": "{debug,Dbgs}"
+												},
+												{
+													"marker": "sys",
+													"c": "sys"
+												}
+											],
+											"c": {
+												"anno": "Opts"
+											}
+										}
+									},
+									{
+										"p": {
+											"seealso": [
+												{
+													"marker": "#type-start_opt",
+													"c": "{spawn_opt,SpawnOpts}"
+												},
+												{
+													"marker": "erts:erlang#spawn_opt/2",
+													"c": "erlang:spawn_opt/2"
+												}
+											],
+											"c": [
+												{
+													"anno": "Opts"
+												},
+												"SpawnOpts",
+												"gen_statem"
+											]
+										}
+									}
+								]
+							},
+							"note": {
+								"p": {
+									"c": [
+										"monitor",
+										"badarg"
+									]
+								}
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "stop",
+							"arity": "1",
+							"since": "OTP 19.0"
+						},
+						"fsummary": "Synchronously stop a generic server.",
+						"desc": {
+							"p": {
+								"seealso": {
+									"marker": "#stop/3",
+									"c": {
+										"anno": "ServerRef"
+									}
+								}
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "stop",
+							"arity": "3",
+							"since": "OTP 19.0"
+						},
+						"fsummary": "Synchronously stop a generic server.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_statem",
+										{
+											"anno": "Reason"
+										},
+										"gen_statem"
+									],
+									"seealso": [
+										{
+											"marker": "#type-server_ref",
+											"c": {
+												"anno": "ServerRef"
+											}
+										},
+										{
+											"marker": "#Module:terminate/3",
+											"c": "Module:terminate/3"
+										}
+									]
+								},
+								{
+									"c": [
+										"ok",
+										"normal",
+										"shutdown",
+										"{shutdown,Term}",
+										{
+											"anno": "Reason"
+										},
+										"normal"
+									],
+									"seealso": {
+										"marker": "kernel:logger",
+										"c": "logger(3)"
+									}
+								},
+								{
+									"c": [
+										{
+											"anno": "Timeout"
+										},
+										"infinity",
+										"infinity",
+										"timeout"
+									]
+								},
+								{
+									"c": "noproc"
+								}
+							]
+						}
+					}
+				]
+			},
+			{
+				"func": [
+					{
+						"name": {
+							"since": "OTP 19.1",
+							"$t": "Module:callback_mode() -> CallbackMode"
+						},
+						"fsummary": "Update the internal state during upgrade/downgrade.",
+						"type": {
+							"v": {
+								"seealso": [
+									{
+										"marker": "#type-callback_mode",
+										"$t": "callback_mode()"
+									},
+									{
+										"marker": "#type-callback_mode",
+										"$t": "callback_mode()"
+									},
+									{
+										"marker": "#type-state_enter",
+										"$t": "state_enter()"
+									}
+								]
+							}
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_statem",
+										"gen_statem",
+										"gen_statem"
+									],
+									"seealso": [
+										{
+											"marker": "#type-callback_mode",
+											"em": "callback mode"
+										},
+										{
+											"marker": "#state callback",
+											"em": "state callback"
+										}
+									]
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#Module:init/1",
+											"c": "Module:init/1"
+										},
+										{
+											"marker": "#enter_loop/4",
+											"c": "enter_loop/4-6"
+										},
+										{
+											"marker": "#Module:code_change/4",
+											"c": "Module:code_change/4"
+										}
+									]
+								},
+								{
+									"c": "CallbackMode",
+									"seealso": [
+										{
+											"marker": "#type-callback_mode",
+											"c": "callback_mode()"
+										},
+										{
+											"marker": "#type-callback_mode",
+											"c": "callback_mode()"
+										},
+										{
+											"marker": "#type-state_enter",
+											"c": "state_enter"
+										}
+									]
+								}
+							],
+							"note": {
+								"p": "If this function's body does not return an inline constant value the callback module is doing something strange."
+							}
+						}
+					},
+					{
+						"name": {
+							"since": "OTP 19.0",
+							"$t": "Module:code_change(OldVsn, OldState, OldData, Extra) -> Result"
+						},
+						"fsummary": "Update the internal state during upgrade/downgrade.",
+						"type": {
+							"v": [
+								"OldVsn = Vsn | {down,Vsn}",
+								"Vsn = term()",
+								"OldState = NewState = term()",
+								"Extra = term()",
+								"Result = {ok,NewState,NewData} | Reason",
+								{
+									"seealso": {
+										"marker": "#type-state",
+										"$t": "state()"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#type-data",
+										"$t": "data()"
+									}
+								},
+								"Reason = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": [
+										"Change = {advanced,Extra}",
+										".appup",
+										"code_change/4",
+										"undef"
+									]
+								}
+							},
+							"p": [
+								{
+									"c": [
+										"gen_statem",
+										"{update,Module,Change,...}",
+										"Change = {advanced,Extra}"
+									],
+									"seealso": [
+										{
+											"marker": "sasl:appup",
+											"c": "appup"
+										},
+										{
+											"marker": "doc/design_principles:release_handling#instr",
+											"$t": "OTP Design Principles"
+										}
+									]
+								},
+								{
+									"c": [
+										"OldVsn",
+										"Vsn",
+										"OldVsn",
+										"{down,Vsn}",
+										"Vsn",
+										"vsn",
+										"Module"
+									]
+								},
+								{
+									"c": [
+										"OldState",
+										"OldData",
+										"gen_statem"
+									]
+								},
+								{
+									"c": [
+										"Extra",
+										"{advanced,Extra}"
+									]
+								},
+								{
+									"c": "{ok,NewState,NewData}"
+								},
+								{
+									"c": [
+										"Reason",
+										"Reason",
+										"{ok,_,_}",
+										"{ok,NewState,NewData}",
+										"{ok,_}",
+										"Reason",
+										"Reason",
+										"{error,Reason}"
+									]
+								},
+								{
+									"c": [
+										"gen_statem",
+										"Change = {advanced,Extra}",
+										"Extra"
+									],
+									"seealso": [
+										{
+											"marker": "sasl:appup",
+											"c": "appup"
+										},
+										{
+											"marker": "#type-callback_mode",
+											"em": "callback mode"
+										}
+									],
+									"em": "callback mode"
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "OTP 19.0",
+							"$t": "Module:init(Args) -> Result(StateType)"
+						},
+						"fsummary": "Initializing process and internal state.",
+						"type": {
+							"v": [
+								"Args = term()",
+								{
+									"seealso": {
+										"marker": "#type-init_result",
+										"$t": "init_result(StateType)"
+									}
+								}
+							]
+						},
+						"desc": {
+							"marker": {
+								"id": "Module:init-1"
+							},
+							"p": [
+								{
+									"c": "gen_statem",
+									"seealso": [
+										{
+											"marker": "#start_link/3",
+											"c": "start_link/3,4"
+										},
+										{
+											"marker": "#start/3",
+											"c": "start/3,4"
+										}
+									]
+								},
+								{
+									"c": [
+										"Args",
+										"Args"
+									]
+								}
+							],
+							"note": {
+								"p": {
+									"c": "gen_statem",
+									"seealso": [
+										{
+											"marker": "proc_lib",
+											"c": "proc_lib"
+										},
+										{
+											"marker": "#enter_loop/4",
+											"c": "enter_loop/4-6"
+										}
+									]
+								},
+								"pre": "init(Args) -> erlang:error(not_implemented, [Args])."
+							}
+						}
+					},
+					{
+						"name": {
+							"since": "OTP 19.0",
+							"$t": "Module:format_status(Opt, [PDict,State,Data]) -> Status"
+						},
+						"fsummary": {
+							"c": "gen_statem"
+						},
+						"type": {
+							"v": [
+								"Opt = normal | terminate",
+								"PDict = [{Key, Value}]",
+								{
+									"seealso": {
+										"marker": "#type-state",
+										"$t": "state()"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#type-data",
+										"$t": "data()"
+									}
+								},
+								"Key = term()",
+								"Value = term()",
+								"Status = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": [
+									{
+										"c": [
+											"gen_statem",
+											"{State,Data}"
+										]
+									},
+									{
+										"c": [
+											"{State,Info}",
+											"Info",
+											"format_status/2"
+										]
+									}
+								]
+							},
+							"p": [
+								{
+									"c": "gen_statem"
+								},
+								{
+									"c": [
+										"gen_statem",
+										"format_status/2",
+										"gen_statem"
+									],
+									"seealso": {
+										"marker": "sys#get_status/1",
+										"c": "sys:get_status/1,2"
+									}
+								},
+								{
+									"c": [
+										"PDict",
+										"gen_statem"
+									]
+								},
+								{
+									"seealso": {
+										"marker": "#type-state",
+										"c": "State"
+									},
+									"c": "gen_statem"
+								},
+								{
+									"seealso": {
+										"marker": "#type-data",
+										"c": "Data"
+									},
+									"c": "gen_statem"
+								},
+								{
+									"c": [
+										"Status",
+										"gen_statem",
+										"Status",
+										"Opt",
+										"normal",
+										"Status",
+										"[{data, [{\"State\", Term}]}]",
+										"Term",
+										"gen_statem"
+									],
+									"seealso": [
+										{
+											"marker": "sys#get_status/1",
+											"c": "sys:get_status/1,2"
+										},
+										{
+											"marker": "sys#get_status/1",
+											"c": "sys:get_status/1,2"
+										}
+									]
+								},
+								"One use for this function is to return compact alternative state representations to avoid having large state terms printed in log files. Another use is to hide sensitive data from being written to the error log."
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"seealso": {
+											"marker": "sys#get_status/1",
+											"c": "sys:get_status/1,2"
+										},
+										"c": [
+											"gen_statem",
+											"Opt",
+											"normal"
+										]
+									},
+									{
+										"c": [
+											"gen_statem",
+											"Opt",
+											"terminate"
+										]
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": [
+							{
+								"since": "OTP 19.0",
+								"$t": "Module:StateName(enter, OldState, Data) -> StateEnterResult(StateName)"
+							},
+							{
+								"since": "OTP 19.0",
+								"$t": "Module:StateName(EventType, EventContent, Data) -> StateFunctionResult"
+							},
+							{
+								"since": "OTP 19.0",
+								"$t": "Module:handle_event(enter, OldState, State, Data) ->\tStateEnterResult(State)"
+							},
+							{
+								"since": "OTP 19.0",
+								"$t": "Module:handle_event(EventType, EventContent, State, Data) ->\tHandleEventResult"
+							}
+						],
+						"fsummary": "Handle an event.",
+						"type": {
+							"v": [
+								{
+									"seealso": {
+										"marker": "#type-event_type",
+										"$t": "event_type()"
+									}
+								},
+								"EventContent = term()",
+								{
+									"seealso": {
+										"marker": "#type-state",
+										"$t": "state()"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#type-data",
+										"$t": "data()"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#type-state_enter_result",
+										"$t": "state_enter_result(StateName)"
+									}
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#type-event_handler_result",
+											"$t": "event_handler_result"
+										},
+										{
+											"marker": "#type-state_name",
+											"$t": "state_name()"
+										}
+									]
+								},
+								{
+									"seealso": {
+										"marker": "#type-state_enter_result",
+										"$t": "state_enter_result(State)"
+									}
+								},
+								{
+									"seealso": [
+										{
+											"marker": "#type-event_handler_result",
+											"$t": "event_handler_result"
+										},
+										{
+											"marker": "#type-state",
+											"$t": "state()"
+										}
+									]
+								}
+							]
+						},
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"gen_statem",
+										"state_functions",
+										"Module:StateName/3",
+										"handle_event_function",
+										"Module:handle_event/4"
+									],
+									"seealso": [
+										{
+											"marker": "#call/2",
+											"c": "call/2"
+										},
+										{
+											"marker": "#cast/2",
+											"c": "cast/2"
+										},
+										{
+											"marker": "#type-callback_mode",
+											"em": "callback mode"
+										}
+									]
+								},
+								{
+									"c": [
+										"EventType",
+										"{reply,From,Reply}"
+									],
+									"seealso": [
+										{
+											"marker": "#type-event_type",
+											"c": "{call,From}"
+										},
+										{
+											"marker": "#state callback",
+											"em": "state callback"
+										},
+										{
+											"marker": "#type-action",
+											"c": "Actions"
+										},
+										{
+											"marker": "#type-reply_action",
+											"c": "Replies"
+										},
+										{
+											"marker": "#reply/2",
+											"c": "reply(From, Reply)"
+										}
+									]
+								},
+								{
+									"c": "=/="
+								},
+								{
+									"c": [
+										"StateFunctionResult",
+										"HandleEventResult",
+										"StateFunctionResult",
+										"HandleEventResult"
+									]
+								},
+								{
+									"c": "gen_statem",
+									"seealso": {
+										"marker": "#type-action",
+										"c": "action()"
+									}
+								},
+								{
+									"c": [
+										"gen_statem",
+										"(enter, OldState, ...)",
+										"{next_state,NextState, ...}",
+										"NextState =/= State",
+										"gen_statem",
+										"{repeat_state, NewData, ...}",
+										"NewData",
+										"{repeat_state_and_data, _}",
+										"repeat_state_and_data",
+										"{keep_state,...}",
+										"{keep_state_and_data,_}",
+										"keep_state_and_data"
+									],
+									"seealso": [
+										{
+											"marker": "#type-state_enter",
+											"em": "state enter calls"
+										},
+										{
+											"marker": "#type-enter_action",
+											"$t": "actions"
+										},
+										{
+											"marker": "#type-postpone",
+											"c": "postpone()"
+										},
+										{
+											"marker": "#type-action",
+											"c": "{next_event,_,_}"
+										}
+									],
+									"em": [
+										"state change",
+										"state enter call",
+										"state enter calls",
+										"state enter call",
+										"state enter call"
+									]
+								},
+								{
+									"seealso": {
+										"marker": "erts:erlang#throw/1",
+										"c": "throw"
+									},
+									"c": [
+										"throw(keep_state_and_data)",
+										"{next_state,State,Data}",
+										"State",
+										"Data"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"since": "OTP 19.0",
+							"$t": "Module:terminate(Reason, State, Data) -> Ignored"
+						},
+						"fsummary": "Clean up before termination.",
+						"type": {
+							"v": [
+								"Reason = normal | shutdown | {shutdown,term()} | term()",
+								{
+									"seealso": {
+										"marker": "#type-state",
+										"$t": "state()"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "#type-data",
+										"$t": "data()"
+									}
+								},
+								"Ignored = term()"
+							]
+						},
+						"desc": {
+							"note": {
+								"p": {
+									"c": "gen_statem"
+								}
+							},
+							"p": [
+								{
+									"c": [
+										"gen_statem",
+										"gen_statem",
+										"Reason"
+									],
+									"seealso": {
+										"marker": "#Module:init/1",
+										"c": "Module:init/1"
+									}
+								},
+								{
+									"c": [
+										"Reason",
+										"gen_statem"
+									],
+									"seealso": {
+										"marker": "#type-state",
+										"c": "State"
+									}
+								},
+								{
+									"c": [
+										"Reason",
+										"gen_statem",
+										"{stop,Reason}",
+										"Reason",
+										"Reason"
+									],
+									"seealso": {
+										"marker": "#type-action",
+										"c": "Actions"
+									}
+								},
+								{
+									"c": [
+										"gen_statem",
+										"Reason = shutdown"
+									]
+								},
+								{
+									"c": [
+										"gen_statem",
+										"'EXIT'",
+										"Reason",
+										"'EXIT'"
+									],
+									"em": "not"
+								},
+								{
+									"c": "gen_statem"
+								},
+								{
+									"c": [
+										"normal",
+										"shutdown",
+										"{shutdown,Term}",
+										"gen_statem"
+									],
+									"seealso": {
+										"marker": "kernel:logger",
+										"c": "logger(3)"
+									}
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"c": "gen_statem"
+										}
+									},
+									{
+										"p": {
+											"c": "brutal_kill"
+										}
+									}
+								]
+							}
+						}
+					}
+				]
+			}
+		]
+	}
+}

@@ -1,0 +1,330 @@
+{
+	"fileref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2012",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "assert.hrl",
+			"prepared": {},
+			"docno": {},
+			"date": {},
+			"rev": {}
+		},
+		"file": "assert.hrl",
+		"filesummary": "Assert macros.",
+		"description": {
+			"p": [
+				{
+					"c": "assert.hrl"
+				},
+				"Include the following directive in the module from which the function is called:",
+				{
+					"c": [
+						"ok",
+						"error",
+						"{Macro, Info}",
+						"Macro",
+						"assertEqual",
+						"Info",
+						"[{module, M}, {line, L}, ...]",
+						"Info"
+					]
+				},
+				{
+					"c": [
+						"?assertEqual(0, fib(0), \"Fibonacci is defined for zero\")",
+						"{comment, Text}"
+					]
+				},
+				{
+					"c": [
+						"NOASSERT",
+						"assert.hrl",
+						"ok"
+					]
+				},
+				{
+					"c": "erlc"
+				},
+				{
+					"c": "NOASSERT"
+				},
+				"A few other macros also have effect on the enabling or disabling of assertions:",
+				{
+					"c": [
+						"DEBUG",
+						"NODEBUG",
+						"ASSERT",
+						"NOASSERT"
+					]
+				}
+			],
+			"code": [
+				{
+					"type": "none",
+					"$t": "-include_lib(\"stdlib/include/assert.hrl\")."
+				},
+				{
+					"type": "none",
+					"$t": "erlc -DNOASSERT=true *.erl"
+				}
+			],
+			"list": {
+				"type": "bulleted",
+				"item": [
+					{
+						"p": {
+							"c": [
+								"NODEBUG",
+								"NOASSERT",
+								"DEBUG",
+								"NODEBUG"
+							]
+						}
+					},
+					{
+						"p": {
+							"c": [
+								"ASSERT",
+								"NOASSERT"
+							]
+						}
+					}
+				]
+			}
+		},
+		"section": [
+			{
+				"title": "Macros",
+				"taglist": {
+					"tag": [
+						{
+							"c": "assert(BoolExpr)"
+						},
+						{
+							"c": "assert(BoolExpr, Comment)"
+						},
+						{
+							"c": "assertNot(BoolExpr)"
+						},
+						{
+							"c": "assertNot(BoolExpr, Comment)"
+						},
+						{
+							"c": "assertMatch(GuardedPattern, Expr)"
+						},
+						{
+							"c": "assertMatch(GuardedPattern, Expr, Comment)"
+						},
+						{
+							"c": "assertNotMatch(GuardedPattern, Expr)"
+						},
+						{
+							"c": "assertNotMatch(GuardedPattern, Expr, Comment)"
+						},
+						{
+							"c": "assertEqual(ExpectedValue, Expr)"
+						},
+						{
+							"c": "assertEqual(ExpectedValue, Expr, Comment)"
+						},
+						{
+							"c": "assertNotEqual(ExpectedValue, Expr)"
+						},
+						{
+							"c": "assertNotEqual(ExpectedValue, Expr, Comment)"
+						},
+						{
+							"c": "assertException(Class, Term, Expr)"
+						},
+						{
+							"c": "assertException(Class, Term, Expr, Comment)"
+						},
+						{
+							"c": "assertNotException(Class, Term, Expr)"
+						},
+						{
+							"c": "assertNotException(Class, Term, Expr, Comment)"
+						},
+						{
+							"c": "assertError(Term, Expr)"
+						},
+						{
+							"c": "assertError(Term, Expr, Comment)"
+						},
+						{
+							"c": "assertExit(Term, Expr)"
+						},
+						{
+							"c": "assertExit(Term, Expr, Comment)"
+						},
+						{
+							"c": "assertThrow(Term, Expr)"
+						},
+						{
+							"c": "assertThrow(Term, Expr, Comment)"
+						}
+					],
+					"item": [
+						{},
+						{
+							"p": {
+								"c": [
+									"BoolExpr",
+									"true"
+								]
+							}
+						},
+						{},
+						{
+							"p": {
+								"c": [
+									"BoolExpr",
+									"false"
+								]
+							}
+						},
+						{},
+						{
+							"p": [
+								{
+									"c": [
+										"Expr",
+										"GuardedPattern"
+									]
+								},
+								{
+									"c": "when ..."
+								}
+							],
+							"code": [
+								{
+									"type": "none",
+									"$t": "?assertMatch({bork, _}, f())"
+								},
+								{
+									"type": "none",
+									"$t": "?assertMatch({bork, X} when X > 0, f())"
+								}
+							]
+						},
+						{},
+						{
+							"p": [
+								{
+									"c": [
+										"Expr",
+										"GuardedPattern"
+									]
+								},
+								{
+									"c": [
+										"assertMatch",
+										"GuardedPattern",
+										"when"
+									]
+								}
+							]
+						},
+						{},
+						{
+							"p": {
+								"c": [
+									"Expr",
+									"ExpectedValue"
+								]
+							}
+						},
+						{},
+						{
+							"p": {
+								"c": [
+									"Expr",
+									"ExpectedValue"
+								]
+							}
+						},
+						{},
+						{
+							"p": [
+								{
+									"c": [
+										"Expr",
+										"Class",
+										"Term",
+										"Expr"
+									]
+								},
+								{
+									"c": [
+										"Class",
+										"Term",
+										"assertMatch"
+									]
+								}
+							]
+						},
+						{},
+						{
+							"p": [
+								{
+									"c": [
+										"Expr",
+										"Class",
+										"Term",
+										"Expr"
+									]
+								},
+								{
+									"c": [
+										"assertException",
+										"Class",
+										"Term"
+									]
+								}
+							]
+						},
+						{},
+						{
+							"p": {
+								"c": "assertException(error, Term, Expr)"
+							}
+						},
+						{},
+						{
+							"p": {
+								"c": "assertException(exit, Term, Expr)"
+							}
+						},
+						{},
+						{
+							"p": {
+								"c": "assertException(throw, Term, Expr)"
+							}
+						}
+					]
+				}
+			},
+			{
+				"title": "See Also",
+				"p": {
+					"seealso": [
+						{
+							"marker": "compiler:compile",
+							"c": "compile(3)"
+						},
+						{
+							"marker": "erts:erlc",
+							"c": "erlc(3)"
+						}
+					]
+				}
+			}
+		]
+	}
+}

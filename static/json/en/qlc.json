@@ -1,0 +1,2127 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2004",
+					"2019"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "qlc",
+			"prepared": "Hans Bolinder",
+			"responsible": {},
+			"docno": {},
+			"approved": {},
+			"checked": {},
+			"date": "2004-08-25",
+			"rev": "PA1",
+			"file": "qlc.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "qlc"
+		},
+		"modulesummary": "Query interface to Mnesia, ETS, Dets, and so on.",
+		"description": {
+			"p": {
+				"seealso": [
+					{
+						"marker": "mnesia:mnesia",
+						"$t": "Mnesia"
+					},
+					{
+						"marker": "ets",
+						"$t": "ETS"
+					},
+					{
+						"marker": "dets",
+						"$t": "Dets"
+					}
+				]
+			}
+		},
+		"section": [
+			{
+				"title": "Overview",
+				"p": [
+					{
+						"em": [
+							"QLC tables",
+							"query",
+							"Query List Comprehensions"
+						],
+						"seealso": [
+							{
+								"marker": "#implementing_a_qlc_table",
+								"$t": "Implementing a QLC Table"
+							},
+							{
+								"marker": "doc/reference_manual:expressions#lcs",
+								"$t": "Erlang Reference Manual"
+							},
+							{
+								"marker": "doc/programming_examples:list_comprehensions",
+								"$t": "Programming Examples"
+							},
+							{
+								"marker": "#common_options",
+								"$t": "Common Options"
+							}
+						],
+						"marker": {
+							"id": "query_list_comprehension"
+						},
+						"c": [
+							"cache",
+							"unique"
+						]
+					},
+					{
+						"seealso": [
+							{
+								"marker": "#q/1",
+								"c": "q/1,2"
+							},
+							{
+								"marker": "#eval/1",
+								"c": "eval/1,2"
+							},
+							{
+								"marker": "doc/reference_manual:code_loading",
+								"$t": "Compilation and Code Loading"
+							},
+							{
+								"marker": "#cursor/1",
+								"c": "cursor/1,2"
+							}
+						],
+						"marker": [
+							{
+								"id": "query_handle"
+							},
+							{
+								"id": "query_cursor"
+							}
+						],
+						"em": [
+							"query handle",
+							"query cursor"
+						],
+						"c": "q/1,2"
+					}
+				]
+			},
+			{
+				"title": "Syntax",
+				"p": [
+					"Syntactically QLCs have the same parts as ordinary list comprehensions:",
+					{
+						"c": [
+							"Expression",
+							"boolean()",
+							"Pattern <- ListExpression",
+							"ListExpression"
+						],
+						"em": [
+							"template",
+							"filters",
+							"generators"
+						],
+						"seealso": [
+							{
+								"marker": "#append/1",
+								"c": "append/1,2"
+							},
+							{
+								"marker": "#keysort/2",
+								"c": "keysort/2,3"
+							},
+							{
+								"marker": "#q/1",
+								"c": "q/1,2"
+							},
+							{
+								"marker": "#sort/1",
+								"c": "sort/1,2"
+							},
+							{
+								"marker": "#string_to_handle/1",
+								"c": "string_to_handle/1,2,3"
+							},
+							{
+								"marker": "#table/2",
+								"c": "table/2"
+							}
+						]
+					}
+				],
+				"code": {
+					"type": "none",
+					"$t": "[Expression || Qualifier1, Qualifier2, ...]"
+				}
+			},
+			{
+				"title": "Evaluation",
+				"p": [
+					"A query handle is evaluated in the following order:",
+					{
+						"c": [
+							"boolean()",
+							"false",
+							"qlc",
+							"false"
+						]
+					}
+				],
+				"list": {
+					"type": "bulleted",
+					"item": [
+						{
+							"p": "Inspection of options and the collection of information about tables. As a result, qualifiers are modified during the optimization phase."
+						},
+						{
+							"p": "All list expressions are evaluated. If a cursor has been created, evaluation takes place in the cursor process. For list expressions that are QLCs, the list expressions of the generators of the QLCs are evaluated as well. Be careful if list expressions have side effects, as list expressions are evaluated in unspecified order."
+						},
+						{
+							"p": {
+								"c": [
+									"false",
+									"true"
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"title": "Join",
+				"p": [
+					{
+						"c": [
+							"qlc",
+							"P1",
+							"P2"
+						]
+					},
+					{
+						"c": "qlc"
+					},
+					{
+						"c": [
+							"qlc",
+							"=:=/2",
+							"==/2",
+							"is_record/2",
+							"element/2",
+							"and/2",
+							"or/2",
+							"andalso/2",
+							"orelse/2",
+							"xor/2"
+						]
+					}
+				],
+				"list": {
+					"type": "bulleted",
+					"item": [
+						{
+							"p": {
+								"em": "Lookup join",
+								"c": [
+									"P1",
+									"P2",
+									"qlc"
+								]
+							}
+						},
+						{
+							"p": {
+								"em": "Merge join",
+								"c": [
+									"P1",
+									"P2",
+									"P2"
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"marker": {
+					"id": "common_options"
+				},
+				"title": "Common Options",
+				"p": {
+					"seealso": [
+						{
+							"marker": "#cursor/2",
+							"c": "cursor/2"
+						},
+						{
+							"marker": "#eval/2",
+							"c": "eval/2"
+						},
+						{
+							"marker": "#fold/4",
+							"c": "fold/4"
+						},
+						{
+							"marker": "#info/2",
+							"c": "info/2"
+						}
+					]
+				},
+				"list": {
+					"type": "bulleted",
+					"item": [
+						{
+							"p": {
+								"c": [
+									"{cache_all, Cache}",
+									"Cache",
+									"ets",
+									"list",
+									"{cache,Cache}",
+									"{cache_all,no}",
+									"cache_all",
+									"{cache_all,ets}"
+								]
+							}
+						},
+						{
+							"p": {
+								"marker": {
+									"id": "max_list_size"
+								},
+								"c": [
+									"{max_list_size, MaxListSize}",
+									"MaxListSize",
+									"MaxListSize",
+									"{cache,list}"
+								]
+							}
+						},
+						{
+							"p": {
+								"c": [
+									"{tmpdir_usage, TmpFileUsage}",
+									"qlc",
+									"tmpdir",
+									"not_allowed",
+									"allowed",
+									"info_msg",
+									"warning_msg",
+									"error_msg"
+								],
+								"seealso": {
+									"marker": "kernel:error_logger",
+									"c": "error_logger"
+								}
+							}
+						},
+						{
+							"p": {
+								"c": [
+									"{tmpdir, TempDirectory}",
+									"{cache,list}",
+									"tmpdir",
+									"\"\"",
+									"file:get_cwd()"
+								],
+								"seealso": [
+									{
+										"marker": "#keysort/3",
+										"c": "keysort/3"
+									},
+									{
+										"marker": "#sort/2",
+										"c": "sort/2"
+									}
+								]
+							}
+						},
+						{
+							"p": {
+								"c": [
+									"{unique_all, true}",
+									"{unique,true}",
+									"{unique_all,false}",
+									"unique_all",
+									"{unique_all,true}"
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"marker": {
+					"id": "getting_started"
+				},
+				"title": "Getting Started",
+				"p": [
+					{
+						"seealso": [
+							{
+								"marker": "doc/reference_manual:expressions",
+								"$t": "Expressions"
+							},
+							{
+								"marker": "doc/programming_examples:list_comprehensions",
+								"$t": "List Comprehensions"
+							}
+						]
+					},
+					{
+						"c": [
+							"qlc",
+							"lists:append(L)",
+							"[X ||Y <- L, X <- Y]",
+							"Y"
+						],
+						"seealso": {
+							"marker": "#eval/1",
+							"c": "eval/1,2"
+						}
+					},
+					{
+						"c": [
+							"qlc",
+							"qlc:table/2",
+							"qlc:table/2"
+						],
+						"seealso": [
+							{
+								"marker": "#table/2",
+								"c": "qlc:table/2"
+							},
+							{
+								"marker": "mnesia:mnesia#table/1",
+								"c": "mnesia:table/1,2"
+							},
+							{
+								"marker": "ets#table/1",
+								"c": "ets:table/1,2"
+							},
+							{
+								"marker": "dets#table/1",
+								"c": "dets:table/1,2"
+							},
+							{
+								"marker": "#table/2",
+								"c": "qlc:table/2"
+							},
+							{
+								"marker": "#implementing_a_qlc_table",
+								"$t": "Implementing a QLC Table"
+							}
+						]
+					},
+					{
+						"c": [
+							"qlc:table/2",
+							"QH",
+							"{finished}",
+							"qlc:append(QH, [{finished}])",
+							"append/2",
+							"QH",
+							"{finished}",
+							"{finished}",
+							"QH",
+							"append/2"
+						],
+						"seealso": {
+							"marker": "#append/1",
+							"c": "qlc:append/1,2"
+						}
+					},
+					{
+						"c": [
+							"QH1",
+							"QH2",
+							"unique"
+						]
+					},
+					{
+						"c": [
+							"unique",
+							"QH1",
+							"QH2",
+							"unique"
+						]
+					},
+					{
+						"c": "unique"
+					},
+					{
+						"c": [
+							"A1",
+							"A2",
+							"A2",
+							"A1 == A2"
+						]
+					},
+					"To return only a few answers, cursors can be used. The following code returns no more than five answers using an ETS table for storing the unique answers:",
+					"QLCs are convenient for stating constraints on data from two or more tables. The following example does a natural join on two query handles on position 2:",
+					{
+						"c": [
+							"qlc",
+							"QH1",
+							"QH2",
+							"X2",
+							"QH2",
+							"X2",
+							"Y2",
+							"QH1",
+							"QH2"
+						]
+					},
+					{
+						"c": [
+							"join",
+							"qlc"
+						]
+					},
+					{
+						"c": [
+							"QH1",
+							"QH2",
+							"QH1",
+							"QH2"
+						]
+					},
+					{
+						"c": [
+							"QH2",
+							"gb_table:table/1",
+							"QH1",
+							"QH2",
+							"QH2",
+							"QH2",
+							"QH2",
+							"QH2",
+							"cache"
+						],
+						"seealso": [
+							{
+								"marker": "gb_trees",
+								"c": "gb_trees"
+							},
+							{
+								"marker": "#implementing_a_qlc_table",
+								"$t": "Implementing a QLC Table"
+							}
+						]
+					},
+					"or only",
+					{
+						"c": [
+							"cache",
+							"QH2'",
+							"QH1",
+							"QH2'",
+							"unique"
+						]
+					},
+					{
+						"c": "{cache,list}",
+						"seealso": {
+							"marker": "#max_list_size",
+							"$t": "limit"
+						}
+					},
+					{
+						"c": [
+							"cache_all",
+							"ets",
+							"list",
+							"cache",
+							"{cache,list}"
+						]
+					}
+				],
+				"code": [
+					{
+						"type": "none",
+						"$t": "qlc:q([X || X <- qlc:append(QH1, QH2)], {unique, true})"
+					},
+					{
+						"type": "none",
+						"$t": "qlc:sort(qlc:q([X || X <- qlc:append(QH1, QH2)], {unique, true}))."
+					},
+					{
+						"type": "none",
+						"$t": "C = qlc:cursor(qlc:q([X || X <- qlc:append(QH1, QH2)],{unique,true})),R = qlc:next_answers(C, 5),ok = qlc:delete_cursor(C),R."
+					},
+					{
+						"type": "none",
+						"$t": "qlc:q([{X1,X2,X3,Y1} || {X1,X2,X3} <- QH1, {Y1,Y2} <- QH2, X2 =:= Y2])"
+					},
+					{
+						"type": "none",
+						"$t": "qlc:q([{X1,X2,X3,Y1} || {X1,X2,X3} <- QH1, {Y1,Y2} <- QH2, X2 =:= Y2], {join, nested_loop})"
+					},
+					{
+						"type": "none",
+						"$t": "QH2' = qlc:q([X || X <- QH2], {cache, ets})"
+					},
+					{
+						"type": "none",
+						"$t": "QH2' = qlc:q([X || X <- QH2], cache)"
+					}
+				]
+			},
+			{
+				"marker": {
+					"id": "implementing_a_qlc_table"
+				},
+				"title": "Implementing a QLC Table",
+				"p": [
+					{
+						"seealso": [
+							{
+								"marker": "#table/2",
+								"c": "table/2"
+							},
+							{
+								"marker": "gb_trees",
+								"c": "gb_trees"
+							}
+						]
+					},
+					{
+						"c": [
+							"TF",
+							"qlc",
+							"gb_trees",
+							"[]"
+						]
+					},
+					{
+						"c": [
+							"qlc_next/1",
+							"{Key,Value}",
+							"{Key,Value}"
+						]
+					},
+					{
+						"seealso": {
+							"marker": "#info/1",
+							"c": "info/1,2"
+						},
+						"c": [
+							"all",
+							"{lookup,1,KeyValues}"
+						]
+					},
+					"Whether the whole table is traversed or only some keys looked up depends on how the query is expressed. If the query has the form",
+					{
+						"c": [
+							"P",
+							"qlc",
+							"P",
+							"F",
+							"P",
+							"InfoFun",
+							"qlc"
+						]
+					}
+				],
+				"code": [
+					{
+						"type": "none",
+						"$t": "-module(gb_table).-export([table/1]).table(T) -> TF = fun() -> qlc_next(gb_trees:next(gb_trees:iterator(T))) end, InfoFun = fun(num_of_objects) -> gb_trees:size(T); (keypos) -> 1; (is_sorted_key) -> true; (is_unique_objects) -> true; (_) -> undefined end, LookupFun = fun(1, Ks) -> lists:flatmap(fun(K) -> case gb_trees:lookup(K, T) of {value, V} -> [{K,V}]; none -> [] end end, Ks) end, FormatFun = fun({all, NElements, ElementFun}) -> ValsS = io_lib:format(\"gb_trees:from_orddict(~w)\", [gb_nodes(T, NElements, ElementFun)]), io_lib:format(\"gb_table:table(~s)\", [ValsS]); ({lookup, 1, KeyValues, _NElements, ElementFun}) -> ValsS = io_lib:format(\"gb_trees:from_orddict(~w)\", [gb_nodes(T, infinity, ElementFun)]), io_lib:format(\"lists:flatmap(fun(K) -> \" \"case gb_trees:lookup(K, ~s) of \" \"{value, V} -> [{K,V}];none -> [] end \" \"end, ~w)\", [ValsS, [ElementFun(KV) || KV <- KeyValues]]) end, qlc:table(TF, [{info_fun, InfoFun}, {format_fun, FormatFun}, {lookup_fun, LookupFun},{key_equality,'=='}]).qlc_next({X, V, S}) -> [{X,V} | fun() -> qlc_next(gb_trees:next(S)) end];qlc_next(none) -> [].gb_nodes(T, infinity, ElementFun) -> gb_nodes(T, -1, ElementFun);gb_nodes(T, NElements, ElementFun) -> gb_iter(gb_trees:iterator(T), NElements, ElementFun).gb_iter(_I, 0, _EFun) -> '...';gb_iter(I0, N, EFun) -> case gb_trees:next(I0) of {X, V, I} -> [EFun({X,V}) | gb_iter(I, N-1, EFun)]; none -> [] end."
+					},
+					{
+						"type": "none",
+						"$t": "qlc:q([T || P <- LE, F])"
+					}
+				]
+			},
+			{
+				"title": "Key Equality",
+				"p": [
+					{
+						"c": [
+							"==/2",
+							"=:=/2",
+							"2 == 2.0",
+							"true",
+							"2 =:= 2.0",
+							"false",
+							"qlc"
+						]
+					},
+					{
+						"c": [
+							"qlc",
+							"==/2",
+							"=:=/2"
+						]
+					},
+					{
+						"c": [
+							"==/2",
+							"=:=/2",
+							"=:=/2",
+							"qlc"
+						],
+						"seealso": {
+							"marker": "#key_equality",
+							"$t": "key_equality"
+						}
+					},
+					{
+						"c": [
+							"{2,2}",
+							"b",
+							"c"
+						]
+					},
+					{
+						"c": [
+							"==/2",
+							"qlc",
+							"==/2"
+						]
+					},
+					{
+						"c": [
+							"==/2",
+							"=:=/2",
+							"qlc"
+						]
+					}
+				],
+				"pre": [
+					{
+						"input": [
+							"E1 = ets:new(t, [set]), % uses =:=/2 for key equality",
+							"Q1 = qlc:q([K ||",
+							"{K} <- ets:table(E1),",
+							"K == 2.71 orelse K == a]),",
+							"io:format(\"~s~n\", [qlc:info(Q1)])."
+						]
+					},
+					{
+						"input": [
+							"E2 = ets:new(t, [set]),",
+							"true = ets:insert(E2, [{{2,2},a},{{2,2.0},b},{{2.0,2},c}]),",
+							"F2 = fun(I) ->",
+							"qlc:q([V || {K,V} <- ets:table(E2), K == I])",
+							"end,",
+							"Q2 = F2({2,2}),",
+							"io:format(\"~s~n\", [qlc:info(Q2)]).",
+							"lists:sort(qlc:e(Q2))."
+						]
+					},
+					{
+						"input": [
+							"E3 = ets:new(t, [ordered_set]), % uses ==/2 for key equality",
+							"true = ets:insert(E3, [{{2,2.0},b}]),",
+							"F3 = fun(I) ->",
+							"qlc:q([V || {K,V} <- ets:table(E3), K == I])",
+							"end,",
+							"Q3 = F3({2,2}),",
+							"io:format(\"~s~n\", [qlc:info(Q3)]).",
+							"qlc:e(Q3)."
+						]
+					}
+				]
+			},
+			{
+				"title": "See Also",
+				"p": {
+					"seealso": [
+						{
+							"marker": "dets",
+							"c": "dets(3)"
+						},
+						{
+							"marker": "erl_eval",
+							"c": "erl_eval(3)"
+						},
+						{
+							"marker": "erts:erlang",
+							"c": "erlang(3)"
+						},
+						{
+							"marker": "kernel:error_logger",
+							"c": "error_logger(3)"
+						},
+						{
+							"marker": "ets",
+							"c": "ets(3)"
+						},
+						{
+							"marker": "kernel:file",
+							"c": "file(3)"
+						},
+						{
+							"marker": "file_sorter",
+							"c": "file_sorter(3)"
+						},
+						{
+							"marker": "mnesia:mnesia",
+							"c": "mnesia(3)"
+						},
+						{
+							"marker": "shell",
+							"c": "shell(3)"
+						},
+						{
+							"marker": "doc/reference_manual:users_guide",
+							"$t": "Erlang Reference Manual"
+						},
+						{
+							"marker": "doc/programming_examples:users_guide",
+							"$t": "Programming Examples"
+						}
+					]
+				}
+			}
+		],
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "abstract_expr"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "erts:absform",
+								"$t": "The Abstract Format"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "answer"
+					}
+				},
+				{
+					"name": {
+						"name": "answers"
+					}
+				},
+				{
+					"name": {
+						"name": "cache"
+					}
+				},
+				{
+					"name": {
+						"name": "match_expression"
+					},
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "erts:match_spec",
+									"$t": "Match Specifications in Erlang"
+								},
+								{
+									"marker": "ms_transform",
+									"c": "ms_transform(3)"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "no_files"
+					},
+					"desc": {
+						"p": "An integer > 1."
+					}
+				},
+				{
+					"name": {
+						"name": "key_pos"
+					}
+				},
+				{
+					"name": {
+						"name": "max_list_size"
+					}
+				},
+				{
+					"name": {
+						"name": "order"
+					}
+				},
+				{
+					"name": {
+						"name": "order_fun"
+					}
+				},
+				{
+					"name": {
+						"name": "query_cursor"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#query_cursor",
+								"$t": "query cursor"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "query_handle"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#query_handle",
+								"$t": "query handle"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "query_handle_or_list"
+					}
+				},
+				{
+					"name": {
+						"name": "query_list_comprehension"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#query_list_comprehension",
+								"$t": "query list comprehension"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "spawn_options"
+					}
+				},
+				{
+					"name": {
+						"name": "sort_options"
+					}
+				},
+				{
+					"name": {
+						"name": "sort_option"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "file_sorter",
+								"c": "file_sorter(3)"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "tmp_directory"
+					}
+				},
+				{
+					"name": {
+						"name": "tmp_file_usage"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "append",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return a query handle.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "QH"
+								},
+								{
+									"anno": "QHL"
+								},
+								{
+									"anno": "QHL"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "append",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Return a query handle.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "QH3"
+									},
+									{
+										"anno": "QH1"
+									},
+									{
+										"anno": "QH2"
+									}
+								]
+							},
+							{
+								"c": [
+									"append(QH1,QH2)",
+									"append([QH1,QH2])"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "cursor",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "cursor",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Create a query cursor.",
+					"desc": {
+						"p": [
+							{
+								"seealso": [
+									{
+										"marker": "#next_answers/1",
+										"c": "next_answers/1,2"
+									},
+									{
+										"marker": "#delete_cursor/1",
+										"c": "delete_cursor/1"
+									},
+									{
+										"marker": "erts:erlang#spawn_opt/2",
+										"c": "erlang:spawn_opt/2"
+									}
+								],
+								"c": [
+									"spawn_options",
+									"spawn_opt/2",
+									"[link]"
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									{
+										"anno": "QH"
+									},
+									{
+										"anno": "QH"
+									}
+								]
+							}
+						],
+						"pre": {
+							"input": [
+								"QH = qlc:q([{X,Y} || X <- [a,b], Y <- [1,2]]),",
+								"QC = qlc:cursor(QH),",
+								"qlc:next_answers(QC, 1).",
+								"qlc:next_answers(QC, 1).",
+								"qlc:next_answers(QC, all_remaining).",
+								"qlc:delete_cursor(QC)."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "delete_cursor",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Delete a query cursor.",
+					"desc": {
+						"p": "Deletes a query cursor. Only the owner of the cursor can delete the cursor."
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "e",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "e",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "eval",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "eval",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Return all answers to a query.",
+					"desc": {
+						"p": [
+							"Evaluates a query handle in the calling process and collects all answers in a list.",
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									{
+										"anno": "QH"
+									},
+									{
+										"anno": "QH"
+									}
+								]
+							}
+						],
+						"pre": {
+							"input": [
+								"QH = qlc:q([{X,Y} || X <- [a,b], Y <- [1,2]]),",
+								"qlc:eval(QH)."
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "fold",
+							"arity": "3",
+							"since": ""
+						},
+						{
+							"name": "fold",
+							"arity": "4",
+							"since": ""
+						}
+					],
+					"fsummary": "Fold a function over the answers to a query.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Function"
+									},
+									{
+										"anno": "AccIn"
+									},
+									{
+										"anno": "Function"
+									},
+									{
+										"anno": "Acc0"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									{
+										"anno": [
+											"Function",
+											"Acc0",
+											"QH"
+										]
+									},
+									{
+										"anno": [
+											"Function",
+											"Acc0",
+											"QH"
+										]
+									}
+								]
+							}
+						],
+						"pre": {
+							"input": [
+								"QH = [1,2,3,4,5,6],",
+								"qlc:fold(fun(X, Sum) -> X + Sum end, 0, QH)."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "format_error",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return an English description of a an error tuple.",
+					"desc": {
+						"p": {
+							"c": "qlc"
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "info",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "info",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Return code describing a query handle.",
+					"desc": {
+						"p": [
+							"Returns information about a query handle. The information describes the simplifications and optimizations that are the results of preparing the query for evaluation. This function is probably mainly useful during debugging.",
+							"The information has the form of an Erlang expression where QLCs most likely occur. Depending on the format functions of mentioned QLC tables, it is not certain that the information is absolutely accurate.",
+							"Options:",
+							{
+								"c": [
+									{
+										"anno": "QH"
+									},
+									{
+										"anno": "QH"
+									}
+								]
+							},
+							{
+								"em": "Examples:"
+							},
+							{
+								"c": "{unique,true}"
+							},
+							{
+								"c": [
+									"V2",
+									"G2",
+									"G1"
+								]
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"c": "{flat,false}"
+									}
+								},
+								{
+									"p": {
+										"c": "{format,abstract_code}"
+									}
+								},
+								{
+									"p": {
+										"c": "{n_elements,NElements}"
+									}
+								},
+								{
+									"p": {
+										"c": [
+											"{depth,Depth}",
+											"'...'"
+										]
+									}
+								}
+							]
+						},
+						"pre": [
+							{
+								"input": [
+									"QH = qlc:q([{X,Y} || X <- [x,y], Y <- [a,b]]),",
+									"io:format(\"~s~n\", [qlc:info(QH, unique_all)])."
+								]
+							},
+							{
+								"input": [
+									"E1 = ets:new(e1, []),",
+									"E2 = ets:new(e2, []),",
+									"true = ets:insert(E1, [{1,a},{2,b}]),",
+									"true = ets:insert(E2, [{a,1},{b,2}]),",
+									"Q = qlc:q([{X,Z,W} ||",
+									"{X, Z} <- ets:table(E1),",
+									"{W, Y} <- ets:table(E2),",
+									"X =:= Y]),",
+									"io:format(\"~s~n\", [qlc:info(Q)])."
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "keysort",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "keysort",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": "Return a query handle.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "QH2"
+									},
+									{
+										"anno": "QH1"
+									}
+								],
+								"seealso": {
+									"marker": "file_sorter#keysort/4",
+									"c": "file_sorter:keysort/4"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": "QH1"
+									},
+									"Size",
+									"Size",
+									"size"
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": [
+											"KeyPos",
+											"QH1"
+										]
+									},
+									{
+										"anno": [
+											"KeyPos",
+											"QH1"
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "next_answers",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "next_answers",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Return some or all answers to a query.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "QueryCursor"
+								}
+							},
+							{
+								"c": [
+									"NumberOfAnswers",
+									"10",
+									"next_answers",
+									"[]"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "q",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "q",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Return a handle for a query list comprehension.",
+					"desc": {
+						"p": [
+							"Returns a query handle for a QLC. The QLC must be the first argument to this function, otherwise it is evaluated as an ordinary list comprehension. It is also necessary to add the following line to the source code:",
+							"This causes a parse transform to substitute a fun for the QLC. The (compiled) fun is called when the query handle is evaluated.",
+							{
+								"c": [
+									"qlc:q/1,2",
+									"file:eval/1,2"
+								],
+								"seealso": {
+									"marker": "erl_eval",
+									"c": "erl_eval(3)"
+								}
+							},
+							"To be explicit, this does not work:",
+							{
+								"c": [
+									"A",
+									"[1,2]",
+									"badarg"
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "QLC"
+									},
+									{
+										"anno": "QLC"
+									}
+								]
+							},
+							"Options:",
+							{
+								"c": [
+									"cache",
+									"unique"
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									"A",
+									"cache",
+									"A"
+								]
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#sort/1",
+										"c": "sort/1,2"
+									},
+									{
+										"marker": "#keysort/2",
+										"c": "keysort/2,3"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#table/2",
+									"c": "table/2"
+								},
+								"marker": {
+									"id": "max_lookup"
+								},
+								"c": [
+									"{max_lookup,MaxLookup}",
+									"MaxLookup",
+									"infinity"
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									"gb_table",
+									"{1,a}",
+									"{1,b}",
+									"{1,c}",
+									"{2,a}",
+									"{2,b}",
+									"{2,c}",
+									"{X,Y}"
+								],
+								"seealso": {
+									"marker": "#implementing_a_qlc_table",
+									"$t": "Implementing a QLC Table"
+								}
+							},
+							"Options:"
+						],
+						"code": {
+							"type": "none",
+							"$t": "-include_lib(\"stdlib/include/qlc.hrl\")."
+						},
+						"pre": [
+							"...A = [X || {X} <- [{1},{2}]],QH = qlc:q(A),...",
+							{
+								"input": [
+									"Q = qlc:q([{A,X,Z,W} ||",
+									"A <- [a,b,c],",
+									"{X,Z} <- [{a,1},{b,4},{c,6}],",
+									"{W,Y} <- [{2,a},{3,b},{4,c}],",
+									"X =:= Y],",
+									"{cache, list}),",
+									"io:format(\"~s~n\", [qlc:info(Q)])."
+								]
+							},
+							{
+								"input": [
+									"T = gb_trees:empty(),",
+									"QH = qlc:q([X || {{X,Y},_} <- gb_table:table(T),",
+									"((X == 1) or (X == 2)) andalso",
+									"((Y == a) or (Y == b) or (Y == c))]),",
+									"io:format(\"~s~n\", [qlc:info(QH)])."
+								]
+							}
+						],
+						"list": [
+							{
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"c": [
+												"{cache,ets}",
+												"cache",
+												"{cache,ets}"
+											]
+										}
+									},
+									{
+										"p": [
+											{
+												"c": [
+													"{cache,list}",
+													"{cache,ets}",
+													"max_list_size",
+													"tmpdir"
+												]
+											},
+											{
+												"c": [
+													"cache",
+													"cache"
+												]
+											}
+										]
+									},
+									{
+										"p": {
+											"c": [
+												"{unique,true}",
+												"unique",
+												"{unique,true}",
+												"unique",
+												"{cache,ets}",
+												"unique",
+												"{cache,list}"
+											],
+											"seealso": {
+												"marker": "#keysort/3",
+												"c": "keysort/3"
+											}
+										}
+									}
+								]
+							},
+							{
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"c": [
+												"{lookup,true}",
+												"qlc",
+												"lookup",
+												"false",
+												"{max_lookup,0}",
+												"any"
+											]
+										}
+									},
+									{
+										"p": [
+											{
+												"c": "{join,Join}"
+											},
+											{
+												"c": [
+													"qlc",
+													"any"
+												]
+											}
+										],
+										"list": {
+											"type": "bulleted",
+											"item": [
+												{
+													"c": "{join,lookup}"
+												},
+												{
+													"c": "{join,merge}"
+												},
+												{
+													"c": "{join,nested_loop}"
+												}
+											]
+										}
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "sort",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "sort",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Return a query handle.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "QH2"
+									},
+									{
+										"anno": "QH1"
+									}
+								],
+								"seealso": {
+									"marker": "file_sorter#sort/3",
+									"c": "file_sorter:sort/3"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": "QH1"
+									},
+									"Size",
+									"Size",
+									"size"
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "QH1"
+									},
+									{
+										"anno": "QH1"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "string_to_handle",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "string_to_handle",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "string_to_handle",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": "Return a handle for a query list comprehension.",
+					"desc": {
+						"p": [
+							{
+								"seealso": [
+									{
+										"marker": "#q/1",
+										"c": "q/1,2"
+									},
+									{
+										"marker": "erl_eval",
+										"c": "erl_eval(3)"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							{
+								"c": [
+									{
+										"anno": "QueryString"
+									},
+									{
+										"anno": "QueryString"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": [
+											"QueryString",
+											"Options"
+										]
+									},
+									{
+										"anno": [
+											"QueryString",
+											"Options"
+										]
+									}
+								]
+							},
+							"This function is probably mainly useful when called from outside of Erlang, for example from a driver written in C."
+						],
+						"pre": {
+							"input": [
+								"L = [1,2,3],",
+								"Bs = erl_eval:add_binding('L', L, erl_eval:new_bindings()),",
+								"QH = qlc:string_to_handle(\"[X+1 || X <- L].\", [], Bs),",
+								"qlc:eval(QH)."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "table",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Return a query handle for a table.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"qlc:table/2",
+									"qlc:table/2"
+								]
+							},
+							{
+								"c": "table/1,2",
+								"seealso": [
+									{
+										"marker": "ets#table/1",
+										"c": "ets(3)"
+									},
+									{
+										"marker": "dets#table/1",
+										"c": "dets(3)"
+									},
+									{
+										"marker": "mnesia:mnesia#table/1",
+										"c": "mnesia(3)"
+									}
+								]
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "TraverseFun"
+											},
+											"[]",
+											{
+												"anno": "TraverseFun"
+											},
+											"qlc:table/2",
+											{
+												"anno": "TraverseFun"
+											}
+										]
+									},
+									"list": {
+										"type": "bulleted",
+										"item": [
+											{
+												"p": {
+													"c": [
+														"qlc:table/2",
+														{
+															"anno": "TraverseFun"
+														}
+													],
+													"seealso": {
+														"marker": "ets#table/2",
+														"c": "ets:table/2"
+													}
+												}
+											},
+											{
+												"p": {
+													"c": [
+														{
+															"anno": "TraverseFun"
+														},
+														"gb_table:table/1"
+													],
+													"seealso": {
+														"marker": "#implementing_a_qlc_table",
+														"$t": "Implementing a QLC Table"
+													}
+												}
+											}
+										]
+									}
+								},
+								{
+									"p": [
+										{
+											"c": {
+												"anno": "PreFun"
+											}
+										},
+										{
+											"c": [
+												{
+													"anno": "PreArgs"
+												},
+												"parent_value",
+												"stop_fun"
+											]
+										}
+									],
+									"list": {
+										"type": "bulleted",
+										"item": [
+											{
+												"p": {
+													"c": [
+														"parent_value",
+														{
+															"anno": "ParentFun"
+														},
+														"undefined",
+														"ParentFun",
+														{
+															"anno": "ParentFun"
+														},
+														{
+															"anno": "PreFun"
+														}
+													],
+													"seealso": [
+														{
+															"marker": "#eval/1",
+															"c": "eval/1,2"
+														},
+														{
+															"marker": "#fold/3",
+															"c": "fold/3,4"
+														},
+														{
+															"marker": "#cursor/1",
+															"c": "cursor/1,2"
+														}
+													]
+												}
+											},
+											{
+												"p": {
+													"c": [
+														"stop_fun",
+														"undefined"
+													]
+												}
+											}
+										]
+									}
+								},
+								{
+									"p": [
+										{
+											"c": [
+												{
+													"anno": "PostFun"
+												},
+												{
+													"anno": "PreFun"
+												},
+												{
+													"anno": "PostFun"
+												}
+											]
+										},
+										"The pre (post) functions for different tables are evaluated in unspecified order.",
+										{
+											"c": {
+												"anno": "InfoFun"
+											}
+										}
+									]
+								},
+								{
+									"p": [
+										{
+											"marker": {
+												"id": "lookup_fun"
+											},
+											"c": [
+												{
+													"anno": "LookupFun"
+												},
+												{
+													"anno": "Position"
+												},
+												{
+													"anno": "Keys"
+												},
+												"Position",
+												{
+													"anno": "Keys"
+												},
+												{
+													"anno": "LookupFun"
+												},
+												{
+													"anno": "Position"
+												},
+												{
+													"anno": "Keys"
+												}
+											]
+										},
+										{
+											"c": [
+												{
+													"anno": "InfoFun"
+												},
+												{
+													"anno": "InfoFun"
+												},
+												{
+													"anno": "InfoFun"
+												}
+											],
+											"seealso": {
+												"marker": "#max_lookup",
+												"$t": "max_lookup"
+											}
+										}
+									]
+								},
+								{
+									"$t": "",
+									"p": {
+										"c": [
+											{
+												"anno": "InfoFun"
+											},
+											"undefined"
+										]
+									},
+									"taglist": {
+										"tag": [
+											{
+												"c": "indices"
+											},
+											{
+												"c": "is_unique_objects"
+											},
+											{
+												"c": "keypos"
+											},
+											{
+												"c": "is_sorted_key"
+											},
+											{
+												"c": "num_of_objects"
+											}
+										],
+										"item": [
+											"Returns a list of indexed positions, a list of positive integers.",
+											{
+												"c": [
+													"true",
+													"TraverseFun"
+												]
+											},
+											"Returns the position of the table key, a positive integer.",
+											{
+												"c": [
+													"true",
+													"TraverseFun"
+												]
+											},
+											"Returns the number of objects in the table, a non-negative integer."
+										]
+									}
+								},
+								{
+									"p": [
+										{
+											"c": [
+												{
+													"anno": "FormatFun"
+												},
+												"undefined",
+												"info/1,2",
+												"'$MOD':'$FUN'/0",
+												{
+													"anno": "FormatFun"
+												},
+												"info/1,2"
+											],
+											"seealso": {
+												"marker": "#info/1",
+												"c": "info/1,2"
+											}
+										},
+										{
+											"c": [
+												{
+													"anno": "FormatFun"
+												},
+												"qlc:table/2"
+											]
+										}
+									],
+									"taglist": {
+										"tag": [
+											{
+												"c": "{lookup, Position, Keys, NElements, DepthFun}"
+											},
+											{
+												"c": "{match_spec, MatchExpression}"
+											},
+											{
+												"c": "{all, NElements, DepthFun}"
+											}
+										],
+										"item": [
+											{
+												"p": {
+													"c": "LookupFun"
+												}
+											},
+											{
+												"p": {
+													"c": "TraverseFun(MatchExpression)"
+												}
+											},
+											{
+												"p": [
+													{
+														"c": "TraverseFun"
+													},
+													{
+														"c": [
+															"NElements",
+															"info/1,2",
+															"n_elements"
+														]
+													},
+													{
+														"c": [
+															"DepthFun",
+															"DepthFun(Term)",
+															"'...'",
+															"Term",
+															"info/1,2",
+															"depth"
+														]
+													},
+													{
+														"c": [
+															{
+																"anno": "FormatFun"
+															},
+															"NElements",
+															"DepthFun",
+															{
+																"anno": "FormatFun"
+															},
+															"NElements",
+															"DepthFun",
+															"{lookup,Position,Keys}",
+															"all"
+														]
+													}
+												]
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"marker": {
+											"id": "key_equality"
+										},
+										"c": [
+											"key_equality",
+											"'=:='",
+											"'=='",
+											"'=:='"
+										]
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	}
+}

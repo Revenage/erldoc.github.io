@@ -1,0 +1,910 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2016"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "queue",
+			"prepared": "Joe",
+			"responsible": "Bjarne Dcker",
+			"docno": "1",
+			"approved": "Bjarne Dcker",
+			"checked": {},
+			"date": "1997-01-15",
+			"rev": "B",
+			"file": "queue.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "queue"
+		},
+		"modulesummary": "Abstract data type for FIFO queues.",
+		"description": {
+			"p": [
+				"This module provides (double-ended) FIFO queues in an efficient manner.",
+				{
+					"c": [
+						"badarg",
+						"badarg"
+					]
+				},
+				{
+					"c": "empty"
+				},
+				"The data representing a queue as used by this module is to be regarded as opaque by other modules. Any code assuming knowledge of the format is running on thin ice.",
+				{
+					"seealso": [
+						{
+							"marker": "#filter/2",
+							"c": "filter/2"
+						},
+						{
+							"marker": "#join/2",
+							"c": "join/2"
+						},
+						{
+							"marker": "#len/1",
+							"c": "len/1"
+						},
+						{
+							"marker": "#member/2",
+							"c": "member/2"
+						},
+						{
+							"marker": "#split/2",
+							"c": "split/2"
+						}
+					],
+					"c": "len/1"
+				},
+				"Queues are double-ended. The mental picture of a queue is a line of people (items) waiting for their turn. The queue front is the end with the item that has waited the longest. The queue rear is the end an item enters when it starts to wait. If instead using the mental picture of a list, the front is called head and the rear is called tail.",
+				"Entering at the front and exiting at the rear are reverse operations on the queue.",
+				"This module has three sets of interface functions: the \"Original API\", the \"Extended API\", and the \"Okasaki API\".",
+				"The \"Original API\" and the \"Extended API\" both use the mental picture of a waiting line of items. Both have reverse operations suffixed \"_r\".",
+				"The \"Original API\" item removal functions return compound terms with both the removed item and the resulting queue. The \"Extended API\" contains alternative functions that build less garbage and functions for just inspecting the queue ends. Also the \"Okasaki API\" functions build less garbage.",
+				"The \"Okasaki API\" is inspired by \"Purely Functional Data Structures\" by Chris Okasaki. It regards queues as lists. This API is by many regarded as strange and avoidable. For example, many reverse operations have lexically reversed names, some with more readable but perhaps less understandable aliases."
+			]
+		},
+		"section": [
+			{
+				"title": "Original API"
+			},
+			{
+				"title": "Extended API"
+			},
+			{
+				"title": "Okasaki API"
+			}
+		],
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "queue",
+						"n_vars": "1"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#new/0",
+								"c": "new/0"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "queue",
+						"n_vars": "0"
+					}
+				}
+			]
+		},
+		"funcs": [
+			{
+				"func": [
+					{
+						"name": {
+							"name": "filter",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Filter a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Q2"
+										},
+										{
+											"anno": [
+												"Fun",
+												"Item"
+											]
+										},
+										{
+											"anno": "Q1"
+										}
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": [
+												"Fun",
+												"Item"
+											]
+										},
+										"true",
+										"Item",
+										"false",
+										{
+											"anno": "Item"
+										},
+										"Item"
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": [
+												"Fun",
+												"Item"
+											]
+										},
+										{
+											"anno": "Item"
+										},
+										"true",
+										"[]",
+										"false"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "from_list",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Convert a list to a queue.",
+						"desc": {
+							"p": {
+								"c": {
+									"anno": "L"
+								}
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "in",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Insert an item at the rear of a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": "Q2"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "in_r",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Insert an item at the front of a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": "Q2"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "is_empty",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Test if a queue is empty.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Q"
+									},
+									"true",
+									"false"
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "is_queue",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Test if a term is a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Term"
+									},
+									"true",
+									"false"
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "join",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Join two queues.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Q3"
+									},
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": "Q2"
+									},
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": "Q2"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "len",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Get the length of a queue.",
+						"desc": {
+							"p": {
+								"c": {
+									"anno": "Q"
+								}
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "member",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Test if an item is in a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									"true",
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Q"
+									},
+									"false"
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "new",
+							"arity": "0",
+							"since": ""
+						},
+						"fsummary": "Create an empty queue.",
+						"desc": {
+							"p": "Returns an empty queue."
+						}
+					},
+					{
+						"name": {
+							"name": "out",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Remove the front item from a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": [
+											"Item",
+											"Q2"
+										]
+									},
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Q2"
+									},
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": "Q1"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "out_r",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Remove the rear item from a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": [
+											"Item",
+											"Q2"
+										]
+									},
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Q2"
+									},
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": "Q1"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "reverse",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Reverse a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Q2"
+									},
+									{
+										"anno": "Q1"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "split",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Split a queue in two.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": "N"
+									},
+									{
+										"anno": "Q2"
+									},
+									{
+										"anno": "Q3"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "to_list",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Convert a queue to a list.",
+						"desc": {
+							"p": "Returns a list of the items in the queue in the same order; the front item of the queue becomes the head of the list."
+						}
+					}
+				]
+			},
+			{
+				"func": [
+					{
+						"name": {
+							"name": "drop",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Remove the front item from a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Q2"
+										},
+										{
+											"anno": "Q1"
+										}
+									]
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q1"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "drop_r",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Remove the rear item from a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Q2"
+										},
+										{
+											"anno": "Q1"
+										}
+									]
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q1"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "get",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return the front item of a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Item"
+										},
+										{
+											"anno": "Q"
+										}
+									]
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "get_r",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return the rear item of a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Item"
+										},
+										{
+											"anno": "Q"
+										}
+									]
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "peek",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return the front item of a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Q"
+									},
+									"empty",
+									{
+										"anno": "Q"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "peek_r",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return the rear item of a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Q"
+									},
+									"empty",
+									{
+										"anno": "Q"
+									}
+								]
+							}
+						}
+					}
+				]
+			},
+			{
+				"func": [
+					{
+						"name": {
+							"name": "cons",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Insert an item at the head of a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": "Q2"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "daeh",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return the tail item of a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "Q"
+									}
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "head",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return the item at the head of a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Item"
+										},
+										{
+											"anno": "Q"
+										}
+									]
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "init",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Remove the tail item from a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Q2"
+										},
+										{
+											"anno": "Q1"
+										}
+									]
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q1"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "lait",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Remove the tail item from a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Q2"
+										},
+										{
+											"anno": "Q1"
+										}
+									]
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q1"
+										}
+									]
+								},
+								{
+									"c": "lait/1"
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "last",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return the tail item of a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "Q"
+									}
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "liat",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Remove the tail item from a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Q2"
+										},
+										{
+											"anno": "Q1"
+										}
+									]
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q1"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "snoc",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Insert an item at the tail of a queue.",
+						"desc": {
+							"p": {
+								"c": [
+									{
+										"anno": "Item"
+									},
+									{
+										"anno": "Q1"
+									},
+									{
+										"anno": "Q2"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "tail",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Remove the head item from a queue.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "Q2"
+										},
+										{
+											"anno": "Q1"
+										}
+									]
+								},
+								{
+									"c": [
+										"empty",
+										{
+											"anno": "Q1"
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		]
+	}
+}

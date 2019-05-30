@@ -1,0 +1,601 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2016"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "dict",
+			"prepared": "Robert Virding",
+			"docno": {},
+			"date": "1997-01-15",
+			"rev": "B"
+		},
+		"module": {
+			"since": "",
+			"$t": "dict"
+		},
+		"modulesummary": "Key-value dictionary.",
+		"description": {
+			"p": [
+				{
+					"c": [
+						"Key",
+						"Value"
+					]
+				},
+				{
+					"seealso": {
+						"marker": "orddict",
+						"c": "orddict(3)"
+					},
+					"c": [
+						"=:=",
+						"orddict",
+						"=="
+					]
+				}
+			]
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "dict",
+						"n_vars": "2"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#new/0",
+								"c": "new/0"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "dict",
+						"n_vars": "0"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "append",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Append a value to keys in a dictionary.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#notes",
+									"$t": "Notes"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "append_list",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Append new values to keys in a dictionary.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "ValList"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#notes",
+									"$t": "Notes"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "erase",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Erase a key from a dictionary.",
+					"desc": {
+						"p": "Erases all items with a given key from a dictionary."
+					}
+				},
+				{
+					"name": {
+						"name": "fetch",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Look up values in a dictionary.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Dict"
+									},
+									{
+										"anno": "Key"
+									},
+									"Dict",
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#notes",
+									"$t": "Notes"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "fetch_keys",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return all keys in a dictionary.",
+					"desc": {
+						"p": {
+							"c": "Dict"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "take",
+						"arity": "2",
+						"since": "OTP 20.0"
+					},
+					"fsummary": "Return value and new dictionary without element with this value.",
+					"desc": {
+						"p": {
+							"c": "error"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "filter",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Select elements that satisfy a predicate.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Dict2"
+								},
+								{
+									"anno": "Dict1"
+								},
+								{
+									"anno": [
+										"Pred",
+										"Key",
+										"Value"
+									]
+								},
+								"true"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "find",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Search for a key in a dictionary.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"Dict",
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "Key"
+									},
+									"error"
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#notes",
+									"$t": "Notes"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "fold",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Fold a function over a dictionary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Fun"
+								},
+								{
+									"anno": "Dict"
+								},
+								"Acc",
+								{
+									"anno": "Fun"
+								},
+								{
+									"anno": "Acc0"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "from_list",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Convert a list of pairs to a dictionary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Key"
+								},
+								{
+									"anno": "Value"
+								},
+								{
+									"anno": "List"
+								},
+								"Dict"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "is_empty",
+						"arity": "1",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {
+						"c": "true"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Dict"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "is_key",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Test if a key is in a dictionary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Key"
+								},
+								{
+									"anno": "Dict"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "map",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Map a function over a dictionary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Fun"
+								},
+								{
+									"anno": "Dict1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "merge",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Merge two dictionaries.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Dict1"
+								},
+								{
+									"anno": "Dict2"
+								},
+								{
+									"anno": "Key"
+								},
+								{
+									"anno": "Value"
+								},
+								{
+									"anno": "Fun"
+								},
+								"merge"
+							]
+						},
+						"code": {
+							"type": "none",
+							"$t": "merge(Fun, D1, D2) -> fold(fun (K, V1, D) -> update(K, fun (V2) -> Fun(K, V1, V2) end, V1, D) end, D2, D1)."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "new",
+						"arity": "0",
+						"since": ""
+					},
+					"fsummary": "Create a dictionary.",
+					"desc": {
+						"p": "Creates a new dictionary."
+					}
+				},
+				{
+					"name": {
+						"name": "size",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the number of elements in a dictionary.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Dict"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "store",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Store a value in a dictionary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Key"
+								},
+								{
+									"anno": "Value"
+								},
+								"Dict2",
+								{
+									"anno": "Key"
+								},
+								{
+									"anno": "Dict1"
+								},
+								{
+									"anno": "Value"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "to_list",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Convert a dictionary to a list of pairs.",
+					"desc": {
+						"p": {
+							"c": "Dict"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "update",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Update a value in a dictionary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Fun"
+								},
+								{
+									"anno": "Key"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "update",
+						"arity": "4",
+						"since": ""
+					},
+					"fsummary": "Update a value in a dictionary.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Fun"
+								},
+								{
+									"anno": "Key"
+								},
+								{
+									"anno": "Initial"
+								},
+								"append/3"
+							]
+						},
+						"code": {
+							"type": "none",
+							"$t": "append(Key, Val, D) -> update(Key, fun (Old) -> Old ++ [Val] end, [Val], D)."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "update_counter",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": "Increment a value in a dictionary.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Increment"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Increment"
+									}
+								]
+							},
+							"This can be defined as follows, but is faster:"
+						],
+						"code": {
+							"type": "none",
+							"$t": "update_counter(Key, Incr, D) -> update(Key, fun (Old) -> Old + Incr end, Incr, D)."
+						}
+					}
+				}
+			]
+		},
+		"section": [
+			{
+				"title": "Notes",
+				"marker": {
+					"id": "notes"
+				},
+				"p": [
+					{
+						"c": [
+							"append",
+							"append_list"
+						],
+						"em": "accumulator"
+					},
+					"This saves the trouble of first fetching a keyed value, appending a new value to the list of stored values, and storing the result.",
+					{
+						"c": [
+							"fetch",
+							"find"
+						]
+					}
+				],
+				"pre": "> D0 = dict:new(), D1 = dict:store(files, [], D0), D2 = dict:append(files, f1, D1), D3 = dict:append(files, f2, D2), D4 = dict:append(files, f3, D3), dict:fetch(files, D4).[f1,f2,f3]"
+			},
+			{
+				"title": "See Also",
+				"p": {
+					"seealso": [
+						{
+							"marker": "gb_trees",
+							"c": "gb_trees(3)"
+						},
+						{
+							"marker": "orddict",
+							"c": "orddict(3)"
+						}
+					]
+				}
+			}
+		]
+	}
+}

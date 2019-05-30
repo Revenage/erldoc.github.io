@@ -1,0 +1,761 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2002",
+					"2017"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "proplists",
+			"prepared": "Patrik Nyblom",
+			"responsible": "Kenneth Lundin",
+			"docno": "1",
+			"approved": "Kenneth Lundin",
+			"checked": {},
+			"date": "2002-09-28",
+			"rev": "A",
+			"file": "proplists.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "proplists"
+		},
+		"modulesummary": "Support functions for property lists.",
+		"description": {
+			"p": [
+				{
+					"c": "{Atom, true}"
+				},
+				"Property lists are useful for representing inherited properties, such as options passed to a function where a user can specify options overriding the default settings, object properties, annotations, and so on.",
+				{
+					"c": [
+						"=:=",
+						"1",
+						"1.0"
+					]
+				}
+			]
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "property"
+					}
+				},
+				{
+					"name": {
+						"name": "proplist"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "append_values",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"seealso": {
+									"marker": "#get_all_values/2",
+									"c": "get_all_values/2"
+								}
+							},
+							{
+								"em": "Example:"
+							},
+							"returns:"
+						],
+						"code": [
+							{
+								"type": "none",
+								"$t": "append_values(a, [{a, [1,2]}, {b, 0}, {a, 3}, {c, -1}, {a, [4]}])"
+							},
+							{
+								"type": "none",
+								"$t": "[1,2,3,4]"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "compact",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": "[property(P) || P <- ListIn]"
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#property/1",
+										"c": "property/1"
+									},
+									{
+										"marker": "#unfold/1",
+										"c": "unfold/1"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "delete",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Key"
+								},
+								{
+									"anno": "List"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "expand",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": [
+											"Property",
+											"Expansion"
+										]
+									},
+									{
+										"anno": "Expansions"
+									},
+									"E",
+									{
+										"anno": "ListIn"
+									},
+									{
+										"anno": "Property"
+									},
+									"E",
+									{
+										"anno": "Property"
+									},
+									"E",
+									{
+										"anno": "Expansion"
+									},
+									{
+										"anno": "ListIn"
+									}
+								]
+							},
+							{
+								"c": "[fie, bar, baz, fum]"
+							},
+							{
+								"c": [
+									"{foo, false}",
+									"foo"
+								]
+							},
+							{
+								"c": {
+									"anno": "Expansions"
+								}
+							},
+							{
+								"seealso": {
+									"marker": "#normalize/2",
+									"c": "normalize/2"
+								}
+							}
+						],
+						"code": [
+							{
+								"type": "none",
+								"$t": "expand([{foo, [bar, baz]}], [fie, foo, fum])expand([{{foo, true}, [bar, baz]}], [fie, foo, fum])expand([{{foo, false}, [bar, baz]}], [fie, {foo, false}, fum])"
+							},
+							{
+								"type": "none",
+								"$t": "expand([{{foo, true}, [bar, baz]}], [{foo, false}, fie, foo, fum])"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "get_all_values",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#get_value/2",
+								"c": "get_value/2"
+							},
+							"em": "all",
+							"c": [
+								"{Key, Value}",
+								{
+									"anno": "List"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "get_bool",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": [
+											"Key",
+											"List"
+										]
+									},
+									{
+										"anno": "Key"
+									},
+									"true",
+									"false"
+								]
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#get_value/2",
+										"c": "get_value/2"
+									},
+									{
+										"marker": "#lookup/2",
+										"c": "lookup/2"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "get_keys",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "List"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "get_value",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Key",
+									"List"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "get_value",
+						"arity": "3",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "List"
+									},
+									{
+										"anno": [
+											"Key",
+											"List"
+										]
+									},
+									{
+										"anno": "Key"
+									},
+									"Value",
+									{
+										"anno": "Default"
+									}
+								]
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#get_all_values/2",
+										"c": "get_all_values/2"
+									},
+									{
+										"marker": "#get_bool/2",
+										"c": "get_bool/2"
+									},
+									{
+										"marker": "#get_value/2",
+										"c": "get_value/2"
+									},
+									{
+										"marker": "#lookup/2",
+										"c": "lookup/2"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "is_defined",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "List"
+								},
+								{
+									"anno": "Key"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "lookup",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "List"
+									},
+									"none",
+									"A",
+									"{A, true}",
+									"A"
+								]
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#get_bool/2",
+										"c": "get_bool/2"
+									},
+									{
+										"marker": "#get_value/2",
+										"c": "get_value/2"
+									},
+									{
+										"marker": "#lookup_all/2",
+										"c": "lookup_all/2"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "lookup_all",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "List"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#lookup/2",
+									"c": "lookup/2"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "normalize",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "ListIn"
+									},
+									"aliases"
+								],
+								"seealso": {
+									"marker": "#substitute_aliases/2",
+									"c": "substitute_aliases/2"
+								}
+							},
+							{
+								"seealso": {
+									"marker": "#compact/1",
+									"c": "compact/1"
+								}
+							},
+							"Typically you want to substitute negations first, then aliases, then perform one or more expansions (sometimes you want to pre-expand particular entries before doing the main expansion). You might want to substitute negations and/or aliases repeatedly, to allow such forms in the right-hand side of aliases and expansion lists.",
+							{
+								"seealso": {
+									"marker": "#substitute_negations/2",
+									"c": "substitute_negations/2"
+								}
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": {
+										"c": [
+											"negations",
+											"substitute_negations/2"
+										]
+									}
+								},
+								{
+									"p": {
+										"c": "expand",
+										"seealso": {
+											"marker": "#expand/2",
+											"c": "expand/2"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "property",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "PropertyIn"
+									},
+									"{Key, true}",
+									"Key",
+									"Key",
+									{
+										"anno": "PropertyIn"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#property/2",
+									"c": "property/2"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "property",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Value"
+									},
+									"true",
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": [
+											"Key",
+											"Value"
+										]
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#property/1",
+									"c": "property/1"
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "split",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "List"
+									},
+									{
+										"anno": "Lists"
+									},
+									{
+										"anno": "Keys"
+									},
+									{
+										"anno": "List"
+									},
+									{
+										"anno": "Rest"
+									},
+									{
+										"anno": "List"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							},
+							"returns:"
+						],
+						"code": [
+							{
+								"type": "none",
+								"$t": "split([{c, 2}, {e, 1}, a, {c, 3, 4}, d, {b, 5}, b], [a, b, c])"
+							},
+							{
+								"type": "none",
+								"$t": "{[[a], [{b, 5}, b],[{c, 2}, {c, 3, 4}]], [{e, 1}, d]}"
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "substitute_aliases",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "ListIn"
+									},
+									"K1",
+									"{K1, K2}",
+									{
+										"anno": "Aliases"
+									},
+									"K2",
+									"K1",
+									{
+										"anno": "Aliases"
+									}
+								]
+							},
+							{
+								"c": [
+									"substitute_aliases([{color, colour}], L)",
+									"{color, ...}",
+									"L",
+									"{colour, ...}",
+									"color",
+									"colour"
+								]
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#normalize/2",
+										"c": "normalize/2"
+									},
+									{
+										"marker": "#substitute_negations/2",
+										"c": "substitute_negations/2"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "substitute_negations",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "ListIn"
+									},
+									"K1",
+									"{K1, K2}",
+									{
+										"anno": "Negations"
+									},
+									"{K1, true}",
+									"{K2, false}",
+									"{K2, true}",
+									"K1",
+									{
+										"anno": "Negations"
+									}
+								],
+								"seealso": {
+									"marker": "#get_bool/2",
+									"c": {
+										"anno": "ListIn"
+									}
+								}
+							},
+							{
+								"c": [
+									"substitute_negations([{no_foo, foo}], L)",
+									"no_foo",
+									"{no_foo, true}",
+									"L",
+									"{foo, false}",
+									"{no_foo, ...}",
+									"{foo, true}"
+								]
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#get_bool/2",
+										"c": "get_bool/2"
+									},
+									{
+										"marker": "#normalize/2",
+										"c": "normalize/2"
+									},
+									{
+										"marker": "#substitute_aliases/2",
+										"c": "substitute_aliases/2"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "unfold",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": {},
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "ListIn"
+								},
+								"{Atom, true}"
+							]
+						}
+					}
+				}
+			]
+		}
+	}
+}
