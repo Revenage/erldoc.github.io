@@ -42,7 +42,7 @@
 			],
 			"note": {
 				"p": [
-					"Functionality in this module generally assumes valid input and	does not necessarily fail on input that does not use a valid	encoding, but may instead very likely produce invalid output.",
+					"Functionality in this module generally assumes valid input and does not necessarily fail on input that does not use a valid encoding, but may instead very likely produce invalid output.",
 					{
 						"em": "rejected"
 					}

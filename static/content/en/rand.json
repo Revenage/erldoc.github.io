@@ -191,10 +191,10 @@
 			"note": [
 				{
 					"p": [
-						"There were a number of problems in the implementation	of the now undocumented algorithms, which is why	they are deprecated. The new algorithms are a bit slower	but do not have these problems:",
-						"Uniform integer ranges had a skew in the probability distribution	that was not noticable for small ranges but for large ranges	less than the generator's precision the probability to produce	a low number could be twice the probability for a high.",
-						"Uniform integer ranges larger than or equal to the generator's	precision used a floating point fallback that only calculated	with 52 bits which is smaller than the requested range	and therefore were not all numbers in the requested range	even possible to produce.",
-						"Uniform floats had a non-uniform density so small values	i.e less than 0.5 had got smaller intervals decreasing	as the generated value approached 0.0 although still uniformly	distributed for sufficiently large subranges. The new algorithms	produces uniformly distributed floats on the form N * 2.0^(-53)	hence equally spaced."
+						"There were a number of problems in the implementation of the now undocumented algorithms, which is why they are deprecated. The new algorithms are a bit slower but do not have these problems:",
+						"Uniform integer ranges had a skew in the probability distribution that was not noticable for small ranges but for large ranges less than the generator's precision the probability to produce a low number could be twice the probability for a high.",
+						"Uniform integer ranges larger than or equal to the generator's precision used a floating point fallback that only calculated with 52 bits which is smaller than the requested range and therefore were not all numbers in the requested range even possible to produce.",
+						"Uniform floats had a non-uniform density so small values i.e less than 0.5 had got smaller intervals decreasing as the generated value approached 0.0 although still uniformly distributed for sufficiently large subranges. The new algorithms produces uniformly distributed floats on the form N * 2.0^(-53) hence equally spaced."
 					]
 				},
 				{
@@ -541,7 +541,7 @@
 								},
 								"If neither endpoint is desired you can test and re-try like this:"
 							],
-							"pre": "my_uniform() -> case rand:uniform() of 0.0 -> my_uniform();	X -> X endend."
+							"pre": "my_uniform() -> case rand:uniform() of 0.0 -> my_uniform(); X -> X endend."
 						}
 					}
 				},
@@ -652,7 +652,7 @@
 								},
 								"If neither endpoint is desired you can test and re-try like this:"
 							],
-							"pre": "my_uniform(State) -> case rand:uniform(State) of {0.0, NewState} -> my_uniform(NewState);	Result -> Result endend."
+							"pre": "my_uniform(State) -> case rand:uniform(State) of {0.0, NewState} -> my_uniform(NewState); Result -> Result endend."
 						}
 					}
 				},

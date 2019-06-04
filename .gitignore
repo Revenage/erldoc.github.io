@@ -1,4 +1,5 @@
 xml/
+.vscode/
 .cache/
 dist/
 elm-stuff/

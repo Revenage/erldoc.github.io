@@ -31,10 +31,10 @@
 					"type": "bulleted",
 					"item": [
 						{
-							"p": "The functionality described in EEP10 was implemented	in Erlang/OTP R13A."
+							"p": "The functionality described in EEP10 was implemented in Erlang/OTP R13A."
 						},
 						{
-							"p": "Erlang/OTP R14B01 added support for Unicode	filenames, but it was not complete and was by default	disabled on platforms where no guarantee was given for the	filename encoding."
+							"p": "Erlang/OTP R14B01 added support for Unicode filenames, but it was not complete and was by default disabled on platforms where no guarantee was given for the filename encoding."
 						},
 						{
 							"p": {
@@ -45,11 +45,11 @@
 							}
 						},
 						{
-							"p": "In Erlang/OTP 17.0, the encoding default for Erlang	source files was switched to UTF-8."
+							"p": "In Erlang/OTP 17.0, the encoding default for Erlang source files was switched to UTF-8."
 						},
 						{
 							"p": [
-								"In Erlang/OTP 20.0, atoms and function can contain	Unicode characters. Module names, application names, and node	names are still restricted to the ISO Latin-1 range.",
+								"In Erlang/OTP 20.0, atoms and function can contain Unicode characters. Module names, application names, and node names are still restricted to the ISO Latin-1 range.",
 								{
 									"c": [
 										"unicode",
@@ -662,7 +662,7 @@
 							}
 						},
 						"p": [
-							"Raw filenames were introduced together with Unicode filename support in ERTS 5.8.2 (Erlang/OTP R14B01). The reason \"raw filenames\" were introduced in the system was	to be able to represent filenames, specified in different encodings on the same system, consistently. It can seem practical to have the VM automatically translate a filename that is not in UTF-8 to a list of Unicode characters, but this would open up for both duplicate filenames and other inconsistent behavior.",
+							"Raw filenames were introduced together with Unicode filename support in ERTS 5.8.2 (Erlang/OTP R14B01). The reason \"raw filenames\" were introduced in the system was to be able to represent filenames, specified in different encodings on the same system, consistently. It can seem practical to have the VM automatically translate a filename that is not in UTF-8 to a list of Unicode characters, but this would open up for both duplicate filenames and other inconsistent behavior.",
 							{
 								"seealso": [
 									{
@@ -1290,8 +1290,8 @@
 							}
 						],
 						"code": [
-							"heuristic_encoding_bin(Bin) when is_binary(Bin) -> case unicode:characters_to_binary(Bin,utf8,utf8) of	Bin -> utf8;	_ -> latin1 end.",
-							"heuristic_encoding_file(FileName) -> {ok,F} = file:open(FileName,[read,binary]), loop_through_file(F,<<>>,file:read(F,1024)).loop_through_file(_,<<>>,eof) -> utf8;loop_through_file(_,_,eof) -> latin1;loop_through_file(F,Acc,{ok,Bin}) when is_binary(Bin) -> case unicode:characters_to_binary([Acc,Bin]) of	{error,_,_} -> latin1;	{incomplete,_,Rest} -> loop_through_file(F,Rest,file:read(F,1024));	Res when is_binary(Res) -> loop_through_file(F,<<>>,file:read(F,1024)) end.",
+							"heuristic_encoding_bin(Bin) when is_binary(Bin) -> case unicode:characters_to_binary(Bin,utf8,utf8) of Bin -> utf8; _ -> latin1 end.",
+							"heuristic_encoding_file(FileName) -> {ok,F} = file:open(FileName,[read,binary]), loop_through_file(F,<<>>,file:read(F,1024)).loop_through_file(_,<<>>,eof) -> utf8;loop_through_file(_,_,eof) -> latin1;loop_through_file(F,Acc,{ok,Bin}) when is_binary(Bin) -> case unicode:characters_to_binary([Acc,Bin]) of {error,_,_} -> latin1;	{incomplete,_,Rest} -> loop_through_file(F,Rest,file:read(F,1024)); Res when is_binary(Res) -> loop_through_file(F,<<>>,file:read(F,1024)) end.",
 							"heuristic_encoding_file2(FileName) -> {ok,F} = file:open(FileName,[read,binary,{encoding,utf8}]), loop_through_file2(F,io:get_chars(F,'',1024)).loop_through_file2(_,eof) -> utf8;loop_through_file2(_,{error,_Err}) -> latin1;loop_through_file2(F,Bin) when is_binary(Bin) -> loop_through_file2(F,io:get_chars(F,'',1024))."
 						]
 					},

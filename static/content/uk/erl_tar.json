@@ -500,7 +500,7 @@
 							}
 						],
 						"note": {
-							"p": "Leading slashes in tar member names will be removed before	writing the file. That is, absolute paths will be turned into	relative paths. There will be an info message written to the error	logger when paths are changed in this way."
+							"p": "Leading slashes in tar member names will be removed before writing the file. That is, absolute paths will be turned into relative paths. There will be an info message written to the error logger when paths are changed in this way."
 						}
 					}
 				},

@@ -159,7 +159,7 @@
 					"desc": {
 						"p": [
 							"Error tuple indicating the type of error. Possible values of the second component:",
-							"The third component is a term providing additional information about the	cause of the error."
+							"The third component is a term providing additional information about the cause of the error."
 						],
 						"list": {
 							"type": "bulleted",
@@ -285,7 +285,7 @@
 									"latin1"
 								]
 							},
-							"Each character in the entry's name and value that cannot be expressed using	the selected character encoding, is replaced by a string consisting of a U+0026	AMPERSAND character (&), a \"#\" (U+0023) character, one or more ASCII	digits representing the Unicode code point of the character in base ten, and	finally	a \";\" (U+003B) character.",
+							"Each character in the entry's name and value that cannot be expressed using the selected character encoding, is replaced by a string consisting of a U+0026 AMPERSAND character (&), a \"#\" (U+0023) character, one or more ASCII digits representing the Unicode code point of the character in base ten, and finally a \";\" (U+003B) character.",
 							"Bytes that are out of the range 0x2A, 0x2D, 0x2E, 0x30 to 0x39, 0x41 to 0x5A, 0x5F,\t0x61 to 0x7A, are percent-encoded (U+0025 PERCENT SIGN character (%) followed by\tuppercase ASCII hex digits representing the hexadecimal value of the byte).",
 							{
 								"seealso": {
@@ -364,7 +364,7 @@
 									"$t": "RFC 3986"
 								}
 							},
-							"This function implements case normalization, percent-encoding	normalization, path segment normalization and scheme based normalization	for HTTP(S) with basic support for FTP, SSH, SFTP and TFTP.",
+							"This function implements case normalization, percent-encoding normalization, path segment normalization and scheme based normalization for HTTP(S) with basic support for FTP, SSH, SFTP and TFTP.",
 							{
 								"em": "Example:"
 							}

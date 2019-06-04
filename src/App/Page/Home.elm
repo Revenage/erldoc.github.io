@@ -1,19 +1,22 @@
 module App.Page.Home exposing (view)
 
-import Html exposing (Html, div, h1, img, main_, text)
+import Html exposing (Html, div, h1,h3, img, main_, text)
 import Html.Attributes exposing (alt, class, id, src, tabindex)
+import App.I18n as I18n
+import App.Types exposing (..)
+import Http
+import Browser exposing (..)
+import App.Decoders exposing (decodeDocs)
 
-
--- VIEW
-
-
-view : { title : String, content : Html msg }
+view : Browser.Document Msg
 view =
     { title = "Home Page"
-    , content =
+    , body = [
         main_ [ id "content", class "container", tabindex -1 ]
             [ h1 [] [ text "Home Page" ]
-            , div [ class "row" ]
-                [ ]
-            ]
+            , div [ class "row" ] []
+                -- [ h3 [] [text (I18n.get translations "commits-refresh")] ]
+            ]]
     }
+
+

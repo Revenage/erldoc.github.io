@@ -1,64 +1,87 @@
+module Main exposing (..)
+import Dict exposing (Dict)
+
+import App.Page.Home as Home
+import App.Page.NotFound as NotFound
+import App.Page.Settings as Settings
+import App.Router exposing (..)
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Http
 import Url
-
-import App.Page.Home as Home
-import App.Page.Settings as Settings
-import App.Page.NotFound as NotFound
-
-import App.Router exposing (..)
-
-import Url.Parser exposing (Parser, parse, map, oneOf, s, string, top)
+import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
+import Json.Decode exposing (Decoder, field, string, dict)
+import App.Types exposing (..)
+import App.Decoders exposing (decodeTranslations)
 
 main : Program () Model Msg
 main =
-  Browser.application
-    { init = init
-    , view = view
-    , update = update
-    , subscriptions = subscriptions
-    , onUrlChange = UrlChanged
-    , onUrlRequest = LinkClicked
-    }
+    Browser.application
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        , onUrlChange = UrlChanged
+        , onUrlRequest = LinkClicked
+        }
 
 
--- MODEL
+getLangString : Language -> String
+getLangString lang =
+    case lang of
+        English ->
+            "en"
 
-type alias Model =
-  { key : Nav.Key
-  , url : Url.Url
-  }
+        Russian ->
+            "ru"
+
+        Ukrainian ->
+            "uk"
+
 
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-  ( Model key url, Cmd.none )
+    ( { key = key
+      , url = url
+      , translateStatus = Loading
+      , language = English
+      }
+    , Http.get
+        { url = "/translations/en.json"
+        , expect = Http.expectJson HandleTranslateResponse decodeTranslations
+        }
+    )
+
 
 -- UPDATE
 
 
-type Msg
-  = LinkClicked Browser.UrlRequest
-  | UrlChanged Url.Url
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-  case msg of
-    LinkClicked urlRequest ->
-      case urlRequest of
-        Browser.Internal url ->
-          ( model, Nav.pushUrl model.key (Url.toString url) )
+    case msg of
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model, Nav.pushUrl model.key (Url.toString url) )
 
-        Browser.External href ->
-          ( model, Nav.load href )
+                Browser.External href ->
+                    ( model, Nav.load href )
 
-    UrlChanged url ->
-      ( { model | url = url }
-      , Cmd.none
-      )
+        UrlChanged url ->
+            ( { model | url = url }
+            , Cmd.none
+            )
+
+        HandleTranslateResponse result ->
+            case result of
+                Ok translation ->
+                    ( { model | translateStatus = Success translation }, Cmd.none )
+
+                Err _ ->
+                    ( { model | translateStatus = Failure }, Cmd.none )
 
 
 
@@ -67,7 +90,7 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-  Sub.none
+    Sub.none
 
 
 
@@ -76,17 +99,22 @@ subscriptions _ =
 
 view : Model -> Browser.Document Msg
 view model =
-  let
-        viewPage page =
-            let
-                { title, content } =
-                    page
-            in
-            { title = title
-            , body = [content]
+    case model.translateStatus of
+        Loading ->
+            { title = "Loading"
+            , body = [ text "Loading" ]
             }
-    in
-  case toRoute model.url of
-      Home -> viewPage Home.view
-      Settings -> viewPage Settings.view
-      NotFound -> viewPage NotFound.view
+
+        Success _ ->
+            case toRoute model.url of
+
+                Home -> Home.view
+
+                Settings -> Settings.view
+
+                NotFound -> NotFound.view
+
+        Failure ->
+            { title = "Failure"
+            , body = [ text "The application failed to initialize. " ]
+            }
