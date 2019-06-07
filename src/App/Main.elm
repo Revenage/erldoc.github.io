@@ -9,12 +9,14 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 import Http
 import Url
 import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
 import Json.Decode exposing (Decoder, field, string, dict)
 import App.Types exposing (..)
 import App.Decoders exposing (decodeTranslations)
+import App.Model exposing (..)
 
 main : Program () Model Msg
 main =
@@ -48,6 +50,13 @@ init flags url key =
       , url = url
       , translateStatus = Loading
       , language = English
+      , settings = {
+          darkMode = False
+      }
+      , home = {
+          search = ""
+      }
+      , tags = []
       }
     , Http.get
         { url = "/translations/en.json"
@@ -83,6 +92,31 @@ update msg model =
                 Err _ ->
                     ( { model | translateStatus = Failure }, Cmd.none )
 
+        HandleTagResponse result ->
+            case result of
+                Ok tags ->
+                    ( { model | tags = tags }, Cmd.none )
+
+                Err _ ->
+                    ( { model | tags = [] }, Cmd.none )
+
+        ChangeMode ->
+
+            let oldSettings = model.settings
+                newSettings = { oldSettings | darkMode = not model.settings.darkMode }
+            in
+                ({ model | settings = newSettings }
+            , Cmd.none)
+
+
+        TypeSearch text ->
+
+            let oldHome = model.home
+                newHome = { oldHome | search = text }
+            in
+                ({ model | home = newHome }
+            , Cmd.none)
+
 
 
 -- SUBSCRIPTIONS
@@ -92,9 +126,55 @@ subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
 
-
-
 -- VIEW
+
+mainView: { title : String, content : Html Msg } -> Model -> Browser.Document Msg
+mainView pageview model = {
+                    title = pageview.title
+                    , body = [
+                        nav model
+                        , pageview.content
+                        , footer model
+                    ]
+                    }
+
+nav : Model -> Html Msg
+nav model =
+    header [ class "navbar navbar-fixed-top navbar-inverse" ]
+        [ div [ class "container" ]
+            [ div [ class "navbar-header" ] []
+            , Html.nav [ class "collapse navbar-collapse", id "myNavBar" ]
+                [ ul [ class "nav navbar-nav navbar-right" ]
+                    [ li []
+                        [ a [ href "/" ]
+                            [ text "Docs" ]
+                        ]
+                    , li []
+                         [ a [ href "/settings" ]
+                            [ text "Settings" ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+
+footer : Model -> Html Msg
+footer model =
+    Html.footer [ class "container" ]
+        [ small [] [ text "Copyright © 2019" ]
+        , Html.nav []
+            [ ul []
+                [ li []
+                    [ a [ href "/about" ]
+                        [ text "About" ]
+                    ]
+                , li []
+                    [ a [ href "/contact" ]
+                        [ text "Contact" ]
+                    ]
+                ]
+            ]
+        ]
 
 
 view : Model -> Browser.Document Msg
@@ -108,9 +188,9 @@ view model =
         Success _ ->
             case toRoute model.url of
 
-                Home -> Home.view
+                Home -> mainView (Home.view model) model
 
-                Settings -> Settings.view
+                Settings -> mainView (Settings.view model) model
 
                 NotFound -> NotFound.view
 

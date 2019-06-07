@@ -1,6 +1,7 @@
 module App.Types exposing (..)
 import Url
 import Dict exposing (Dict)
+import Html exposing (Html)
 
 import Browser.Navigation as Nav
 import Browser
@@ -10,6 +11,9 @@ type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
     | HandleTranslateResponse (Result Http.Error Translations)
+    | HandleTagResponse (Result Http.Error Tags)
+    | ChangeMode
+    | TypeSearch String
 
 
 type RespondStatus
@@ -23,12 +27,10 @@ type Language
     | Russian
     | Ukrainian
 
-type alias Model =
-    { key : Nav.Key
-    , url : Url.Url
-    , translateStatus : RespondStatus
-    , language : Language
-    }
-
 type alias Translations =
     Dict String String
+
+type alias Tags = List String
+
+
+type alias PageView = { title : String, content : Html Msg }
