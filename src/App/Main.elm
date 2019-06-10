@@ -1,121 +1,136 @@
-module Main exposing (..)
-import Dict exposing (Dict)
-
-import App.Page.Home as Home
-import App.Page.NotFound as NotFound
-import App.Page.Settings as Settings
-import App.Router exposing (..)
-import Browser
+module Main exposing (main)
+import Url exposing (Url)
+import Browser exposing (Document)
 import Browser.Navigation as Nav
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
-import Http
-import Url
-import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
-import Json.Decode exposing (Decoder, field, string, dict)
-import App.Types exposing (..)
-import App.Decoders exposing (decodeTranslations)
-import App.Model exposing (..)
 
-main : Program () Model Msg
+
+import Html exposing (..)
+import Page exposing (Page)
+-- import Page.Home as Home
+import Page.NotFound as NotFound
+import Page.Settings as Settings
+
+import Route exposing (Route)
+
+main : Program Url Model Msg
 main =
     Browser.application
         { init = init
-        , view = view
-        , update = update
+        , onUrlChange = ChangedUrl
+        , onUrlRequest = ClickedLink
         , subscriptions = subscriptions
-        , onUrlChange = UrlChanged
-        , onUrlRequest = LinkClicked
+        , update = update
+        , view = view
         }
 
+type Model
+    = NotFound
+    -- | Home Home.Model
+    | Settings Settings.Model
 
-getLangString : Language -> String
-getLangString lang =
-    case lang of
-        English ->
-            "en"
+type Msg
+    = ChangedRoute (Maybe Route)
+    | ChangedUrl Url
+    | ClickedLink Browser.UrlRequest
+    -- | GotHomeMsg Home.Msg
+    | GotSettingsMsg Settings.Msg
 
-        Russian ->
-            "ru"
+init : Url -> Nav.Key -> Model -> ( Model, Cmd Msg )
+init url navKey model = changeRouteTo (Route.fromUrl url) model
+ 
+changeRouteTo : Maybe Route -> Model -> ( Model, Cmd Msg )
+changeRouteTo maybeRoute model =
+    case maybeRoute of
+        Nothing ->
+            ( NotFound, Cmd.none )
 
-        Ukrainian ->
-            "uk"
+        Just Route.Settings -> ( NotFound, Cmd.none )
+            -- Settings.init
+            --     |> updateWith Settings GotSettingsMsg model
 
-
-
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init flags url key =
-    ( { key = key
-      , url = url
-      , translateStatus = Loading
-      , language = English
-      , settings = {
-          darkMode = False
-      }
-      , home = {
-          search = ""
-      }
-      , tags = []
-      }
-    , Http.get
-        { url = "/translations/en.json"
-        , expect = Http.expectJson HandleTranslateResponse decodeTranslations
-        }
-    )
+        -- Just Route.Home ->
+        --     Home.init
+        --         |> updateWith Home GotHomeMsg model
 
 
--- UPDATE
+-- VIEW
+
+
+view : Model -> Document Msg
+view model =
+    let
+        viewPage page toMsg config =
+            let
+                { title, body } =
+                    Page.view page config
+            in
+            { title = title
+            , body = List.map (Html.map toMsg) body
+            }
+    in
+    case model of
+
+        NotFound ->
+            Page.view Page.Other NotFound.view
+
+        Settings settings ->
+            viewPage Page.Other GotSettingsMsg (Settings.view settings)
+
+        -- Home home ->
+        --     viewPage Page.Home GotHomeMsg (Home.view home)
+
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        LinkClicked urlRequest ->
+    case ( msg, model ) of
+        ( ClickedLink urlRequest, _ ) ->
             case urlRequest of
                 Browser.Internal url ->
-                    ( model, Nav.pushUrl model.key (Url.toString url) )
+                    case url.fragment of
+                        Nothing ->
+                            -- If we got a link that didn't include a fragment,
+                            -- it's from one of those (href "") attributes that
+                            -- we have to include to make the RealWorld CSS work.
+                            --
+                            -- In an application doing path routing instead of
+                            -- fragment-based routing, this entire
+                            -- `case url.fragment of` expression this comment
+                            -- is inside would be unnecessary.
+                            ( model, Cmd.none )
+
+                        Just _ ->
+                            ( model, Cmd.none )
 
                 Browser.External href ->
-                    ( model, Nav.load href )
+                    ( model
+                    , Nav.load href
+                    )
 
-        UrlChanged url ->
-            ( { model | url = url }
-            , Cmd.none
-            )
+        ( ChangedUrl url, _ ) ->
+            changeRouteTo (Route.fromUrl url) model
 
-        HandleTranslateResponse result ->
-            case result of
-                Ok translation ->
-                    ( { model | translateStatus = Success translation }, Cmd.none )
+        ( ChangedRoute route, _ ) ->
+            changeRouteTo route model
 
-                Err _ ->
-                    ( { model | translateStatus = Failure }, Cmd.none )
+        ( GotSettingsMsg subMsg, Settings settings ) ->
+            Settings.update subMsg settings
+                |> updateWith Settings GotSettingsMsg model
 
-        HandleTagResponse result ->
-            case result of
-                Ok tags ->
-                    ( { model | tags = tags }, Cmd.none )
+        -- ( GotHomeMsg subMsg, Home home ) ->
+        --     Home.update subMsg home
+        --         |> updateWith Home GotHomeMsg model
 
-                Err _ ->
-                    ( { model | tags = [] }, Cmd.none )
-
-        ChangeMode ->
-
-            let oldSettings = model.settings
-                newSettings = { oldSettings | darkMode = not model.settings.darkMode }
-            in
-                ({ model | settings = newSettings }
-            , Cmd.none)
+        ( _, _ ) ->
+            -- Disregard messages that arrived for the wrong page.
+            ( model, Cmd.none )
 
 
-        TypeSearch text ->
-
-            let oldHome = model.home
-                newHome = { oldHome | search = text }
-            in
-                ({ model | home = newHome }
-            , Cmd.none)
+updateWith : (subModel -> Model) -> (subMsg -> Msg) -> Model -> ( subModel, Cmd subMsg ) -> ( Model, Cmd Msg )
+updateWith toModel toMsg model ( subModel, subCmd ) =
+    ( toModel subModel
+    , Cmd.map toMsg subCmd
+    )
 
 
 
@@ -123,78 +138,15 @@ update msg model =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.none
+subscriptions model =
+    case model of
+        NotFound ->
+            Sub.none
 
--- VIEW
+        Settings settings ->
+            Sub.map GotSettingsMsg (Settings.subscriptions settings)
 
-mainView: { title : String, content : Html Msg } -> Model -> Browser.Document Msg
-mainView pageview model = {
-                    title = pageview.title
-                    , body = [
-                        nav model
-                        , pageview.content
-                        , footer model
-                    ]
-                    }
-
-nav : Model -> Html Msg
-nav model =
-    header [ class "navbar navbar-fixed-top navbar-inverse" ]
-        [ div [ class "container" ]
-            [ div [ class "navbar-header" ] []
-            , Html.nav [ class "collapse navbar-collapse", id "myNavBar" ]
-                [ ul [ class "nav navbar-nav navbar-right" ]
-                    [ li []
-                        [ a [ href "/" ]
-                            [ text "Docs" ]
-                        ]
-                    , li []
-                         [ a [ href "/settings" ]
-                            [ text "Settings" ]
-                        ]
-                    ]
-                ]
-            ]
-        ]
-
-footer : Model -> Html Msg
-footer model =
-    Html.footer [ class "container" ]
-        [ small [] [ text "Copyright © 2019" ]
-        , Html.nav []
-            [ ul []
-                [ li []
-                    [ a [ href "/about" ]
-                        [ text "About" ]
-                    ]
-                , li []
-                    [ a [ href "/contact" ]
-                        [ text "Contact" ]
-                    ]
-                ]
-            ]
-        ]
+        -- Home home ->
+        --     Sub.map GotHomeMsg (Home.subscriptions home)
 
 
-view : Model -> Browser.Document Msg
-view model =
-    case model.translateStatus of
-        Loading ->
-            { title = "Loading"
-            , body = [ text "Loading" ]
-            }
-
-        Success _ ->
-            case toRoute model.url of
-
-                Home -> mainView (Home.view model) model
-
-                Settings -> mainView (Settings.view model) model
-
-                NotFound -> NotFound.view
-
-        Failure ->
-            { title = "Failure"
-            , body = [ text "The application failed to initialize. " ]
-            }
