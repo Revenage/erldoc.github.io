@@ -1,19 +1,24 @@
 module Page exposing (Page(..), view, viewErrors)
 
--- import Api exposing (Cred)
--- import Avatar
+import Api exposing (Cred)
+import Avatar
 import Browser exposing (Document)
 import Html exposing (Html, a, button, div, footer, i, img, li, nav, p, span, text, ul)
 import Html.Attributes exposing (class, classList, href, style)
 import Html.Events exposing (onClick)
--- import Profile
+import Profile
 import Route exposing (Route)
+import Session exposing (Session)
+import Username exposing (Username)
+import Viewer exposing (Viewer)
 
 
 {-| Determines which navbar link (if any) will be rendered as active.
+
 Note that we don't enumerate every page here, because the navbar doesn't
 have links for every page. Anything that's not part of the navbar falls
 under Other.
+
 -}
 type Page
     = Other
@@ -22,28 +27,53 @@ type Page
 
 
 {-| Take a page's Html and frames it with a header and footer.
+
 The caller provides the current user, so we can display in either
 "signed in" (rendering username) or "signed out" mode.
+
 isLoading is for determining whether we should show a loading spinner
 in the header. (This comes up during slow page transitions.)
+
 -}
-view : Page -> { title : String, content : Html msg } -> Document msg
-view page { title, content } =
+view : Maybe Viewer -> Page -> { title : String, content : Html msg } -> Document msg
+view maybeViewer page { title, content } =
     { title = title ++ " - Conduit"
-    , body = viewHeader page :: content :: [ viewFooter ]
+    , body = viewHeader page maybeViewer :: content :: [ viewFooter ]
     }
 
 
-viewHeader : Page -> Html msg
-viewHeader page =
+viewHeader : Page -> Maybe Viewer -> Html msg
+viewHeader page maybeViewer =
     nav [ class "navbar navbar-light" ]
         [ div [ class "container" ]
             [ a [ class "navbar-brand", Route.href Route.Home ]
                 [ text "conduit" ]
             , ul [ class "nav navbar-nav pull-xs-right" ] <|
-                navbarLink page Route.Home [ text "Home" ] :: []
+                navbarLink page Route.Home [ text "Home" ]
+                    :: viewMenu page maybeViewer
             ]
         ]
+
+
+viewMenu : Page -> Maybe Viewer -> List (Html msg)
+viewMenu page maybeViewer =
+    let
+        linkTo =
+            navbarLink page
+    in
+    case maybeViewer of
+        Just viewer ->
+            let
+                username =
+                    Viewer.username viewer
+
+                avatar =
+                    Viewer.avatar viewer
+            in
+            [ linkTo Route.Settings [ i [ class "ion-gear-a" ] [], text "\u{00A0}Settings" ] ]
+
+        Nothing ->
+            [ linkTo Route.Settings [ i [ class "ion-gear-a" ] [], text "\u{00A0}SSSettings" ] ]
 
 
 viewFooter : Html msg
@@ -74,6 +104,7 @@ isActive page route =
 
         ( Settings, Route.Settings ) ->
             True
+
         _ ->
             False
 
