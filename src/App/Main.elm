@@ -35,11 +35,11 @@ type Msg
     -- | GotHomeMsg Home.Msg
     | GotSettingsMsg Settings.Msg
 
-init : Url -> Nav.Key -> Model -> ( Model, Cmd Msg )
-init url navKey model = changeRouteTo (Route.fromUrl url) model
+init : Url -> Nav.Key -> ( Model, Cmd Msg )
+init url navKey = changeRouteTo (Route.fromUrl url)
  
-changeRouteTo : Maybe Route -> Model -> ( Model, Cmd Msg )
-changeRouteTo maybeRoute model =
+changeRouteTo : Maybe Route -> ( Model, Cmd Msg )
+changeRouteTo maybeRoute =
     case maybeRoute of
         Nothing ->
             ( NotFound, Cmd.none )
