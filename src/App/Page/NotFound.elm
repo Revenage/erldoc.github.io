@@ -1,22 +1,25 @@
 module App.Page.NotFound exposing (view)
 
-import Html exposing (Html, div, h1, img, main_, text, a)
-import Html.Attributes exposing (alt, class, id, src, tabindex, href)
-import Browser exposing (..)
 import App.Types exposing (..)
+import Browser exposing (..)
+import Html exposing (Html, a, div, h1, img, main_, text)
+import Html.Attributes exposing (alt, class, href, id, src, tabindex)
+
+
+
 -- VIEW
 
 
-view : Browser.Document Msg
+view : { title : String, body : List (Html msg) }
 view =
     { title = "Page Not Found"
-    , body = [
-        main_ [ id "content", class "container", tabindex -1 ]
+    , body =
+        [ main_ [ id "content", class "container", tabindex -1 ]
             [ h1 [] [ text "Not Found" ]
             , div [ class "row" ]
-            [ a [ href "/" ]
-                        [ text "Docs" ]
-                    ]
+                [ a [ href "/" ]
+                    [ text "Docs" ]
                 ]
             ]
+        ]
     }

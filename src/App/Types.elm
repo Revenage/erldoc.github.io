@@ -1,19 +1,11 @@
-module App.Types exposing (..)
-import Url
+module App.Types exposing (Language(..), RespondStatus(..), Tags, Translations)
+
+import Browser
+import Browser.Navigation as Nav
 import Dict exposing (Dict)
 import Html exposing (Html)
-
-import Browser.Navigation as Nav
-import Browser
 import Http
-
-type Msg
-    = LinkClicked Browser.UrlRequest
-    | UrlChanged Url.Url
-    | HandleTranslateResponse (Result Http.Error Translations)
-    | HandleTagResponse (Result Http.Error Tags)
-    | ChangeMode
-    | TypeSearch String
+import Url
 
 
 type RespondStatus
@@ -22,15 +14,21 @@ type RespondStatus
     | Success Translations
 
 
+type HandleTagResponse
+    = TagFailure
+    | TagLoading
+    | TagSuccess
+
+
 type Language
     = English
     | Russian
     | Ukrainian
 
+
 type alias Translations =
     Dict String String
 
-type alias Tags = List String
 
-
-type alias PageView = { title : String, content : Html Msg }
+type alias Tags =
+    List String
