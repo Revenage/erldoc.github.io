@@ -135,9 +135,10 @@ update msg model =
     case ( msg, model ) of
         ( ClickedLink urlRequest, _ ) ->
             case urlRequest of
-                Browser.Internal url -> ( model
-                            , Nav.pushUrl (Session.navKey (toSession model)) (Url.toString url)
-                            )
+                Browser.Internal url ->
+                    ( model
+                    , Nav.pushUrl (Session.navKey (toSession model)) (Url.toString url)
+                    )
 
                 Browser.External href ->
                     ( model
