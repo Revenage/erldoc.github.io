@@ -1,9 +1,10 @@
-module Main exposing (..)
+module Main exposing (Model, Msg(..), PageView, footer, getLangString, init, main, nav, subscriptions, update, view)
 
-import App.Decoders exposing (decodeTranslations)
-import App.Page.Home as Home
-import App.Page.NotFound as NotFound
-import App.Page.Settings as Settings
+-- import App.Page.Home as Home
+-- import App.Page.NotFound as NotFound
+-- import App.Page.Settings as Settings
+
+import App.Decoders exposing (..)
 import App.Router exposing (..)
 import App.Types exposing (..)
 import Browser
@@ -11,11 +12,22 @@ import Browser.Navigation as Nav
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode exposing (Decoder, dict, field, string)
 import Url
 import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
+
+
+type alias HomeModel =
+    { search : String
+    , tags : HandleTagResponse
+    }
+
+
+type alias SettingsModel =
+    { darkMode : Bool
+    }
 
 
 type alias Model =
@@ -23,8 +35,8 @@ type alias Model =
     , url : Url.Url
     , translateStatus : RespondStatus
     , language : Language
-    , home : Home.Model
-    , settings : Settings.Model
+    , home : HomeModel
+    , settings : SettingsModel
     }
 
 
@@ -32,12 +44,13 @@ type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
     | HandleTranslateResponse (Result Http.Error Translations)
+    | HandleTagResponse (Result Http.Error Tags)
     | ChangeMode
-    | GotHomeMsg Home.Msg
-    | GotSettingsMsg Settings.Msg
+    | TypeSearch String
 
 
-type alias PageView = { title : String, content : Html Msg }
+type alias PageView =
+    { title : String, content : Html Msg }
 
 
 main : Program () Model Msg
@@ -76,14 +89,25 @@ init flags url key =
             }
       , home =
             { search = ""
-            , tags = []
+            , tags = TagLoading
             }
       }
-    , Http.get
-        { url = "/translations/en.json"
-        , expect = Http.expectJson HandleTranslateResponse decodeTranslations
-        }
+    , loadPageData
     )
+
+
+loadPageData : Cmd Msg
+loadPageData =
+    Cmd.batch
+        [ Http.get
+            { url = "/translations/en.json"
+            , expect = Http.expectJson HandleTranslateResponse decodeTranslations
+            }
+        , Http.get
+            { url = "/content/tags.json"
+            , expect = Http.expectJson HandleTagResponse decodeTag
+            }
+        ]
 
 
 
@@ -114,6 +138,25 @@ update msg model =
                 Err _ ->
                     ( { model | translateStatus = Failure }, Cmd.none )
 
+        HandleTagResponse result ->
+            case result of
+                Ok tags ->
+                    let
+                        oldmodel =
+                            model.home
+
+                        newmodel =
+                            { oldmodel | tags = TagSuccess tags }
+                    in
+                    ( { model | home = newmodel }
+                    , Cmd.none
+                    )
+
+                Err _ ->
+                    ( model
+                    , Cmd.none
+                    )
+
         ChangeMode ->
             let
                 oldSettings =
@@ -126,20 +169,17 @@ update msg model =
             , Cmd.none
             )
 
-        ( GotSettingsMsg subMsg) ->
-            Settings.update subMsg model.settings
-                |> updateWith model.settings GotSettingsMsg model
+        TypeSearch text ->
+            let
+                oldmodel =
+                    model.home
 
-        -- ( GotHomeMsg subMsg ) ->
-        --     Home.update subMsg model.home
-        --         |> updateWith Home GotHomeMsg model
-
-
-updateWith : (subModel -> Model) -> (subMsg -> Msg) -> Model -> ( subModel, Cmd subMsg ) -> ( Model, Cmd Msg )
-updateWith toModel toMsg model ( subModel, subCmd ) =
-    ( toModel subModel
-    , Cmd.map toMsg subCmd
-    )
+                newmodel =
+                    { oldmodel | search = text }
+            in
+            ( { model | home = newmodel }
+            , Cmd.none
+            )
 
 
 
@@ -153,17 +193,15 @@ subscriptions _ =
 
 
 -- VIEW
-
-
-mainView : PageView -> Model -> Browser.Document Msg
-mainView pageview model =
-    { title = pageview.title
-    , body =
-        [ nav model
-        , pageview.content
-        , footer model
-        ]
-    }
+-- mainView : PageView -> Model -> Browser.Document Msg
+-- mainView pageview model =
+--     { title = pageview.title
+--     , body =
+--         [ nav model
+--         , pageview.content
+--         , footer model
+--         ]
+--     }
 
 
 nav : Model -> Html Msg
@@ -215,17 +253,94 @@ view model =
             }
 
         Success _ ->
+            let
+                viewPage pageview pagemodel =
+                    let
+                        { title, content } =
+                            pageview pagemodel
+                    in
+                    { title = title, body = [ nav model, content, footer model ] }
+            in
             case toRoute model.url of
                 Home ->
-                    mainView (Home.view model.home) model
+                    viewPage homeView model.home
 
                 Settings ->
-                    mainView (Settings.view model.settings) model
+                    viewPage settingsView model.settings
 
                 NotFound ->
-                    NotFound.view
+                    notFoundView
 
         Failure ->
             { title = "Failure"
             , body = [ text "The application failed to initialize. " ]
             }
+
+
+settingsView : SettingsModel -> { title : String, content : Html Msg }
+settingsView model =
+    { title = "Settings"
+    , content =
+        main_ [ id "content", class "container", tabindex -1 ]
+            [ h1 [] [ text "Settings" ]
+            , div [ class "row" ]
+                [ label [ class "checkbox" ]
+                    [ input
+                        [ type_ "checkbox"
+                        , checked <| model.darkMode
+                        , onClick <| ChangeMode
+                        ]
+                        []
+                    , text "dark mode"
+                    ]
+                ]
+            ]
+    }
+
+
+homeView : HomeModel -> { title : String, content : Html Msg }
+homeView model =
+    let
+        { tags } =
+            model
+    in
+    { title = "Home Page"
+    , content =
+        main_ [ id "content", class "container", tabindex -1 ]
+            [ h1 [] [ text "Home Page" ]
+            , div [ class "row" ]
+                [ h3 [] [ text "AAA" ]
+                , h3 [] [ text "TEST" ]
+                , ul [] (renderList tags)
+                ]
+            , input [ placeholder "Search: ", value model.search, onInput TypeSearch ] []
+            ]
+    }
+
+
+renderList tags =
+    if tags == Success then
+        List.map toLi tags
+
+    else
+        []
+
+
+toLi : String -> Html Msg
+toLi item =
+    li [] []
+
+
+notFoundView : { title : String, body : List (Html msg) }
+notFoundView =
+    { title = "Page Not Found"
+    , body =
+        [ main_ [ id "content", class "container", tabindex -1 ]
+            [ h1 [] [ text "Not Found" ]
+            , div [ class "row" ]
+                [ a [ href "/" ]
+                    [ text "Docs" ]
+                ]
+            ]
+        ]
+    }

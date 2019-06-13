@@ -13,4 +13,4 @@ decodeDocs =
 
 decodeTag : Decoder Tags
 decodeTag =
-    list string
+    dict string

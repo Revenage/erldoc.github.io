@@ -1,4 +1,4 @@
-module App.Page.Home exposing (..)
+module App.Page.Home exposing (Model, Msg(..), init, update, view)
 
 import App.Decoders exposing (decodeTag)
 import App.I18n as I18n
@@ -12,7 +12,7 @@ import Http
 
 type alias Model =
     { search : String
-    , tags : List String
+    , tags : Tags
     }
 
 
@@ -24,7 +24,7 @@ type Msg
 init : Model -> ( Model, Cmd Msg )
 init model =
     ( { search = model.search
-      , tags = []
+      , tags = {}
       }
     , Http.get
         { url = "/content/tags.json"
@@ -42,7 +42,7 @@ update msg model =
                     ( { model | tags = tags }, Cmd.none )
 
                 Err _ ->
-                    ( { model | tags = [] }, Cmd.none )
+                    ( { model | tags = {} }, Cmd.none )
 
         TypeSearch text ->
             ( { model | search = text }

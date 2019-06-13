@@ -3,10 +3,11 @@ module App.I18n exposing (get)
 import App.Types exposing (..)
 import Dict exposing (Dict)
 
+
 type Language
     = English
-    | Finnish
-    | FinnishFormal
+    | Russian
+    | Ukrainian
 
 
 get : Translations -> String -> String
