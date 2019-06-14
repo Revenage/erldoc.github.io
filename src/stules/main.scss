@@ -1,0 +1,19 @@
+@import "reset";
+@import "vars";
+
+body {
+  height: 100vh;
+  min-height: 100vh;
+  .app {
+    height: 100%;
+    &.light {
+      background-color: $white;
+      color: black;
+    }
+
+    &.dark {
+      background-color: $bgDark;
+      color: $white;
+    }
+  }
+}
