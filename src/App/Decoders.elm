@@ -1,16 +1,19 @@
-module App.Decoders exposing (..)
+module App.Decoders exposing (decodeDocs, decodeTag, decodeTranslations)
 
-import Json.Decode exposing (Decoder, dict, string, field, list)
 import App.Types exposing (..)
+import Json.Decode exposing (Decoder, dict, field, list, string)
+
 
 decodeTranslations : Decoder Translations
 decodeTranslations =
     dict string
 
-decodeDocs: Decoder Translations
+
+decodeDocs : Decoder Translations
 decodeDocs =
     dict string
 
+
 decodeTag : Decoder Tags
 decodeTag =
-    dict string
+    list string

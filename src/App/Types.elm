@@ -31,4 +31,4 @@ type alias Translations =
 
 
 type alias Tags =
-    Dict String String
+    List String 

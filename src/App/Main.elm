@@ -254,22 +254,22 @@ view model =
 
         Success _ ->
             let
-                viewPage pageview pagemodel =
+                viewPage pageview =
                     let
                         { title, content } =
-                            pageview pagemodel
+                            pageview model
                     in
-                    { title = title, body = [ nav model, content, footer model ] }
+                    { title = title, body = [ div [ classList [ ( "app", True ), ( "dark", model.settings.darkMode ), ( "light", not model.settings.darkMode ) ] ] [ nav model, content, footer model ] ] }
             in
             case toRoute model.url of
                 Home ->
-                    viewPage homeView model.home
+                    viewPage homeView
 
                 Settings ->
-                    viewPage settingsView model.settings
+                    viewPage settingsView
 
                 NotFound ->
-                    notFoundView
+                    viewPage notFoundView
 
         Failure ->
             { title = "Failure"
@@ -277,8 +277,12 @@ view model =
             }
 
 
-settingsView : SettingsModel -> { title : String, content : Html Msg }
+settingsView : Model -> { title : String, content : Html Msg }
 settingsView model =
+    let
+        { darkMode } =
+            model.settings
+    in
     { title = "Settings"
     , content =
         main_ [ id "content", class "container", tabindex -1 ]
@@ -287,7 +291,7 @@ settingsView model =
                 [ label [ class "checkbox" ]
                     [ input
                         [ type_ "checkbox"
-                        , checked <| model.darkMode
+                        , checked <| model.settings.darkMode
                         , onClick <| ChangeMode
                         ]
                         []
@@ -298,49 +302,52 @@ settingsView model =
     }
 
 
-homeView : HomeModel -> { title : String, content : Html Msg }
+homeView : Model -> { title : String, content : Html Msg }
 homeView model =
     let
-        { tags } =
-            model
+        { search, tags } =
+            model.home
     in
     { title = "Home Page"
     , content =
         main_ [ id "content", class "container", tabindex -1 ]
             [ h1 [] [ text "Home Page" ]
+            , input [ placeholder "Search: ", value search, onInput TypeSearch ] []
             , div [ class "row" ]
-                [ h3 [] [ text "AAA" ]
-                , h3 [] [ text "TEST" ]
+                [ h3 [] [ text "Modules:" ]
                 , ul [] (renderList tags)
                 ]
-            , input [ placeholder "Search: ", value model.search, onInput TypeSearch ] []
             ]
     }
 
 
+renderList : HandleTagResponse -> List (Html Msg)
 renderList tags =
-    if tags == Success then
-        List.map toLi tags
+    case tags of
+        TagSuccess tagList ->
+            List.map toLi tagList
 
-    else
-        []
+        TagLoading ->
+            [ li [] [ text "Loading" ] ]
+
+        TagFailure ->
+            [ li [] [ text "Failure" ] ]
 
 
 toLi : String -> Html Msg
 toLi item =
-    li [] []
+    li [] [ text item ]
 
 
-notFoundView : { title : String, body : List (Html msg) }
-notFoundView =
+notFoundView : Model -> { title : String, content : Html msg }
+notFoundView model =
     { title = "Page Not Found"
-    , body =
-        [ main_ [ id "content", class "container", tabindex -1 ]
+    , content =
+        main_ [ id "content", class "container", tabindex -1 ]
             [ h1 [] [ text "Not Found" ]
             , div [ class "row" ]
                 [ a [ href "/" ]
                     [ text "Docs" ]
                 ]
             ]
-        ]
     }
