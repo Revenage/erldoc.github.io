@@ -1,0 +1,939 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1997",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "filename",
+			"prepared": "Kenneth Lundin",
+			"docno": "1",
+			"date": "1997-11-13",
+			"rev": "B"
+		},
+		"module": {
+			"since": "",
+			"$t": "filename"
+		},
+		"modulesummary": "Filename manipulation functions.",
+		"description": {
+			"p": [
+				{
+					"c": [
+						"foo.erl",
+						"D:\\usr/local\\bin\\erl/lib\\tools\\foo.erl"
+					]
+				},
+				{
+					"seealso": {
+						"marker": "#join/1",
+						"c": "join/1"
+					}
+				},
+				{
+					"seealso": [
+						{
+							"marker": "unicode_usage#notes-about-raw-filenames",
+							"$t": "raw filenames"
+						},
+						{
+							"marker": "kernel:file#native_name_encoding/0",
+							"c": "file:native_name_encoding/0"
+						},
+						{
+							"marker": "kernel:file",
+							"c": "file"
+						}
+					],
+					"c": "join/1"
+				}
+			],
+			"note": {
+				"p": [
+					"Functionality in this module generally assumes valid input and does not necessarily fail on input that does not use a valid encoding, but may instead very likely produce invalid output.",
+					{
+						"em": "rejected"
+					}
+				]
+			},
+			"warning": {
+				"p": "Currently null characters at the end of the filename will be accepted by primitive file operations. Such filenames are however still documented as invalid. The implementation will also change in the future and reject such filenames."
+			}
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "absname",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Convert a filename to an absolute name, relative the working directory.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Filename"
+								}
+							},
+							{
+								"em": "Unix examples:"
+							},
+							{
+								"em": "Windows examples:"
+							}
+						],
+						"pre": [
+							{
+								"input": [
+									"pwd().",
+									"filename:absname(\"foo\").",
+									"filename:absname(\"../x\").",
+									"filename:absname(\"/\")."
+								]
+							},
+							{
+								"input": [
+									"pwd().",
+									"filename:absname(\"foo\").",
+									"filename:absname(\"../x\").",
+									"filename:absname(\"/\")."
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "absname",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Convert a filename to an absolute name, relative a specified directory.",
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#absname/1",
+								"c": "absname/1"
+							},
+							"c": {
+								"anno": "Dir"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "absname_join",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Join an absolute directory with a relative filename.",
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#join/2",
+								"c": "join/2"
+							},
+							"c": [
+								{
+									"anno": "Filename"
+								},
+								{
+									"anno": "Dir"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "basedir",
+							"arity": "2",
+							"clause_i": "1",
+							"since": "OTP 19.0"
+						},
+						{
+							"name": "basedir",
+							"arity": "2",
+							"clause_i": "2",
+							"since": "OTP 19.0"
+						}
+					],
+					"fsummary": {
+						"c": [
+							{
+								"anno": [
+									"PathType",
+									"Application"
+								]
+							},
+							{
+								"anno": [
+									"PathsType",
+									"Application"
+								]
+							}
+						]
+					},
+					"type": [
+						{
+							"variable": "PathType",
+							"name_i": "1"
+						},
+						{
+							"name": "basedir_path_type"
+						},
+						{
+							"variable": "PathsType",
+							"name_i": "2"
+						},
+						{
+							"name": "basedir_paths_type"
+						},
+						{
+							"variable": "Application"
+						}
+					],
+					"desc": {
+						"p": {
+							"seealso": [
+								{
+									"marker": "#basedir_3_1",
+									"anno": [
+										"PathType",
+										"Application"
+									]
+								},
+								{
+									"marker": "#basedir_3_2",
+									"anno": [
+										"PathsType",
+										"Application"
+									]
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "basedir",
+							"arity": "3",
+							"clause_i": "1",
+							"anchor": "basedir_3_1",
+							"since": "OTP 19.0"
+						},
+						{
+							"name": "basedir",
+							"arity": "3",
+							"clause_i": "2",
+							"anchor": "basedir_3_2",
+							"since": "OTP 19.0"
+						}
+					],
+					"fsummary": {},
+					"type": [
+						{
+							"variable": "PathType",
+							"name_i": "1"
+						},
+						{
+							"name": "basedir_path_type"
+						},
+						{
+							"variable": "PathsType",
+							"name_i": "2"
+						},
+						{
+							"name": "basedir_paths_type"
+						},
+						{
+							"variable": "Application"
+						},
+						{
+							"variable": "Opts"
+						},
+						{
+							"name": "basedir_opts"
+						}
+					],
+					"desc": {
+						"marker": {
+							"id": "basedir-3"
+						},
+						"p": [
+							{
+								"c": [
+									"os",
+									{
+										"anno": "Opts"
+									},
+									"'linux'",
+									"'darwin'",
+									"'windows'",
+									"os:type/0",
+									"'darwin'",
+									"'windows'",
+									"'linux'"
+								]
+							},
+							{
+								"c": [
+									"'author'",
+									"'version'",
+									"'windows'"
+								]
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"c": "user_cache",
+									"p": [
+										"The path location is intended for transient data files on a local machine.",
+										{
+											"c": "XDG_CACHE_HOME"
+										}
+									],
+									"pre": [
+										{
+											"input": "filename:basedir(user_cache, \"my_application\", #{os=>linux})."
+										},
+										{
+											"input": "filename:basedir(user_cache, \"my_application\", #{os=>darwin})."
+										},
+										{
+											"input": [
+												"filename:basedir(user_cache, \"My App\").",
+												"filename:basedir(user_cache, \"My App\").",
+												"filename:basedir(user_cache, \"My App\", #{author=>\"Erlang\"}).",
+												"filename:basedir(user_cache, \"My App\", #{version=>\"1.2\"}).",
+												"filename:basedir(user_cache, \"My App\", #{author=>\"Erlang\",version=>\"1.2\"})."
+											]
+										}
+									]
+								},
+								{
+									"c": "user_config",
+									"p": [
+										"The path location is intended for persistent configuration files.",
+										{
+											"c": "XDG_CONFIG_HOME"
+										}
+									],
+									"pre": [
+										{
+											"input": "filename:basedir(user_config, \"my_application\", #{os=>linux})."
+										},
+										{
+											"input": "filename:basedir(user_config, \"my_application\", #{os=>darwin})."
+										},
+										{
+											"input": [
+												"filename:basedir(user_config, \"My App\").",
+												"filename:basedir(user_config, \"My App\", #{author=>\"Erlang\", version=>\"1.2\"})."
+											]
+										}
+									]
+								},
+								{
+									"c": "user_data",
+									"p": [
+										"The path location is intended for persistent data files.",
+										{
+											"c": "XDG_DATA_HOME"
+										}
+									],
+									"pre": [
+										{
+											"input": "filename:basedir(user_data, \"my_application\", #{os=>linux})."
+										},
+										{
+											"input": "filename:basedir(user_data, \"my_application\", #{os=>darwin})."
+										},
+										{
+											"input": [
+												"filename:basedir(user_data, \"My App\").",
+												"filename:basedir(user_data, \"My App\",#{author=>\"Erlang\",version=>\"1.2\"})."
+											]
+										}
+									]
+								},
+								{
+									"c": "user_log",
+									"p": [
+										"The path location is intended for transient log files on a local machine.",
+										{
+											"c": "XDG_CACHE_HOME"
+										}
+									],
+									"pre": [
+										{
+											"input": "filename:basedir(user_log, \"my_application\", #{os=>linux})."
+										},
+										{
+											"input": "filename:basedir(user_log, \"my_application\", #{os=>darwin})."
+										},
+										{
+											"input": [
+												"filename:basedir(user_log, \"My App\").",
+												"filename:basedir(user_log, \"My App\",#{author=>\"Erlang\",version=>\"1.2\"})."
+											]
+										}
+									]
+								},
+								{
+									"c": "site_config",
+									"p": {
+										"c": "XDG_CONFIG_DIRS"
+									},
+									"pre": [
+										{
+											"input": [
+												"filename:basedir(site_data, \"my_application\", #{os=>linux}).",
+												"os:getenv(\"XDG_CONFIG_DIRS\").",
+												"filename:basedir(site_config, \"my_application\", #{os=>linux}).",
+												"os:unsetenv(\"XDG_CONFIG_DIRS\").",
+												"filename:basedir(site_config, \"my_application\", #{os=>linux})."
+											]
+										},
+										{
+											"input": "filename:basedir(site_config, \"my_application\", #{os=>darwin})."
+										}
+									]
+								},
+								{
+									"c": "site_data",
+									"p": {
+										"c": "XDG_DATA_DIRS"
+									},
+									"pre": [
+										{
+											"input": [
+												"os:getenv(\"XDG_DATA_DIRS\").",
+												"filename:basedir(site_data, \"my_application\", #{os=>linux}).",
+												"os:unsetenv(\"XDG_DATA_DIRS\").",
+												"filename:basedir(site_data, \"my_application\", #{os=>linux})."
+											]
+										},
+										{
+											"input": "filename:basedir(site_data, \"my_application\", #{os=>darwin})."
+										}
+									]
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "basename",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the last component of a filename.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Filename"
+									},
+									{
+										"anno": "Filename"
+									}
+								]
+							},
+							{
+								"em": "Examples:"
+							}
+						],
+						"pre": {
+							"input": [
+								"filename:basename(\"foo\").",
+								"filename:basename(\"/usr/foo\").",
+								"filename:basename(\"/\")."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "basename",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Return the last component of a filename, stripped of the specified extension.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Filename"
+									},
+									{
+										"anno": "Ext"
+									},
+									"rootname(basename(Filename))"
+								]
+							},
+							{
+								"em": "Examples:"
+							}
+						],
+						"pre": {
+							"input": [
+								"filename:basename(\"~/src/kalle.erl\", \".erl\").",
+								"filename:basename(\"~/src/kalle.beam\", \".erl\").",
+								"filename:basename(\"~/src/kalle.old.erl\", \".erl\").",
+								"filename:rootname(filename:basename(\"~/src/kalle.erl\")).",
+								"filename:rootname(filename:basename(\"~/src/kalle.beam\"))."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "dirname",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the directory part of a path name.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Filename"
+								}
+							},
+							{
+								"em": "Examples:"
+							}
+						],
+						"pre": [
+							{
+								"input": [
+									"filename:dirname(\"/usr/src/kalle.erl\").",
+									"filename:dirname(\"kalle.erl\")."
+								]
+							},
+							{
+								"input": "filename:dirname(\"\\\\usr\\\\src/kalle.erl\")."
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "extension",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the file extension.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Filename"
+								}
+							},
+							{
+								"em": "Examples:"
+							}
+						],
+						"pre": {
+							"input": [
+								"filename:extension(\"foo.erl\").",
+								"filename:extension(\"beam.src/kalle\")."
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "find_src",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "find_src",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Find the filename and compiler options for a module.",
+					"desc": {
+						"p": [
+							{
+								"seealso": {
+									"marker": "compiler:compile#file/2",
+									"c": "compile:file/2"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": "Beam"
+									},
+									"\".erl\"",
+									{
+										"anno": "Module"
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "Rules"
+									},
+									{
+										"anno": [
+											"BinSuffix",
+											"SourceSuffix"
+										]
+									},
+									{
+										"anno": "BinSuffix"
+									},
+									{
+										"anno": "BinSuffix"
+									},
+									{
+										"anno": "SourceSuffix"
+									},
+									{
+										"anno": "Options"
+									}
+								],
+								"seealso": {
+									"marker": "filelib#wildcard/1",
+									"c": "filelib:wildcard/1"
+								}
+							},
+							{
+								"c": {
+									"anno": "Rules"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": [
+											"SourceFile",
+											"Options"
+										]
+									},
+									{
+										"anno": "SourceFile"
+									},
+									"\".erl\"",
+									{
+										"anno": "Options"
+									},
+									"compile:file/2",
+									"report",
+									"verbose",
+									{
+										"anno": "Path"
+									},
+									"{i, Path}"
+								]
+							}
+						],
+						"warning": {
+							"p": [
+								{
+									"seealso": {
+										"marker": "filelib#find_source/1",
+										"c": "filelib:find_source/1"
+									}
+								},
+								{
+									"seealso": {
+										"marker": "beam_lib",
+										"c": "beam_lib(3)"
+									}
+								}
+							]
+						},
+						"code": {
+							"type": "none",
+							"$t": "[{\"\", \"\"}, {\"ebin\", \"src\"}, {\"ebin\", \"esrc\"}, {\"ebin\", \"src/*\"}, {\"ebin\", \"esrc/*\"}]"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "flatten",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Convert a filename to a flat string.",
+					"desc": {
+						"p": "Converts a possibly deep list filename consisting of characters and atoms into the corresponding flat string filename."
+					}
+				},
+				{
+					"name": {
+						"name": "join",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Join a list of filename components with directory separators.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Components"
+									},
+									{
+										"anno": "Components"
+									},
+									"\"/xxx\""
+								]
+							},
+							"The result is \"normalized\":",
+							{
+								"em": "Examples:"
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								"Redundant directory separators are removed.",
+								"In Windows, all directory separators are forward slashes and the drive letter is in lower case."
+							]
+						},
+						"pre": [
+							{
+								"input": [
+									"filename:join([\"/usr\", \"local\", \"bin\"]).",
+									"filename:join([\"a/b///c/\"])."
+								]
+							},
+							{
+								"input": "filename:join([\"B:a\\\\b///c/\"])."
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "join",
+						"arity": "2",
+						"since": ""
+					},
+					"fsummary": "Join two filename components with directory separators.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": [
+									"Name1",
+									"Name2"
+								]
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "nativename",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the native form of a file path.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Path"
+								},
+								"seealso": {
+									"marker": "#join/1",
+									"c": "join/1"
+								}
+							},
+							{
+								"em": "Examples:"
+							}
+						],
+						"pre": [
+							{
+								"input": "filename:nativename(\"/usr/local/bin/\")."
+							},
+							{
+								"input": "filename:nativename(\"/usr/local/bin/\")."
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "pathtype",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Return the path type.",
+					"desc": {
+						"p": "Returns the path type, which is one of the following:",
+						"taglist": {
+							"tag": [
+								{
+									"c": "absolute"
+								},
+								{
+									"c": "relative"
+								},
+								{
+									"c": "volumerelative"
+								}
+							],
+							"item": [
+								{
+									"p": [
+										"The path name refers to a specific file on a specific volume.",
+										{
+											"c": "/usr/local/bin"
+										},
+										{
+											"c": "D:/usr/local/bin"
+										}
+									]
+								},
+								{
+									"p": [
+										"The path name is relative to the current working directory on the current volume.",
+										{
+											"c": "foo/bar, ../src"
+										}
+									]
+								},
+								{
+									"p": [
+										"The path name is relative to the current working directory on a specified volume, or it is a specific file on the current working volume.",
+										{
+											"c": "D:bar.erl, /bar/foo.erl"
+										}
+									]
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "rootname",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "rootname",
+							"arity": "2",
+							"since": ""
+						}
+					],
+					"fsummary": "Remove a filename extension.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"rootname/2",
+									"rootname/1",
+									{
+										"anno": "Ext"
+									}
+								]
+							},
+							{
+								"em": "Examples:"
+							}
+						],
+						"pre": {
+							"input": [
+								"filename:rootname(\"/beam.src/kalle\").",
+								"filename:rootname(\"/beam.src/foo.erl\").",
+								"filename:rootname(\"/beam.src/foo.erl\", \".erl\").",
+								"filename:rootname(\"/beam.src/foo.beam\", \".erl\")."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "safe_relative_path",
+						"arity": "1",
+						"since": "OTP 19.3"
+					},
+					"fsummary": "Sanitize a relative path to avoid directory traversal attacks.",
+					"desc": {
+						"p": [
+							{
+								"c": "unsafe"
+							},
+							{
+								"em": "Examples:"
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": "The path is not relative."
+								},
+								{
+									"p": "A \"..\" component would climb up above the root of the relative path."
+								}
+							]
+						},
+						"pre": {
+							"input": [
+								"filename:safe_relative_path(\"dir/sub_dir/..\").",
+								"filename:safe_relative_path(\"dir/..\").",
+								"filename:safe_relative_path(\"dir/../..\").",
+								"filename:safe_relative_path(\"/abs/path\")."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "split",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Split a filename into its path components.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Filename"
+								}
+							},
+							{
+								"em": "Examples:"
+							}
+						],
+						"pre": {
+							"input": [
+								"filename:split(\"/usr/local/bin\").",
+								"filename:split(\"foo/bar\").",
+								"filename:split(\"a:\\\\msdev\\\\include\")."
+							]
+						}
+					}
+				}
+			]
+		}
+	}
+}

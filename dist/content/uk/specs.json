@@ -1,0 +1,193 @@
+{
+	"specs": {
+		"xmlns:xi": "http://www.w3.org/2001/XInclude",
+		"xi:include": [
+			{
+				"href": "../specs/specs_array.xml"
+			},
+			{
+				"href": "../specs/specs_base64.xml"
+			},
+			{
+				"href": "../specs/specs_beam_lib.xml"
+			},
+			{
+				"href": "../specs/specs_binary.xml"
+			},
+			{
+				"href": "../specs/specs_c.xml"
+			},
+			{
+				"href": "../specs/specs_calendar.xml"
+			},
+			{
+				"href": "../specs/specs_dets.xml"
+			},
+			{
+				"href": "../specs/specs_dict.xml"
+			},
+			{
+				"href": "../specs/specs_digraph.xml"
+			},
+			{
+				"href": "../specs/specs_digraph_utils.xml"
+			},
+			{
+				"href": "../specs/specs_epp.xml"
+			},
+			{
+				"href": "../specs/specs_erl_anno.xml"
+			},
+			{
+				"href": "../specs/specs_erl_eval.xml"
+			},
+			{
+				"href": "../specs/specs_erl_expand_records.xml"
+			},
+			{
+				"href": "../specs/specs_erl_id_trans.xml"
+			},
+			{
+				"href": "../specs/specs_erl_internal.xml"
+			},
+			{
+				"href": "../specs/specs_erl_lint.xml"
+			},
+			{
+				"href": "../specs/specs_erl_parse.xml"
+			},
+			{
+				"href": "../specs/specs_erl_pp.xml"
+			},
+			{
+				"href": "../specs/specs_erl_scan.xml"
+			},
+			{
+				"href": "../specs/specs_erl_tar.xml"
+			},
+			{
+				"href": "../specs/specs_ets.xml"
+			},
+			{
+				"href": "../specs/specs_file_sorter.xml"
+			},
+			{
+				"href": "../specs/specs_filelib.xml"
+			},
+			{
+				"href": "../specs/specs_filename.xml"
+			},
+			{
+				"href": "../specs/specs_gb_sets.xml"
+			},
+			{
+				"href": "../specs/specs_gb_trees.xml"
+			},
+			{
+				"href": "../specs/specs_gen_event.xml"
+			},
+			{
+				"href": "../specs/specs_gen_fsm.xml"
+			},
+			{
+				"href": "../specs/specs_gen_server.xml"
+			},
+			{
+				"href": "../specs/specs_gen_statem.xml"
+			},
+			{
+				"href": "../specs/specs_io.xml"
+			},
+			{
+				"href": "../specs/specs_io_lib.xml"
+			},
+			{
+				"href": "../specs/specs_lists.xml"
+			},
+			{
+				"href": "../specs/specs_log_mf_h.xml"
+			},
+			{
+				"href": "../specs/specs_maps.xml"
+			},
+			{
+				"href": "../specs/specs_math.xml"
+			},
+			{
+				"href": "../specs/specs_ms_transform.xml"
+			},
+			{
+				"href": "../specs/specs_orddict.xml"
+			},
+			{
+				"href": "../specs/specs_ordsets.xml"
+			},
+			{
+				"href": "../specs/specs_pool.xml"
+			},
+			{
+				"href": "../specs/specs_proc_lib.xml"
+			},
+			{
+				"href": "../specs/specs_proplists.xml"
+			},
+			{
+				"href": "../specs/specs_qlc.xml"
+			},
+			{
+				"href": "../specs/specs_queue.xml"
+			},
+			{
+				"href": "../specs/specs_rand.xml"
+			},
+			{
+				"href": "../specs/specs_random.xml"
+			},
+			{
+				"href": "../specs/specs_re.xml"
+			},
+			{
+				"href": "../specs/specs_sets.xml"
+			},
+			{
+				"href": "../specs/specs_shell.xml"
+			},
+			{
+				"href": "../specs/specs_shell_default.xml"
+			},
+			{
+				"href": "../specs/specs_slave.xml"
+			},
+			{
+				"href": "../specs/specs_sofs.xml"
+			},
+			{
+				"href": "../specs/specs_string.xml"
+			},
+			{
+				"href": "../specs/specs_supervisor.xml"
+			},
+			{
+				"href": "../specs/specs_supervisor_bridge.xml"
+			},
+			{
+				"href": "../specs/specs_sys.xml"
+			},
+			{
+				"href": "../specs/specs_timer.xml"
+			},
+			{
+				"href": "../specs/specs_unicode.xml"
+			},
+			{
+				"href": "../specs/specs_uri_string.xml"
+			},
+			{
+				"href": "../specs/specs_win32reg.xml"
+			},
+			{
+				"href": "../specs/specs_zip.xml"
+			}
+		]
+	}
+}

@@ -1,0 +1,656 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2016"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "erl_scan",
+			"prepared": "Robert Virding",
+			"responsible": "Bjarne Dcker",
+			"docno": "1",
+			"approved": "Bjarne Dcker",
+			"checked": {},
+			"date": "1997-01-24",
+			"rev": "B",
+			"file": "erl_scan.xml"
+		},
+		"module": {
+			"since": "",
+			"$t": "erl_scan"
+		},
+		"modulesummary": "The Erlang token scanner.",
+		"description": {
+			"p": "This module contains functions for tokenizing (scanning) characters into Erlang tokens."
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "category"
+					}
+				},
+				{
+					"name": {
+						"name": "error_description"
+					}
+				},
+				{
+					"name": {
+						"name": "error_info"
+					}
+				},
+				{
+					"name": {
+						"name": "option"
+					}
+				},
+				{
+					"name": {
+						"name": "options"
+					}
+				},
+				{
+					"name": {
+						"name": "symbol"
+					}
+				},
+				{
+					"name": {
+						"name": "resword_fun"
+					}
+				},
+				{
+					"name": {
+						"name": "token"
+					}
+				},
+				{
+					"name": {
+						"name": "tokens"
+					}
+				},
+				{
+					"name": {
+						"name": "tokens_result"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "category",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the category.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Token"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "column",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the column.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Token"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "end_location",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the end location of the text.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Token"
+								},
+								"undefined"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "format_error",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Format an error descriptor.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "ErrorDescriptor"
+								},
+								"ErrorInfo"
+							],
+							"seealso": {
+								"marker": "#errorinfo",
+								"$t": "Error Information"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "line",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the line.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Token"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "location",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the location.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Token"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "reserved_word",
+						"arity": "1",
+						"since": ""
+					},
+					"fsummary": "Test for a reserved word.",
+					"desc": {
+						"p": {
+							"c": [
+								"true",
+								{
+									"anno": "Atom"
+								},
+								"false"
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "string",
+							"arity": "1",
+							"since": ""
+						},
+						{
+							"name": "string",
+							"arity": "2",
+							"since": ""
+						},
+						{
+							"name": "string",
+							"arity": "3",
+							"since": ""
+						}
+					],
+					"fsummary": "Scan a string and return the Erlang tokens.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "String"
+								}
+							},
+							{
+								"c": [
+									{
+										"anno": "String"
+									},
+									{
+										"anno": "String"
+									},
+									{
+										"anno": [
+											"String",
+											"StartLocation"
+										]
+									},
+									{
+										"anno": [
+											"String",
+											"StartLocation"
+										]
+									}
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": "StartLocation"
+									},
+									{
+										"anno": "StartLocation"
+									},
+									"Anno",
+									{
+										"anno": "EndLocation"
+									},
+									{
+										"anno": "ErrorLocation"
+									},
+									{
+										"anno": "StartLocation"
+									},
+									"Anno",
+									{
+										"anno": "EndLocation"
+									},
+									{
+										"anno": "ErrorLocation"
+									},
+									"text"
+								],
+								"em": "token annotations",
+								"seealso": [
+									{
+										"marker": "#column/1",
+										"c": "column/1"
+									},
+									{
+										"marker": "#line/1",
+										"c": "line/1"
+									},
+									{
+										"marker": "#location/1",
+										"c": "location/1"
+									},
+									{
+										"marker": "#text/1",
+										"c": "text/1"
+									}
+								]
+							},
+							{
+								"em": "token",
+								"c": [
+									";",
+									"|"
+								]
+							},
+							"Valid options:"
+						],
+						"taglist": [
+							{
+								"tag": [
+									{
+										"c": {
+											"anno": [
+												"Tokens",
+												"EndLocation"
+											]
+										}
+									},
+									{
+										"c": {
+											"anno": [
+												"ErrorInfo",
+												"ErrorLocation"
+											]
+										}
+									}
+								],
+								"item": [
+									{
+										"p": {
+											"c": [
+												{
+													"anno": "Tokens"
+												},
+												{
+													"anno": "String"
+												},
+												{
+													"anno": "EndLocation"
+												}
+											]
+										}
+									},
+									{
+										"p": {
+											"c": {
+												"anno": "ErrorLocation"
+											}
+										}
+									}
+								]
+							},
+							{
+								"tag": [
+									{
+										"c": "{reserved_word_fun, reserved_word_fun()}"
+									},
+									{
+										"c": "return_comments"
+									},
+									{
+										"c": "return_white_spaces"
+									},
+									{
+										"c": "return"
+									},
+									{
+										"c": "text"
+									}
+								],
+								"item": [
+									{
+										"p": {
+											"c": [
+												"true",
+												"false",
+												"atom"
+											]
+										}
+									},
+									{
+										"p": "Return comment tokens."
+									},
+									{
+										"p": "Return white space tokens. By convention, a newline character, if present, is always the first character of the text (there cannot be more than one newline in a white space token)."
+									},
+									{
+										"p": {
+											"c": "[return_comments, return_white_spaces]"
+										}
+									},
+									{
+										"p": "Include the token text in the token annotation. The text is the part of the input corresponding to the token."
+									}
+								]
+							}
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"c": "{atom, Anno, atom()}"
+								},
+								{
+									"c": "{char, Anno, char()}"
+								},
+								{
+									"c": "{comment, Anno, string()}"
+								},
+								{
+									"c": "{float, Anno, float()}"
+								},
+								{
+									"c": "{integer, Anno, integer()}"
+								},
+								{
+									"c": "{var, Anno, atom()}"
+								},
+								{
+									"c": "{white_space, Anno, string()}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "symbol",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the symbol.",
+					"desc": {
+						"p": {
+							"c": {
+								"anno": "Token"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "text",
+						"arity": "1",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Return the text.",
+					"desc": {
+						"p": {
+							"c": [
+								{
+									"anno": "Token"
+								},
+								"undefined"
+							]
+						}
+					}
+				},
+				{
+					"name": [
+						{
+							"name": "tokens",
+							"arity": "3",
+							"since": ""
+						},
+						{
+							"name": "tokens",
+							"arity": "4",
+							"since": ""
+						}
+					],
+					"fsummary": "Re-entrant scanner.",
+					"type": [
+						{
+							"name": "char_spec"
+						},
+						{
+							"name": "return_cont"
+						}
+					],
+					"type_desc": {
+						"name": "return_cont",
+						"$t": "An opaque continuation."
+					},
+					"desc": {
+						"p": [
+							{
+								"em": "dot",
+								"c": "eof"
+							},
+							{
+								"c": [
+									{
+										"anno": "CharSpec"
+									},
+									"eof",
+									{
+										"anno": "LeftOverChars"
+									},
+									"eof"
+								]
+							},
+							{
+								"c": [
+									{
+										"anno": [
+											"Continuation",
+											"CharSpec",
+											"StartLocation"
+										]
+									},
+									{
+										"anno": [
+											"Continuation",
+											"CharSpec",
+											"StartLocation"
+										]
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#string/3",
+									"c": "string/3"
+								}
+							}
+						],
+						"taglist": {
+							"tag": [
+								{
+									"c": {
+										"anno": [
+											"Result",
+											"LeftOverChars"
+										]
+									}
+								},
+								{
+									"c": {
+										"anno": "Continuation1"
+									}
+								}
+							],
+							"item": [
+								{
+									"p": {
+										"c": {
+											"anno": "Result"
+										}
+									},
+									"taglist": {
+										"tag": [
+											{
+												"c": "{ok, Tokens, EndLocation}"
+											},
+											{
+												"c": "{eof, EndLocation}"
+											},
+											{
+												"c": "{error, ErrorInfo, EndLocation}"
+											}
+										],
+										"item": [
+											{
+												"p": {
+													"c": "Tokens",
+													"em": "dot"
+												}
+											},
+											{
+												"p": "End of file was encountered before any more tokens."
+											},
+											{
+												"p": {
+													"c": [
+														{
+															"anno": "LeftOverChars"
+														},
+														"EndLocation"
+													]
+												}
+											}
+										]
+									}
+								},
+								{
+									"p": {
+										"c": [
+											{
+												"anno": "Continuation1"
+											},
+											"tokens/3,4"
+										]
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		"section": [
+			{
+				"marker": {
+					"id": "errorinfo"
+				},
+				"title": "Error Information",
+				"p": [
+					{
+						"c": [
+							"ErrorInfo",
+							"ErrorInfo"
+						]
+					},
+					"A string describing the error is obtained with the following call:"
+				],
+				"code": [
+					{
+						"type": "none",
+						"$t": "{ErrorLocation, Module, ErrorDescriptor}"
+					},
+					{
+						"type": "none",
+						"$t": "Module:format_error(ErrorDescriptor)"
+					}
+				]
+			},
+			{
+				"title": "Notes",
+				"p": {
+					"c": "[]"
+				}
+			},
+			{
+				"title": "See Also",
+				"p": {
+					"seealso": [
+						{
+							"marker": "erl_anno",
+							"c": "erl_anno(3)"
+						},
+						{
+							"marker": "erl_parse",
+							"c": "erl_parse(3)"
+						},
+						{
+							"marker": "io",
+							"c": "io(3)"
+						}
+					]
+				}
+			}
+		]
+	}
+}

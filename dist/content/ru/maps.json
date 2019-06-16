@@ -1,0 +1,1028 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2013",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "maps",
+			"prepared": "Björn-Egil Dahlberg",
+			"docno": "1",
+			"date": "2014-02-28",
+			"rev": "A"
+		},
+		"module": {
+			"since": "OTP 17.0",
+			"$t": "maps"
+		},
+		"modulesummary": "Maps processing functions.",
+		"description": {
+			"p": "This module contains functions for maps processing."
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "iterator",
+						"n_vars": "2"
+					},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Value"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#iterator-1",
+									"c": "maps:iterator/1"
+								}
+							},
+							{
+								"seealso": [
+									{
+										"marker": "#next-1",
+										"c": "maps:next/1"
+									},
+									{
+										"marker": "#filter-2",
+										"c": "maps:filter/2"
+									},
+									{
+										"marker": "#fold-3",
+										"c": "maps:fold/3"
+									},
+									{
+										"marker": "#map-2",
+										"c": "maps:map/2"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": {
+						"name": "iterator",
+						"n_vars": "0"
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "filter",
+						"arity": "2",
+						"since": "OTP 18.0"
+					},
+					"fsummary": "Select pairs that satisfy a predicate.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Map"
+									},
+									{
+										"anno": "Pred"
+									},
+									{
+										"anno": "MapOrIter"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "MapOrIter"
+									},
+									"badarg",
+									{
+										"anno": "Pred"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> M = #{a => 2, b => 3, c=> 4, \"a\" => 1, \"b\" => 2, \"c\" => 4}, Pred = fun(K,V) -> is_atom(K) andalso (V rem 2) =:= 0 end, maps:filter(Pred,M).#{a => 2,c => 4}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "find",
+						"arity": "2",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"{ok, Value}",
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "Key"
+									},
+									"error",
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Map"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{\"hi\" => 42}, Key = \"hi\", maps:find(Key,Map).{ok,42}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "fold",
+						"arity": "3",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"F(Key, Value, AccIn)",
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "MapOrIter"
+									},
+									"fun F/3",
+									{
+										"anno": "Init"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "MapOrIter"
+									},
+									"badarg",
+									{
+										"anno": "Fun"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Fun = fun(K,V,AccIn) when is_list(K) -> AccIn + V end, Map = #{\"k1\" => 1, \"k2\" => 2, \"k3\" => 3}, maps:fold(Fun,0,Map).6"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "from_list",
+						"arity": "1",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							"Takes a list of key-value tuples elements and builds a map. The associations can be in any order, and both keys and values in the association can be of any term. If the same key appears more than once, the latter (right-most) value is used and the previous values are ignored.",
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> List = [{\"a\",ignored},{1337,\"value two\"},{42,value_three},{\"a\",1}], maps:from_list(List).#{42 => value_three,1337 => \"value two\",\"a\" => 1}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "get",
+						"arity": "2",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Map"
+									},
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map"
+									},
+									"{badkey,Key}",
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Key = 1337, Map = #{42 => value_two,1337 => \"value one\",\"a\" => 1}, maps:get(Key,Map).\"value one\""
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "get",
+						"arity": "3",
+						"since": "OTP 17.1"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Map"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Default"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{ key1 => val1, key2 => val2 }.#{key1 => val1,key2 => val2}> maps:get(key1, Map, \"Default value\").val1> maps:get(key3, Map, \"Default value\").\"Default value\""
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "is_key",
+						"arity": "2",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"true",
+									{
+										"anno": "Map"
+									},
+									{
+										"anno": "Key"
+									},
+									"false",
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{\"42\" => value}.#{\"42\" => value}> maps:is_key(\"42\",Map).true> maps:is_key(value,Map).false"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "iterator",
+						"arity": "1",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Create a map iterator.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Iterator"
+								},
+								"seealso": {
+									"marker": "#next-1",
+									"c": "maps:next/1"
+								}
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> M = #{ a => 1, b => 2 }.#{a => 1,b => 2}> I = maps:iterator(M), ok.ok> {K1, V1, I2} = maps:next(I), {K1, V1}.{a,1}> {K2, V2, I3} = maps:next(I2),{K2, V2}.{b,2}> maps:next(I3).none"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "keys",
+						"arity": "1",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Map"
+								}
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{42 => value_three,1337 => \"value two\",\"a\" => 1}, maps:keys(Map).[42,1337,\"a\"]"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "map",
+						"arity": "2",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Map"
+									},
+									"fun F(Key, Value1)",
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Value1"
+									},
+									{
+										"anno": "MapOrIter"
+									},
+									"fun Fun/2",
+									{
+										"anno": "Value2"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Map"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "MapOrIter"
+									},
+									"badarg",
+									{
+										"anno": "Fun"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Fun = fun(K,V1) when is_list(K) -> V1*2 end, Map = #{\"k1\" => 1, \"k2\" => 2, \"k3\" => 3}, maps:map(Fun,Map).#{\"k1\" => 2,\"k2\" => 4,\"k3\" => 6}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "merge",
+						"arity": "2",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Map3"
+									},
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Map2"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Map2"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map1 = #{a => \"value_one\", b => \"value_two\"}, Map2 = #{a => 1, c => 2}, maps:merge(Map1,Map2).#{a => 1,b => \"value_two\",c => 2}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "new",
+						"arity": "0",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							"Returns a new empty map.",
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> maps:new().#{}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "next",
+						"arity": "1",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Get the next key and value from an iterator.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Iterator"
+								}
+							},
+							{
+								"c": "none"
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{a => 1, b => 2, c => 3}.#{a => 1,b => 2,c => 3}> I = maps:iterator(Map), ok.ok> {K1, V1, I1} = maps:next(I), {K1, V1}.{a,1}> {K2, V2, I2} = maps:next(I1), {K2, V2}.{b,2}> {K3, V3, I3} = maps:next(I2), {K3, V3}.{c,3}> maps:next(I3).none"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "put",
+						"arity": "3",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Value"
+									},
+									"Map2",
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "Map2"
+									},
+									{
+										"anno": "Map1"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map1"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{\"a\" => 1}.#{\"a\" => 1}> maps:put(\"a\", 42, Map).#{\"a\" => 42}> maps:put(\"b\", 1337, Map).#{\"a\" => 1,\"b\" => 1337}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "remove",
+						"arity": "2",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Map2"
+									},
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map1"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{\"a\" => 1}.#{\"a\" => 1}> maps:remove(\"a\",Map).#{}> maps:remove(\"b\",Map).#{\"a\" => 1}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "size",
+						"arity": "1",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "Map"
+								}
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{42 => value_two,1337 => \"value one\",\"a\" => 1}, maps:size(Map).3"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "take",
+						"arity": "2",
+						"since": "OTP 19.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "Map2"
+									},
+									{
+										"anno": "Key"
+									},
+									"error"
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map1"
+									}
+								]
+							},
+							"Example:"
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{\"a\" => \"hello\", \"b\" => \"world\"}.#{\"a\" => \"hello\", \"b\" => \"world\"}> maps:take(\"a\",Map).{\"hello\",#{\"b\" => \"world\"}}> maps:take(\"does not exist\",Map).error"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "to_list",
+						"arity": "1",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Map"
+									},
+									"[{K1,V1}, ..., {Kn,Vn}]"
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{42 => value_three,1337 => \"value two\",\"a\" => 1}, maps:to_list(Map).[{42,value_three},{1337,\"value two\"},{\"a\",1}]"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "update",
+						"arity": "3",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Value"
+									},
+									{
+										"anno": "Map2"
+									}
+								]
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map1"
+									},
+									"{badkey,Key}",
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{\"a\" => 1}.#{\"a\" => 1}> maps:update(\"a\", 42, Map).#{\"a\" => 42}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "update_with",
+						"arity": "3",
+						"since": "OTP 19.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Fun"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							"Example:"
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{\"counter\" => 1}, Fun = fun(V) -> V + 1 end, maps:update_with(\"counter\",Fun,Map).#{\"counter\" => 2}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "update_with",
+						"arity": "4",
+						"since": "OTP 19.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Fun"
+									},
+									{
+										"anno": "Key"
+									},
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Init"
+									},
+									{
+										"anno": "Key"
+									}
+								]
+							},
+							"Example:"
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{\"counter\" => 1}, Fun = fun(V) -> V + 1 end, maps:update_with(\"new counter\",Fun,42,Map).#{\"counter\" => 1,\"new counter\" => 42}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "values",
+						"arity": "1",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": "Map"
+							},
+							{
+								"c": [
+									"{badmap,Map}",
+									{
+										"anno": "Map"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{42 => value_three,1337 => \"value two\",\"a\" => 1}, maps:values(Map).[value_three,\"value two\",1]"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "with",
+						"arity": "2",
+						"since": "OTP 17.3"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Map2"
+									},
+									"K1",
+									"Kn",
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Ks"
+									},
+									{
+										"anno": "Map1"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{42 => value_three,1337 => \"value two\",\"a\" => 1}, Ks = [\"a\",42,\"other key\"], maps:with(Ks,Map).#{42 => value_three,\"a\" => 1}"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "without",
+						"arity": "2",
+						"since": "OTP 17.0"
+					},
+					"fsummary": {},
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "Map2"
+									},
+									"K1",
+									"Kn",
+									{
+										"anno": "Map1"
+									},
+									{
+										"anno": "Ks"
+									},
+									{
+										"anno": "Map1"
+									}
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"code": {
+							"type": "none",
+							"$t": "> Map = #{42 => value_three,1337 => \"value two\",\"a\" => 1}, Ks = [\"a\",42,\"other key\"], maps:without(Ks,Map).#{1337 => \"value two\"}"
+						}
+					}
+				}
+			]
+		}
+	}
+}

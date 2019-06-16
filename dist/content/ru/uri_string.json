@@ -1,0 +1,528 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2017",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "uri_string",
+			"prepared": "Péter Dimitrov",
+			"docno": "1",
+			"date": "2018-02-07",
+			"rev": "A"
+		},
+		"module": {
+			"since": "OTP 21.0",
+			"$t": "uri_string"
+		},
+		"modulesummary": "URI processing functions.",
+		"description": {
+			"p": [
+				{
+					"url": [
+						{
+							"href": "https://www.ietf.org/rfc/rfc3986.txt",
+							"$t": "RFC 3986"
+						},
+						{
+							"href": "https://www.w3.org/TR/html52/",
+							"$t": "HTML 5.2"
+						}
+					]
+				},
+				{
+					"url": {
+						"href": "https://www.w3.org/TR/html50/",
+						"$t": "HTML 5.0"
+					}
+				},
+				{
+					"em": "URI",
+					"url": {
+						"href": "https://www.ietf.org/rfc/rfc3986.txt",
+						"$t": "RFC 3986"
+					}
+				},
+				"The generic URI syntax consists of a hierarchical sequence of components referred to as the scheme, authority, path, query, and fragment:",
+				"The interpretation of a URI depends only on the characters used and not on how those characters are represented in a network protocol.",
+				"The functions implemented by this module cover the following use cases:",
+				"There are four different encodings present during the handling of URIs:",
+				{
+					"c": [
+						"uri_string()",
+						"transcode/2"
+					]
+				},
+				"Unless otherwise specified the return value type and encoding are the same as the input type and encoding. That is, binary input returns binary output, list input returns a list output but mixed input returns list output.",
+				{
+					"c": [
+						"transcode/2",
+						"uri_string()"
+					]
+				},
+				{
+					"url": {
+						"href": "https://www.ietf.org/rfc/rfc3986.txt",
+						"$t": "RFC 3986"
+					}
+				}
+			],
+			"pre": "URI = scheme \":\" hier-part [ \"?\" query ] [ \"#\" fragment ] hier-part = \"//\" authority path-abempty / path-absolute / path-rootless / path-empty scheme = ALPHA *( ALPHA / DIGIT / \"+\" / \"-\" / \".\" ) authority = [ userinfo \"@\" ] host [ \":\" port ] userinfo = *( unreserved / pct-encoded / sub-delims / \":\" ) reserved = gen-delims / sub-delims gen-delims = \":\" / \"/\" / \"?\" / \"#\" / \"[\" / \"]\" / \"@\" sub-delims = \"!\" / \"$\" / \"&\" / \"'\" / \"(\" / \")\" / \"*\" / \"+\" / \",\" / \";\" / \"=\" unreserved = ALPHA / DIGIT / \"-\" / \".\" / \"_\" / \"~\"",
+			"br": {},
+			"list": [
+				{
+					"type": "bulleted",
+					"item": [
+						{
+							"br": {},
+							"seealso": {
+								"marker": "#parse/1",
+								"c": "parse/1"
+							}
+						},
+						{
+							"br": {},
+							"seealso": {
+								"marker": "#recompose/1",
+								"c": "recompose/1"
+							}
+						},
+						{
+							"br": {},
+							"seealso": {
+								"marker": "#transcode/2",
+								"c": "transcode/2"
+							}
+						},
+						{
+							"br": [
+								{},
+								{}
+							],
+							"seealso": [
+								{
+									"marker": "#normalize/1",
+									"c": "normalize/1"
+								},
+								{
+									"marker": "#normalize/2",
+									"c": "normalize/2"
+								}
+							]
+						},
+						{
+							"br": [
+								{},
+								{}
+							],
+							"seealso": [
+								{
+									"marker": "#compose_query/1",
+									"c": "compose_query/1"
+								},
+								{
+									"marker": "#compose_query/2",
+									"c": "compose_query/2"
+								}
+							]
+						},
+						{
+							"br": {},
+							"seealso": {
+								"marker": "#dissect_query/1",
+								"c": "dissect_query/1"
+							}
+						}
+					]
+				},
+				{
+					"type": "bulleted",
+					"item": [
+						"Inbound binary encoding in binaries",
+						"Inbound percent-encoding in lists and binaries",
+						"Outbound binary encoding in binaries",
+						"Outbound percent-encoding in lists and binaries"
+					]
+				}
+			]
+		},
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "error"
+					},
+					"desc": {
+						"p": [
+							"Error tuple indicating the type of error. Possible values of the second component:",
+							"The third component is a term providing additional information about the cause of the error."
+						],
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"c": "invalid_character"
+								},
+								{
+									"c": "invalid_encoding"
+								},
+								{
+									"c": "invalid_input"
+								},
+								{
+									"c": "invalid_map"
+								},
+								{
+									"c": "invalid_percent_encoding"
+								},
+								{
+									"c": "invalid_scheme"
+								},
+								{
+									"c": "invalid_uri"
+								},
+								{
+									"c": "invalid_utf8"
+								},
+								{
+									"c": "missing_value"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "uri_map"
+					},
+					"desc": {
+						"p": "Map holding the main components of a URI."
+					}
+				},
+				{
+					"name": {
+						"name": "uri_string"
+					},
+					"desc": {
+						"p": {
+							"url": {
+								"href": "https://www.ietf.org/rfc/rfc3986.txt",
+								"$t": "RFC 3986"
+							},
+							"em": "percent-encoded form"
+						}
+					}
+				}
+			]
+		},
+		"funcs": {
+			"func": [
+				{
+					"name": {
+						"name": "compose_query",
+						"arity": "1",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Compose urlencoded query string.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "QueryString"
+									},
+									{
+										"anno": "QueryList"
+									}
+								],
+								"url": [
+									{
+										"href": "https://www.w3.org/TR/html52/",
+										"$t": "HTML 5.2"
+									},
+									{
+										"href": "https://www.w3.org/TR/html50/",
+										"$t": "HTML 5.0"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#dissect_query/1",
+									"c": "dissect_query/1"
+								}
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"pre": {
+							"input": "uri_string:compose_query([{\"foo bar\",\"1\"},{\"city\",\"örebro\"}])."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "compose_query",
+						"arity": "2",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Compose urlencoded query string.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"compose_query/1",
+									{
+										"anno": "Options"
+									},
+									"utf8",
+									"unicode",
+									"latin1"
+								]
+							},
+							"Each character in the entry's name and value that cannot be expressed using the selected character encoding, is replaced by a string consisting of a U+0026 AMPERSAND character (&), a \"#\" (U+0023) character, one or more ASCII digits representing the Unicode code point of the character in base ten, and finally a \";\" (U+003B) character.",
+							"Bytes that are out of the range 0x2A, 0x2D, 0x2E, 0x30 to 0x39, 0x41 to 0x5A, 0x5F,\t0x61 to 0x7A, are percent-encoded (U+0025 PERCENT SIGN character (%) followed by\tuppercase ASCII hex digits representing the hexadecimal value of the byte).",
+							{
+								"seealso": {
+									"marker": "#dissect_query/1",
+									"c": "dissect_query/1"
+								}
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"pre": {
+							"input": "uri_string:compose_query([{\"foo bar\",\"1\"},{\"city\",\"örebro\"}],"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "dissect_query",
+						"arity": "1",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Dissect query string.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									{
+										"anno": "QueryString"
+									},
+									{
+										"anno": "QueryList"
+									}
+								],
+								"url": [
+									{
+										"href": "https://www.w3.org/TR/html52/",
+										"$t": "HTML 5.2"
+									},
+									{
+										"href": "https://www.w3.org/TR/html50/",
+										"$t": "HTML 5.0"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#compose_query/1",
+									"c": "compose_query/1"
+								}
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"pre": {
+							"input": "uri_string:dissect_query(\"foo+bar=1&city=%C3%B6rebro\")."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "normalize",
+						"arity": "1",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Syntax-based normalization.",
+					"desc": {
+						"p": [
+							{
+								"c": {
+									"anno": "URI"
+								},
+								"url": {
+									"href": "https://www.ietf.org/rfc/rfc3986.txt",
+									"$t": "RFC 3986"
+								}
+							},
+							"This function implements case normalization, percent-encoding normalization, path segment normalization and scheme based normalization for HTTP(S) with basic support for FTP, SSH, SFTP and TFTP.",
+							{
+								"em": "Example:"
+							}
+						],
+						"pre": {
+							"input": [
+								"uri_string:normalize(\"/a/b/c/./../../g\").",
+								"uri_string:normalize(#{scheme => \"http\",port => 80,path => \"/a/b/c/./../../g\","
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "normalize",
+						"arity": "2",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Syntax-based normalization.",
+					"desc": {
+						"p": [
+							{
+								"c": [
+									"normalize/1",
+									{
+										"anno": "Options"
+									},
+									"return_map"
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"pre": {
+							"input": [
+								"uri_string:normalize(\"/a/b/c/./../../g\", [return_map]).",
+								"uri_string:normalize(#{scheme => \"http\",port => 80,path => \"/a/b/c/./../../g\","
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "parse",
+						"arity": "1",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Parse URI into a map.",
+					"desc": {
+						"p": [
+							{
+								"url": {
+									"href": "https://www.ietf.org/rfc/rfc3986.txt",
+									"$t": "RFC 3986"
+								},
+								"c": [
+									"uri_string()",
+									"uri_map()",
+									"URI"
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#recompose/1",
+									"c": "recompose/1"
+								}
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"pre": {
+							"input": "uri_string:parse(\"foo://user@example.com:8042/over/there?name=ferret#nose\")."
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "recompose",
+						"arity": "1",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Recompose URI.",
+					"desc": {
+						"p": [
+							{
+								"url": {
+									"href": "https://www.ietf.org/rfc/rfc3986.txt",
+									"$t": "RFC 3986"
+								},
+								"c": [
+									{
+										"anno": "URIString"
+									},
+									{
+										"anno": "URIMap"
+									},
+									{
+										"anno": "URIMap"
+									}
+								]
+							},
+							{
+								"seealso": {
+									"marker": "#parse/1",
+									"c": "parse/1"
+								}
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"pre": {
+							"input": [
+								"URIMap = #{fragment => \"nose\", host => \"example.com\", path => \"/over/there\",",
+								"uri_string:recompose(URIMap)."
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "transcode",
+						"arity": "2",
+						"since": "OTP 21.0"
+					},
+					"fsummary": "Transcode URI.",
+					"desc": {
+						"p": [
+							{
+								"url": {
+									"href": "https://www.ietf.org/rfc/rfc3986.txt",
+									"$t": "RFC 3986"
+								},
+								"c": [
+									{
+										"anno": "URIString"
+									},
+									{
+										"anno": "Options"
+									},
+									"in_encoding",
+									"out_encoding",
+									"in_encoding",
+									"out_encoding"
+								]
+							},
+							{
+								"em": "Example:"
+							}
+						],
+						"pre": {
+							"input": "uri_string:transcode(<<\"foo%00%00%00%F6bar\"/utf32>>,"
+						}
+					}
+				}
+			]
+		}
+	}
+}

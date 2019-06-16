@@ -1,0 +1,1208 @@
+{
+	"erlref": {
+		"header": {
+			"copyright": {
+				"year": [
+					"1996",
+					"2018"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "supervisor",
+			"prepared": {},
+			"docno": {},
+			"date": {},
+			"rev": {}
+		},
+		"module": {
+			"since": "",
+			"$t": "supervisor"
+		},
+		"modulesummary": "Generic supervisor behavior.",
+		"description": {
+			"p": [
+				{
+					"seealso": [
+						{
+							"marker": "gen_event",
+							"c": "gen_event"
+						},
+						{
+							"marker": "gen_server",
+							"c": "gen_server"
+						},
+						{
+							"marker": "gen_statem",
+							"c": "gen_statem"
+						},
+						{
+							"marker": "doc/design_principles:sup_princ",
+							"$t": "Supervisor Behaviour"
+						}
+					]
+				},
+				"A supervisor expects the definition of which child processes to supervise to be specified in a callback module exporting a predefined set of functions.",
+				"Unless otherwise stated, all functions in this module fail if the specified supervisor does not exist or if bad arguments are specified."
+			]
+		},
+		"section": [
+			{
+				"marker": [
+					{
+						"id": "supervision_princ"
+					},
+					{
+						"id": "sup_flags"
+					},
+					{
+						"id": "child_spec"
+					}
+				],
+				"title": "Supervision Principles",
+				"p": [
+					"The supervisor is responsible for starting, stopping, and monitoring its child processes. The basic idea of a supervisor is that it must keep its child processes alive by restarting them when necessary.",
+					{
+						"em": "child specifications"
+					},
+					"The supervisor properties are defined by the supervisor flags. The type definition for the supervisor flags is as follows:",
+					{
+						"em": "restart strategies",
+						"c": "strategy"
+					},
+					{
+						"em": "maximum restart intensity",
+						"c": [
+							"intensity",
+							"period",
+							"MaxR",
+							"intensity",
+							"MaxT",
+							"period",
+							"MaxR",
+							"MaxT",
+							"shutdown",
+							"intensity",
+							"1",
+							"period",
+							"5"
+						]
+					},
+					"The type definition of a child specification is as follows:",
+					{
+						"seealso": {
+							"marker": "#type-child_spec",
+							"$t": "child_spec()"
+						}
+					}
+				],
+				"pre": [
+					"sup_flags() = #{strategy => strategy(), % optional intensity => non_neg_integer(), % optional period => pos_integer()} % optional",
+					"child_spec() = #{id => child_id(), % mandatory start => mfargs(), % mandatory restart => restart(), % optional shutdown => shutdown(), % optional type => worker(), % optional modules => modules()} % optional"
+				],
+				"list": [
+					{
+						"type": "bulleted",
+						"item": [
+							{
+								"p": {
+									"c": "one_for_one"
+								}
+							},
+							{
+								"p": {
+									"c": "one_for_all"
+								}
+							},
+							{
+								"p": {
+									"c": "rest_for_one"
+								}
+							},
+							{
+								"p": [
+									{
+										"c": [
+											"simple_one_for_one",
+											"one_for_one"
+										]
+									},
+									{
+										"seealso": [
+											{
+												"marker": "#delete_child/2",
+												"c": "delete_child/2"
+											},
+											{
+												"marker": "#restart_child/2",
+												"c": "restart_child/2"
+											}
+										],
+										"c": [
+											"simple_one_for_one",
+											"{error,simple_one_for_one}"
+										]
+									},
+									{
+										"seealso": {
+											"marker": "#terminate_child/2",
+											"c": "terminate_child/2"
+										},
+										"c": [
+											"simple_one_for_one",
+											"pid()",
+											"terminate_child/2",
+											"{error,simple_one_for_one}"
+										]
+									},
+									{
+										"c": "simple_one_for_one"
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "bulleted",
+						"item": [
+							{
+								"p": [
+									{
+										"c": "id"
+									},
+									{
+										"c": "id"
+									},
+									"Notice that this identifier on occations has been called \"name\". As far as possible, the terms \"identifier\" or \"id\" are now used but to keep backward compatibility, some occurences of \"name\" can still be found, for example in error messages."
+								]
+							},
+							{
+								"p": [
+									{
+										"c": [
+											"start",
+											"{M,F,A}",
+											"apply(M,F,A)"
+										]
+									},
+									{
+										"em": "must create and link to",
+										"c": [
+											"{ok,Child}",
+											"{ok,Child,Info}",
+											"Child",
+											"Info"
+										]
+									},
+									{
+										"c": "ignore"
+									},
+									{
+										"c": "{error,Error}"
+									},
+									{
+										"c": "start_link"
+									},
+									{
+										"c": "start"
+									}
+								]
+							},
+							{
+								"p": [
+									{
+										"c": [
+											"restart",
+											"permanent",
+											"temporary",
+											"rest_for_one",
+											"one_for_all",
+											"transient",
+											"normal",
+											"shutdown",
+											"{shutdown,Term}"
+										]
+									},
+									{
+										"c": [
+											"restart",
+											"permanent"
+										]
+									}
+								]
+							},
+							{
+								"p": [
+									{
+										"c": [
+											"shutdown",
+											"brutal_kill",
+											"exit(Child,kill)",
+											"exit(Child,shutdown)",
+											"shutdown",
+											"exit(Child,kill)"
+										]
+									},
+									{
+										"c": "infinity"
+									},
+									{
+										"c": "infinity"
+									},
+									"Notice that all child processes implemented using the standard OTP behavior modules automatically adhere to the shutdown protocol.",
+									{
+										"c": [
+											"shutdown",
+											"5000",
+											"worker",
+											"infinity",
+											"supervisor"
+										]
+									}
+								],
+								"warning": [
+									{
+										"p": {
+											"c": [
+												"infinity",
+												"supervisor"
+											]
+										}
+									},
+									{
+										"p": {
+											"c": "infinity"
+										}
+									}
+								]
+							},
+							{
+								"p": [
+									{
+										"c": "type"
+									},
+									{
+										"c": [
+											"type",
+											"worker"
+										]
+									}
+								]
+							},
+							{
+								"p": [
+									{
+										"c": [
+											"modules",
+											"supervisor",
+											"gen_server",
+											"gen_statem",
+											"[Module]",
+											"Module",
+											"gen_event",
+											"dynamic"
+										],
+										"seealso": {
+											"marker": "doc/design_principles:release_handling",
+											"$t": "Release Handling"
+										}
+									},
+									{
+										"c": [
+											"modules",
+											"[M]",
+											"M",
+											"{M,F,A}"
+										]
+									}
+								]
+							},
+							{
+								"p": {
+									"c": [
+										"Child",
+										"undefined"
+									]
+								}
+							}
+						]
+					}
+				]
+			},
+			{
+				"title": "Callback Functions",
+				"p": {
+					"c": "supervisor"
+				}
+			},
+			{
+				"title": "See Also",
+				"p": {
+					"seealso": [
+						{
+							"marker": "gen_event",
+							"c": "gen_event(3)"
+						},
+						{
+							"marker": "gen_statem",
+							"c": "gen_statem(3)"
+						},
+						{
+							"marker": "gen_server",
+							"c": "gen_server(3)"
+						},
+						{
+							"marker": "sys",
+							"c": "sys(3)"
+						}
+					]
+				}
+			}
+		],
+		"datatypes": {
+			"datatype": [
+				{
+					"name": {
+						"name": "child"
+					}
+				},
+				{
+					"name": {
+						"name": "child_id"
+					},
+					"desc": {
+						"p": {
+							"c": "pid()"
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "child_spec"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#child_spec",
+								"$t": "above"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "mfargs"
+					},
+					"desc": {
+						"p": {
+							"c": [
+								"undefined",
+								{
+									"anno": "A"
+								},
+								"supervisor",
+								"temporary",
+								"undefined"
+							]
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "modules"
+					}
+				},
+				{
+					"name": {
+						"name": "restart"
+					}
+				},
+				{
+					"name": {
+						"name": "shutdown"
+					}
+				},
+				{
+					"name": {
+						"name": "strategy"
+					}
+				},
+				{
+					"name": {
+						"name": "sup_flags"
+					},
+					"desc": {
+						"p": {
+							"seealso": {
+								"marker": "#sup_flags",
+								"$t": "above"
+							}
+						}
+					}
+				},
+				{
+					"name": {
+						"name": "sup_ref"
+					}
+				},
+				{
+					"name": {
+						"name": "worker"
+					}
+				}
+			]
+		},
+		"funcs": [
+			{
+				"func": [
+					{
+						"name": {
+							"name": "check_childspecs",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Check if children specifications are syntactically correct.",
+						"desc": {
+							"p": {
+								"c": [
+									"ok",
+									{
+										"anno": "Error"
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "count_children",
+							"arity": "1",
+							"since": "OTP R13B04"
+						},
+						"fsummary": "Return counts for the number of child specifications, active children, supervisors, and workers.",
+						"desc": {
+							"p": [
+								{
+									"seealso": {
+										"marker": "proplists",
+										"c": "proplists"
+									}
+								},
+								{
+									"c": {
+										"anno": "SupRef"
+									},
+									"seealso": {
+										"marker": "#SupRef",
+										"c": "start_child/2"
+									}
+								}
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"c": "specs"
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"active",
+												"simple_one_for_one"
+											]
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"supervisors",
+												"child_type = supervisor"
+											]
+										}
+									},
+									{
+										"p": {
+											"c": [
+												"workers",
+												"child_type = worker"
+											]
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"name": {
+							"name": "delete_child",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Delete a child specification from a supervisor.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "SupRef"
+										},
+										{
+											"anno": "Id"
+										}
+									],
+									"seealso": {
+										"marker": "#terminate_child/2",
+										"c": "terminate_child/2"
+									}
+								},
+								{
+									"c": {
+										"anno": "SupRef"
+									},
+									"seealso": {
+										"marker": "#SupRef",
+										"c": "start_child/2"
+									}
+								},
+								{
+									"c": [
+										"ok",
+										{
+											"anno": "Id"
+										},
+										"{error,running}",
+										"{error,restarting}",
+										{
+											"anno": "Id"
+										},
+										"{error,not_found}"
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "get_childspec",
+							"arity": "2",
+							"since": "OTP 18.0"
+						},
+						"fsummary": "Return the child specification map for the specified child.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										"Id",
+										"SupRef"
+									]
+								},
+								{
+									"c": {
+										"anno": "SupRef"
+									},
+									"seealso": {
+										"marker": "#SupRef",
+										"c": "start_child/2"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "restart_child",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Restart a terminated child process belonging to a supervisor.",
+						"desc": {
+							"p": [
+								{
+									"c": [
+										{
+											"anno": "SupRef"
+										},
+										{
+											"anno": "Id"
+										}
+									]
+								},
+								"Notice that for temporary children, the child specification is automatically deleted when the child terminates; thus, it is not possible to restart such children.",
+								{
+									"c": {
+										"anno": "SupRef"
+									},
+									"seealso": {
+										"marker": "#SupRef",
+										"c": "start_child/2"
+									}
+								},
+								{
+									"c": [
+										{
+											"anno": "Id"
+										},
+										"{error,not_found}",
+										"{error,running}"
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "Child"
+										},
+										{
+											"anno": [
+												"Child",
+												"Info"
+											]
+										}
+									]
+								},
+								{
+									"c": [
+										"ignore",
+										"undefined",
+										"{ok,undefined}"
+									]
+								},
+								{
+									"c": [
+										{
+											"anno": "Error"
+										},
+										{
+											"anno": "Error"
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "start_child",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Dynamically add a child process to a supervisor.",
+						"type": [
+							{
+								"name": "startchild_ret"
+							},
+							{
+								"name": "startchild_err"
+							}
+						],
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "SupRef"
+									}
+								},
+								{
+									"marker": {
+										"id": "SupRef"
+									},
+									"c": {
+										"anno": "SupRef"
+									}
+								},
+								{
+									"c": [
+										{
+											"anno": "ChildSpec"
+										},
+										"simple_one_for_one"
+									]
+								},
+								{
+									"c": [
+										"simple_one_for_one",
+										"Module:init/1",
+										{
+											"anno": "ChildSpec"
+										},
+										{
+											"anno": "List"
+										},
+										{
+											"anno": "List"
+										},
+										{
+											"anno": "List"
+										},
+										"{M,F,A}"
+									]
+								},
+								{
+									"c": [
+										"simple_one_for_one",
+										"ignore",
+										"{ok,undefined}"
+									]
+								},
+								{
+									"c": [
+										"{error,Error}",
+										"Error"
+									]
+								}
+							],
+							"list": [
+								{
+									"type": "bulleted",
+									"item": [
+										"The pid",
+										{
+											"c": "Name"
+										},
+										{
+											"c": "{Name,Node}"
+										},
+										{
+											"c": "{global,Name}"
+										},
+										{
+											"c": "{via,Module,Name}"
+										}
+									]
+								},
+								{
+									"type": "bulleted",
+									"item": [
+										{
+											"p": {
+												"c": [
+													{
+														"anno": "ChildSpec"
+													},
+													"{error,already_present}",
+													{
+														"anno": "Child"
+													}
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													{
+														"anno": "Child"
+													},
+													{
+														"anno": [
+															"Child",
+															"Info"
+														]
+													}
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													"ignore",
+													"simple_one_for_one",
+													"undefined",
+													"{ok,undefined}"
+												]
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": [
+							{
+								"name": "start_link",
+								"arity": "2",
+								"since": ""
+							},
+							{
+								"name": "start_link",
+								"arity": "3",
+								"since": ""
+							}
+						],
+						"fsummary": "Create a supervisor process.",
+						"type": [
+							{
+								"name": "startlink_ret"
+							},
+							{
+								"name": "startlink_err"
+							},
+							{
+								"name": "sup_name"
+							}
+						],
+						"desc": {
+							"p": [
+								"Creates a supervisor process as part of a supervision tree. For example, the function ensures that the supervisor is linked to the calling process (its supervisor).",
+								{
+									"c": [
+										{
+											"anno": "Module"
+										},
+										"start_link/2,3",
+										{
+											"anno": "Module"
+										}
+									]
+								},
+								"If no name is provided, the supervisor is not registered.",
+								{
+									"c": {
+										"anno": "Module"
+									}
+								},
+								{
+									"c": [
+										{
+											"anno": "Args"
+										},
+										{
+											"anno": "Module"
+										}
+									]
+								}
+							],
+							"list": [
+								{
+									"type": "bulleted",
+									"item": [
+										{
+											"p": {
+												"c": [
+													{
+														"anno": "SupName"
+													},
+													"Name",
+													"register/2"
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													{
+														"anno": "SupName"
+													},
+													"Name"
+												],
+												"seealso": {
+													"marker": "kernel:global#register_name/2",
+													"c": "global:register_name/2"
+												}
+											}
+										},
+										{
+											"p": {
+												"c": [
+													{
+														"anno": [
+															"SupName",
+															"Module",
+															"Name"
+														]
+													},
+													"Name",
+													"Module",
+													"Module",
+													"register_name/2",
+													"unregister_name/1",
+													"send/2",
+													{
+														"anno": "Name"
+													}
+												],
+												"seealso": {
+													"marker": "kernel:global",
+													"c": "global"
+												}
+											}
+										}
+									]
+								},
+								{
+									"type": "bulleted",
+									"item": [
+										{
+											"p": {
+												"c": [
+													"{ok,Child}",
+													"{ok,Child,Info}",
+													"ignore",
+													"{ok,Pid}",
+													"Pid"
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													{
+														"anno": "SupName"
+													},
+													"{error,{already_started,Pid}}",
+													"Pid"
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													{
+														"anno": "Module"
+													},
+													"ignore",
+													"ignore",
+													"normal"
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													{
+														"anno": "Module"
+													},
+													"{error,Term}",
+													"Term",
+													"Term"
+												]
+											}
+										},
+										{
+											"p": {
+												"c": [
+													"shutdown",
+													"{error, {shutdown, Reason}}"
+												]
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "terminate_child",
+							"arity": "2",
+							"since": ""
+						},
+						"fsummary": "Terminate a child process belonging to a supervisor.",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "SupRef"
+									}
+								},
+								{
+									"c": [
+										"simple_one_for_one",
+										{
+											"anno": "Id"
+										}
+									],
+									"seealso": [
+										{
+											"marker": "#restart_child/2",
+											"c": "restart_child/2"
+										},
+										{
+											"marker": "#delete_child/2",
+											"c": "delete_child/2"
+										}
+									]
+								},
+								{
+									"c": [
+										"delete_child/2",
+										"restart_child/2"
+									]
+								},
+								{
+									"c": [
+										"simple_one_for_one",
+										{
+											"anno": "Id"
+										},
+										"pid()",
+										"{error,not_found}",
+										"pid()",
+										"{error,simple_one_for_one}"
+									]
+								},
+								{
+									"c": [
+										"ok",
+										{
+											"anno": "Id"
+										},
+										"{error,not_found}"
+									]
+								},
+								{
+									"c": {
+										"anno": "SupRef"
+									},
+									"seealso": {
+										"marker": "#SupRef",
+										"c": "start_child/2"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": {
+							"name": "which_children",
+							"arity": "1",
+							"since": ""
+						},
+						"fsummary": "Return information about all children specifications and child processes belonging to a supervisor.",
+						"desc": {
+							"p": [
+								{
+									"c": {
+										"anno": "SupRef"
+									}
+								},
+								"Notice that calling this function when supervising many childrens under low memory conditions can cause an out of memory exception.",
+								{
+									"c": {
+										"anno": "SupRef"
+									},
+									"seealso": {
+										"marker": "#SupRef",
+										"c": "start_child/2"
+									}
+								},
+								"The following information is given for each child specification/process:"
+							],
+							"list": {
+								"type": "bulleted",
+								"item": [
+									{
+										"p": {
+											"c": [
+												{
+													"anno": "Id"
+												},
+												"undefined",
+												"simple_one_for_one"
+											]
+										}
+									},
+									{
+										"p": {
+											"c": [
+												{
+													"anno": "Child"
+												},
+												"restarting",
+												"undefined"
+											]
+										}
+									},
+									{
+										"p": {
+											"c": {
+												"anno": "Type"
+											}
+										}
+									},
+									{
+										"p": {
+											"c": {
+												"anno": "Modules"
+											}
+										}
+									}
+								]
+							}
+						}
+					}
+				]
+			},
+			{
+				"func": {
+					"name": {
+						"since": "",
+						"$t": "Module:init(Args) -> Result"
+					},
+					"fsummary": "Return a supervisor specification.",
+					"type": {
+						"v": [
+							"Args = term()",
+							"Result = {ok,{SupFlags,[ChildSpec]}} | ignore",
+							{
+								"seealso": {
+									"marker": "#type-sup_flags",
+									"c": "sup_flags()"
+								}
+							},
+							{
+								"seealso": {
+									"marker": "#type-child_spec",
+									"c": "child_spec()"
+								}
+							}
+						]
+					},
+					"desc": {
+						"p": [
+							{
+								"seealso": {
+									"marker": "#start_link/2",
+									"c": "start_link/2,3"
+								}
+							},
+							{
+								"c": [
+									"Args",
+									"Args"
+								]
+							},
+							{
+								"c": [
+									"SupFlags",
+									"[ChildSpec]"
+								],
+								"seealso": {
+									"marker": "#supervision_princ",
+									"c": "Supervision Principles"
+								}
+							},
+							{
+								"c": "simple_one_for_one",
+								"seealso": {
+									"marker": "#start_child/2",
+									"c": "start_child/2"
+								}
+							},
+							{
+								"c": "ignore"
+							},
+							{
+								"seealso": {
+									"marker": "doc/design_principles:appup_cookbook#sup",
+									"$t": "Changing a Supervisor"
+								}
+							}
+						]
+					}
+				}
+			}
+		]
+	}
+}

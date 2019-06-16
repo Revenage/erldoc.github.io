@@ -1,0 +1,499 @@
+{
+	"chapter": {
+		"header": {
+			"copyright": {
+				"year": [
+					"2006",
+					"2016"
+				],
+				"holder": "Ericsson AB. All Rights Reserved."
+			},
+			"legalnotice": "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+			"title": "STDLIB Release Notes",
+			"prepared": {},
+			"docno": {},
+			"date": {},
+			"rev": {}
+		},
+		"section": [
+			{
+				"title": "STDLIB 1.13",
+				"section": [
+					{
+						"title": "Fixed Bugs and Malfunctions",
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": [
+										"For the bit syntax, when matching with a size field that is bound during the same matching, a warning for unused variable was emitted. This bug has been fixed.",
+										"Own Id: OTP-4858"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": "epp"
+										},
+										"Own Id: OTP-4871 Aux Id: OTP-4870"
+									]
+								},
+								{
+									"p": [
+										"Bugs concerning guards have been fixed in the Erlang interpreter.",
+										"Own Id: OTP-4885"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": "erlang:is_record/2"
+										},
+										"Own Id: OTP-4886"
+									]
+								},
+								{
+									"p": [
+										"Guards of mach specifications are corrected to resemble the semantics of guards in real code more closely. The implementation now corresponds to the documentation in ERTS User's Guide. The following things are corrected:",
+										"*** POTENTIAL INCOMPATIBILITY ***",
+										"Own Id: OTP-4927"
+									],
+									"list": {
+										"type": "bulleted",
+										"item": [
+											{
+												"c": [
+													"{'or', {'is_integer','$1'}, {'or', '$1', '$1'}}",
+													"true",
+													"'$1'"
+												]
+											},
+											"Unary + and - was not implemented",
+											{
+												"c": [
+													"ets/dbg:fun2ms",
+													"erlang:'or'(A,B)"
+												]
+											},
+											{
+												"c": [
+													"integer(X)",
+													"is_integer(X)",
+													"ets/dbg:fun2ms"
+												]
+											},
+											{
+												"c": "ets/dbg:fun2ms"
+											}
+										]
+									}
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"file_sorter",
+												"{end_of_input, Value}"
+											]
+										},
+										"Own Id: OTP-5009"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": "filelib:fold_files/5"
+										},
+										"Own Id: OTP-5137"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"filelib:fold_files/5",
+												"filelib:is_regular/1"
+											]
+										},
+										{
+											"c": "filelib:fold_files/5"
+										},
+										"Own Id: OTP-5171 Aux Id: OTP-5128"
+									]
+								}
+							]
+						}
+					},
+					{
+						"title": "Improvements and New Features",
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": [
+										{
+											"c": [
+												"init",
+												".erlang",
+												".erlang",
+												"-s"
+											]
+										},
+										"Own Id: OTP-4877"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"erlc",
+												"erlc",
+												"erl",
+												"-boot start_clean",
+												"start_sasl"
+											]
+										},
+										"Own Id: OTP-4878"
+									]
+								},
+								{
+									"p": [
+										"Dets tables can now be opened or closed in parallel. In particular, if some table is being repaired, other tables can still be opened or closed.",
+										"Own Id: OTP-4908"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"qlc",
+												"qlc",
+												"qlc(3)"
+											]
+										},
+										"Own Id: OTP-5043"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"rd/2",
+												"rf/0,1",
+												"rl/0,1",
+												"rp/1",
+												"rr/1,2,3",
+												"user_default.erl",
+												"shell(3)"
+											]
+										},
+										"*** POTENTIAL INCOMPATIBILITY ***",
+										"Own Id: OTP-5063"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": "string:to_integer/1,"
+										},
+										"Own Id: OTP-5081 Aux Id: OTP-5136"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"dets:repair_continuation/2",
+												"dets:select/1",
+												"dets:select/3"
+											]
+										},
+										"Own Id: OTP-5126"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": "string:to_float/1,"
+										},
+										"Own Id: OTP-5136 Aux Id: OTP-5081"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": "string"
+										},
+										"Own Id: OTP-5138"
+									]
+								}
+							]
+						}
+					}
+				]
+			},
+			{
+				"title": "STDLIB 1.12.8",
+				"section": {
+					"title": "Improvements and New Features",
+					"list": {
+						"type": "bulleted",
+						"item": [
+							{
+								"p": [
+									{
+										"c": [
+											"ets:insert_new/2",
+											"dets:insert_new/2"
+										]
+									},
+									"Own Id: OTP-5075"
+								]
+							},
+							{
+								"p": [
+									{
+										"c": [
+											"proc_lib:hibernate/3.",
+											"proc_lib",
+											"gen_server",
+											"erlang:hibernate/3"
+										]
+									},
+									"Own Id: OTP-5077"
+								]
+							}
+						]
+					}
+				}
+			},
+			{
+				"title": "STDLIB 1.12.6",
+				"section": {
+					"title": "Fixed Bugs and Malfunctions",
+					"list": {
+						"type": "bulleted",
+						"item": {
+							"p": [
+								{
+									"c": "beam_lib"
+								},
+								"Own Id: OTP-5046 Aux Id: OTP-4997, seq8590"
+							]
+						}
+					}
+				}
+			},
+			{
+				"title": "STDLIB 1.12.5",
+				"section": [
+					{
+						"title": "Fixed Bugs and Malfunctions",
+						"list": {
+							"type": "bulleted",
+							"item": {
+								"p": [
+									"When opening a Dets table read only an attempt was made to re-hash the table resulting in an error message. This problem has been fixed.",
+									"Own Id: OTP-4989 Aux Id: seq8536"
+								]
+							}
+						}
+					},
+					{
+						"title": "Improvements and New Features",
+						"list": {
+							"type": "bulleted",
+							"item": {
+								"p": [
+									{
+										"c": [
+											"gen_server",
+											"gen_event",
+											"gen_fsm",
+											"{undef,[{M,F,A}|...]}"
+										]
+									},
+									"Own Id: OTP-4952 Aux Id: OTP-4925"
+								]
+							}
+						}
+					}
+				]
+			},
+			{
+				"title": "STDLIB 1.12.4",
+				"section": [
+					{
+						"title": "Fixed Bugs and Malfunctions",
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": [
+										{
+											"c": "c:regs()"
+										},
+										"Own Id: OTP-4890"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": "dets"
+										},
+										"Own Id: OTP-4906"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": [
+												"dets",
+												"not_a_dets_file"
+											]
+										},
+										"Own Id: OTP-4907"
+									]
+								}
+							]
+						}
+					},
+					{
+						"title": "Improvements and New Features",
+						"list": {
+							"type": "bulleted",
+							"item": {
+								"p": [
+									{
+										"c": "+Bi"
+									},
+									"Own Id: OTP-4897"
+								]
+							}
+						}
+					}
+				]
+			},
+			{
+				"title": "STDLIB 1.12.3",
+				"section": [
+					{
+						"title": "Fixed Bugs and Malfunctions",
+						"list": {
+							"type": "bulleted",
+							"item": [
+								{
+									"p": [
+										{
+											"c": "erl_scan"
+										},
+										"Own Id: OTP-4787"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": "nowarn_unused_vars"
+										},
+										"Own Id: OTP-4831 Aux Id: seq8202"
+									]
+								},
+								{
+									"p": [
+										{
+											"c": "gen_server:cast/2"
+										},
+										{
+											"c": [
+												"gen_server:abcast/2-3",
+												"global",
+												"gen_server:abcast(global,[node@host])",
+												"node@host",
+												"global",
+												"node@host"
+											]
+										},
+										{
+											"c": [
+												"rpc:call/5",
+												"rpc:block_call/5"
+											]
+										},
+										{
+											"c": "rpc:abcast/2-3"
+										},
+										{
+											"c": "calendar"
+										},
+										"*** POTENTIAL INCOMPATIBILITY ***",
+										"Own Id: OTP-4844 Aux Id: seq8226"
+									]
+								}
+							]
+						}
+					},
+					{
+						"title": "Improvements and New Features",
+						"list": {
+							"type": "bulleted",
+							"item": {
+								"p": [
+									{
+										"c": "f/1"
+									},
+									"Own Id: OTP-4818"
+								]
+							}
+						}
+					}
+				]
+			},
+			{
+				"title": "STDLIB 1.12.2",
+				"section": {
+					"title": "Fixed Bugs and Malfunctions",
+					"list": {
+						"type": "bulleted",
+						"item": {
+							"p": [
+								{
+									"c": [
+										"gen_server",
+										"get_parent,",
+										"gen_server:enter_loop/[4,5],",
+										"gen_server",
+										"get_parent/0"
+									]
+								},
+								"Own Id: OTP-4820 Aux Id: seq8170"
+							]
+						}
+					}
+				}
+			},
+			{
+				"title": "STDLIB 1.12.1",
+				"section": {
+					"title": "Fixed Bugs and Malfunctions",
+					"list": {
+						"type": "bulleted",
+						"item": {
+							"p": [
+								{
+									"c": [
+										"-s file eval Filename",
+										"Filename",
+										"code:add_patha/1"
+									]
+								},
+								"Note! Starting Erlang through code loading from a remote Erlang boot server will not work after this patch. It will be fixed in a later patch. Rumours has it that remote boot server code loading did not work before this patch either. It is not a commonly used feature.",
+								"*** POTENTIAL INCOMPATIBILITY ***",
+								"Own Id: OTP-4802 Aux Id: seq8314"
+							]
+						}
+					}
+				}
+			}
+		]
+	}
+}
