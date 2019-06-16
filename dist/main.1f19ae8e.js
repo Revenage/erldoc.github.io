@@ -11675,7 +11675,10 @@ function toggleDarkMode(darkMode) {
   }
 }
 
-var settings = JSON.parse(localStorage.getItem("settings"));
+var settings = JSON.parse(localStorage.getItem("settings")) || {
+  darkMode: false,
+  language: "en"
+};
 
 var app = _Main.Elm.Main.init({
   node: document.getElementById("app"),
@@ -11717,7 +11720,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50240" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62282" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
