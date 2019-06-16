@@ -229,30 +229,39 @@ subscriptions _ =
 
 nav : Model -> Html Msg
 nav model =
-    header [ class "navbar navbar-fixed-top navbar-inverse" ]
-        [ div [ class "container" ]
-            [ div [ class "navbar-header" ] []
-            , Html.nav [ class "collapse navbar-collapse", id "myNavBar" ]
-                [ ul [ class "nav navbar-nav navbar-right" ]
-                    [ li []
-                        [ a [ href "/" ]
-                            [ text "Docs" ]
-                        ]
-                    , li []
-                        [ a [ href "/settings" ]
-                            [ text "Settings" ]
-                        ]
+    let
+        headetClass =
+            checkColapse "navbar" model
+    in
+    header []
+        [ Html.nav [ class headetClass, id "myNavBar" ]
+            [ ul [ class "nav" ]
+                [ li []
+                    [ a [ href "/" ]
+                        [ text "Docs" ]
+                    ]
+                , li []
+                    [ a [ href "/settings" ]
+                        [ text "Settings" ]
                     ]
                 ]
             ]
         ]
 
 
+checkColapse : String -> Model -> String
+checkColapse baseclass model =
+    if toRoute model.url == Settings then
+        String.join " " [ baseclass, "collapse" ]
+
+    else
+        baseclass
+
+
 footer : Model -> Html Msg
 footer model =
     Html.footer [ class "container" ]
-        [ small [] [ text "Copyright © 2019" ]
-        , Html.nav []
+        [ Html.nav []
             [ ul []
                 [ li []
                     [ a [ href "/about" ]
@@ -264,6 +273,7 @@ footer model =
                     ]
                 ]
             ]
+        , small [] [ text "Copyright © 2019" ]
         ]
 
 
@@ -283,17 +293,7 @@ view model =
                             pageview model
                     in
                     { title = title
-                    , body =
-                        [ div
-                            []
-                            -- [ classList
-                            --     [ ( "app", True )
-                            --     , ( "dark", model.settings.darkMode )
-                            --     , ( "light", not model.settings.darkMode )
-                            --     ]
-                            -- ]
-                            [ nav model, content, footer model ]
-                        ]
+                    , body = [ nav model, content, footer model ]
                     }
             in
             case toRoute model.url of
@@ -304,7 +304,7 @@ view model =
                     viewPage settingsView
 
                 NotFound ->
-                    viewPage notFoundView
+                    notFoundView model
 
         Failure ->
             { title = "Failure"
@@ -321,8 +321,7 @@ settingsView model =
     { title = "Settings"
     , content =
         main_ [ id "content", class "container", tabindex -1 ]
-            [ h1 [] [ text "Settings" ]
-            , div [ class "row" ]
+            [ div [ class "row" ]
                 [ div [ class "toggle-list" ]
                     [ input
                         [ attribute "checked" ""
@@ -350,8 +349,7 @@ homeView model =
     { title = "Home Page"
     , content =
         main_ [ id "content", class "container", tabindex -1 ]
-            [ h1 [] [ text "Home Page" ]
-            , input [ placeholder "Search: ", value search, onInput TypeSearch ] []
+            [ input [ placeholder "Search: ", value search, onInput TypeSearch ] []
             , div [ class "row" ]
                 [ h3 [] [ text "Modules:" ]
                 , ul [] (renderList tags)
@@ -378,15 +376,21 @@ toLi item =
     li [] [ text item ]
 
 
-notFoundView : Model -> { title : String, content : Html msg }
+notFoundView : Model -> { title : String, body : List (Html msg) }
 notFoundView model =
     { title = "Page Not Found"
-    , content =
-        main_ [ id "content", class "container", tabindex -1 ]
-            [ h1 [] [ text "Not Found" ]
+    , body =
+        [ main_ [ id "content", class "container page404", tabindex -1 ]
+            [ div [ class "row" ]
+                [ h1 [ class "title" ] [ text "Page not found" ]
+                ]
             , div [ class "row" ]
-                [ a [ href "/" ]
-                    [ text "Docs" ]
+                [ div [ class "image404" ] []
+                ]
+            , div [ class "row" ]
+                [ a [ class "back", href "/" ]
+                    [ text "Back to Docs" ]
                 ]
             ]
+        ]
     }
