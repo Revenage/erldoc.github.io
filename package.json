@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel ./src/index.html",
-    "prod": "parcel build ./src/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prod": "parcel build ./src/index.html --public-url '/erldoc'",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "git add dist -f && git commit -m 'push -f dist' && git push origin --delete gh-pages && git subtree push --prefix dist origin gh-pages"
   },
   "author": "",
   "license": "ISC",

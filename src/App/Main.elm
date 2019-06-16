@@ -111,11 +111,11 @@ loadPageData : Cmd Msg
 loadPageData =
     Cmd.batch
         [ Http.get
-            { url = "/translations/en.json"
+            { url = "./translations/en.json"
             , expect = Http.expectJson HandleTranslateResponse decodeTranslations
             }
         , Http.get
-            { url = "/content/tags.json"
+            { url = "./content/tags.json"
             , expect = Http.expectJson HandleTagResponse decodeTag
             }
         ]
