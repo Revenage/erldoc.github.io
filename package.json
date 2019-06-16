@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel ./src/index.html",
+    "prod": "parcel build ./src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,6 +15,7 @@
     "elm-format": "^0.8.1"
   },
   "devDependencies": {
+    "cssnano": "^4.1.10",
     "elm-hot": "^1.1.0",
     "node-elm-compiler": "^5.0.3",
     "parcel-plugin-static-files-copy": "^2.1.2",

@@ -9,7 +9,10 @@ function toggleDarkMode(darkMode) {
   }
 }
 
-const settings = JSON.parse(localStorage.getItem("settings"));
+const settings = JSON.parse(localStorage.getItem("settings")) || {
+  darkMode: false,
+  language: "en"
+};
 
 const app = Elm.Main.init({
   node: document.getElementById("app"),
