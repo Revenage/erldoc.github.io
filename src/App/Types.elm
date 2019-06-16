@@ -1,4 +1,4 @@
-module App.Types exposing (HandleTagResponse(..), Language(..), RespondStatus(..), Tags, Translations)
+module App.Types exposing (HandleTagResponse(..), Language(..), RespondStatus(..), Tags, Translation)
 
 import Browser
 import Browser.Navigation as Nav
@@ -11,7 +11,7 @@ import Url
 type RespondStatus
     = Failure
     | Loading
-    | Success Translations
+    | Success Translation
 
 
 type HandleTagResponse
@@ -26,9 +26,13 @@ type Language
     | Ukrainian
 
 
-type alias Translations =
+type alias Translation =
     Dict String String
 
 
+type alias Translations =
+    Dict String Translation
+
+
 type alias Tags =
-    List String 
+    List String

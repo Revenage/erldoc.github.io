@@ -1,4 +1,4 @@
-module Main exposing (Model, Msg(..), PageView, footer, getLangString, init, main, nav, subscriptions, update, view)
+port module Main exposing (Model, Msg(..), PageView, footer, getLangString, init, main, nav, subscriptions, update, view)
 
 -- import App.Page.Home as Home
 -- import App.Page.NotFound as NotFound
@@ -15,8 +15,17 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode exposing (Decoder, dict, field, string)
+import Json.Encode as Encode
 import Url
 import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
+
+
+port settings : Encode.Value -> Cmd msg
+
+
+type alias InitialData =
+    { settings : Maybe SettingsModel
+    }
 
 
 type alias HomeModel =
@@ -27,14 +36,14 @@ type alias HomeModel =
 
 type alias SettingsModel =
     { darkMode : Bool
+    , language : String
     }
 
 
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
-    , translateStatus : RespondStatus
-    , language : Language
+    , translation : RespondStatus
     , home : HomeModel
     , settings : SettingsModel
     }
@@ -43,7 +52,7 @@ type alias Model =
 type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
-    | HandleTranslateResponse (Result Http.Error Translations)
+    | HandleTranslateResponse (Result Http.Error Translation)
     | HandleTagResponse (Result Http.Error Tags)
     | ChangeMode
     | TypeSearch String
@@ -53,7 +62,7 @@ type alias PageView =
     { title : String, content : Html Msg }
 
 
-main : Program () Model Msg
+main : Program InitialData Model Msg
 main =
     Browser.application
         { init = init
@@ -78,15 +87,17 @@ getLangString lang =
             "uk"
 
 
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init : InitialData -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     ( { key = key
       , url = url
-      , translateStatus = Loading
-      , language = English
+      , translation = Loading
       , settings =
-            { darkMode = False
-            }
+            Maybe.withDefault
+                { darkMode = False
+                , language = getLangString English
+                }
+                flags.settings
       , home =
             { search = ""
             , tags = TagLoading
@@ -133,10 +144,10 @@ update msg model =
         HandleTranslateResponse result ->
             case result of
                 Ok translation ->
-                    ( { model | translateStatus = Success translation }, Cmd.none )
+                    ( { model | translation = Success translation }, Cmd.none )
 
                 Err _ ->
-                    ( { model | translateStatus = Failure }, Cmd.none )
+                    ( { model | translation = Failure }, Cmd.none )
 
         HandleTagResponse result ->
             case result of
@@ -166,7 +177,7 @@ update msg model =
                     { oldSettings | darkMode = not model.settings.darkMode }
             in
             ( { model | settings = newSettings }
-            , Cmd.none
+            , saveSettings newSettings
             )
 
         TypeSearch text ->
@@ -180,6 +191,18 @@ update msg model =
             ( { model | home = newmodel }
             , Cmd.none
             )
+
+
+saveSettings : SettingsModel -> Cmd msg
+saveSettings model =
+    let
+        value =
+            Encode.object
+                [ ( "darkMode", Encode.bool model.darkMode )
+                , ( "language", Encode.string model.language )
+                ]
+    in
+    settings value
 
 
 
@@ -246,7 +269,7 @@ footer model =
 
 view : Model -> Browser.Document Msg
 view model =
-    case model.translateStatus of
+    case model.translation of
         Loading ->
             { title = "Loading"
             , body = [ text "Loading" ]
@@ -259,7 +282,19 @@ view model =
                         { title, content } =
                             pageview model
                     in
-                    { title = title, body = [ div [ classList [ ( "app", True ), ( "dark", model.settings.darkMode ), ( "light", not model.settings.darkMode ) ] ] [ nav model, content, footer model ] ] }
+                    { title = title
+                    , body =
+                        [ div
+                            []
+                            -- [ classList
+                            --     [ ( "app", True )
+                            --     , ( "dark", model.settings.darkMode )
+                            --     , ( "light", not model.settings.darkMode )
+                            --     ]
+                            -- ]
+                            [ nav model, content, footer model ]
+                        ]
+                    }
             in
             case toRoute model.url of
                 Home ->
@@ -288,14 +323,18 @@ settingsView model =
         main_ [ id "content", class "container", tabindex -1 ]
             [ h1 [] [ text "Settings" ]
             , div [ class "row" ]
-                [ label [ class "checkbox" ]
+                [ div [ class "toggle-list" ]
                     [ input
-                        [ type_ "checkbox"
+                        [ attribute "checked" ""
+                        , class "ios-toggle"
+                        , id "red"
+                        , name "test"
+                        , type_ "checkbox"
                         , checked <| model.settings.darkMode
                         , onClick <| ChangeMode
                         ]
                         []
-                    , text "dark mode"
+                    , label [ class "checkbox-label", attribute "data-off" "Light theme", attribute "data-on" "Dark theme", for "red" ] []
                     ]
                 ]
             ]

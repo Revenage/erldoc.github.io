@@ -1,19 +1,28 @@
 @import "reset";
 @import "vars";
+@import "switch";
+
+html {
+  background-color: $white;
+  color: $black;
+  min-height: 100%;
+  font-family: Helvetica Neue, helvetica, arial, verdana, sans-serif;
+  &.dark {
+    background-color: $bgDark;
+    color: $white;
+  }
+}
 
 body {
-  height: 100vh;
-  min-height: 100vh;
-  .app {
-    height: 100%;
-    &.light {
-      background-color: $white;
-      color: black;
-    }
-
-    &.dark {
-      background-color: $bgDark;
-      color: $white;
+  padding: 15px 0;
+  .container {
+    .row {
+      .toggle-list {
+        width: 60px;
+        margin: 50px auto;
+        text-align: center;
+        padding-right: 36px;
+      }
     }
   }
 }
