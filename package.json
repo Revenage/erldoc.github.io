@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel ./src/index.html",
+    "start": "parcel ./src/index.html --public-url '/erldoc'",
     "clear": "rm -rf ./dist",
     "prod": "parcel build ./src/index.html --public-url '/erldoc'",
     "test": "echo \"Error: no test specified\" && exit 1",

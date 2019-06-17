@@ -111,11 +111,11 @@ loadPageData : Cmd Msg
 loadPageData =
     Cmd.batch
         [ Http.get
-            { url = "/translations/en.json"
+            { url = "erldoc/translations/en.json"
             , expect = Http.expectJson HandleTranslateResponse decodeTranslations
             }
         , Http.get
-            { url = "/content/tags.json"
+            { url = "erldoc/content/tags.json"
             , expect = Http.expectJson HandleTagResponse decodeTag
             }
         ]
@@ -237,11 +237,11 @@ nav model =
         [ Html.nav [ class headetClass, id "myNavBar" ]
             [ ul [ class "nav" ]
                 [ li []
-                    [ a [ href "/" ]
+                    [ a [ href "/erldoc" ]
                         [ span [] [ text "Docs" ] ]
                     ]
                 , li []
-                    [ a [ href "/settings" ]
+                    [ a [ href "/erldoc/settings" ]
                         [ span [] [ text "Settings" ] ]
                     ]
                 ]
@@ -264,11 +264,11 @@ footer model =
         [ Html.nav []
             [ ul []
                 [ li []
-                    [ a [ href "/about" ]
+                    [ a [ href "/erldoc/about" ]
                         [ text "About" ]
                     ]
                 , li []
-                    [ a [ href "/contact" ]
+                    [ a [ href "/erldoc/contact" ]
                         [ text "Contact" ]
                     ]
                 ]
@@ -282,7 +282,7 @@ view model =
     case model.translation of
         Loading ->
             { title = "Loading"
-            , body = [ text "Loading" ]
+            , body = loader
             }
 
         Success _ ->
@@ -308,8 +308,12 @@ view model =
 
         Failure ->
             { title = "Failure"
-            , body = [ text "The application failed to initialize. " ]
+            , body = loader
             }
+
+
+loader =
+    [ div [ class "loader" ] [] ]
 
 
 settingsView : Model -> { title : String, content : Html Msg }
@@ -364,10 +368,10 @@ renderList tags =
             List.map toLi tagList
 
         TagLoading ->
-            [ li [] [ text "Loading" ] ]
+            loader
 
         TagFailure ->
-            [ li [] [ text "Failure" ] ]
+            loader
 
 
 toLi : String -> Html Msg
@@ -387,7 +391,7 @@ notFoundView model =
                 [ div [ class "image404" ] []
                 ]
             , div [ class "row" ]
-                [ a [ class "back", href "/" ]
+                [ a [ class "back", href "/erldoc" ]
                     [ text "Back to Docs" ]
                 ]
             ]

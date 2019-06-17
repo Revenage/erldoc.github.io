@@ -9,7 +9,7 @@ import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Url
-import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
+import Url.Parser exposing ((</>), Parser, map, oneOf, parse, s, string, top)
 
 
 type Route
@@ -22,8 +22,9 @@ route : Parser (Route -> a) a
 route =
     oneOf
         [ map Home top
-        , map Settings (s "settings")
-        , map NotFound (s "404")
+        , map Settings (s "erldoc" </> s "settings")
+        , map NotFound (s "erldoc" </> s "404")
+        , map Home (s "erldoc")
         ]
 
 
