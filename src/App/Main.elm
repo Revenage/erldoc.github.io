@@ -111,11 +111,11 @@ loadPageData : Cmd Msg
 loadPageData =
     Cmd.batch
         [ Http.get
-            { url = "erldoc/translations/en.json"
+            { url = "/erldoc/translations/en.json"
             , expect = Http.expectJson HandleTranslateResponse decodeTranslations
             }
         , Http.get
-            { url = "erldoc/content/tags.json"
+            { url = "/erldoc/content/tags.json"
             , expect = Http.expectJson HandleTagResponse decodeTag
             }
         ]
@@ -237,11 +237,11 @@ nav model =
         [ Html.nav [ class headetClass, id "myNavBar" ]
             [ ul [ class "nav" ]
                 [ li []
-                    [ a [ href "/erldoc" ]
+                    [ a [ href "/" ]
                         [ span [] [ text "Docs" ] ]
                     ]
                 , li []
-                    [ a [ href "/erldoc/settings" ]
+                    [ a [ href "/settings" ]
                         [ span [] [ text "Settings" ] ]
                     ]
                 ]
@@ -264,11 +264,11 @@ footer model =
         [ Html.nav []
             [ ul []
                 [ li []
-                    [ a [ href "/erldoc/about" ]
+                    [ a [ href "/about" ]
                         [ text "About" ]
                     ]
                 , li []
-                    [ a [ href "/erldoc/contact" ]
+                    [ a [ href "/contact" ]
                         [ text "Contact" ]
                     ]
                 ]
@@ -391,7 +391,7 @@ notFoundView model =
                 [ div [ class "image404" ] []
                 ]
             , div [ class "row" ]
-                [ a [ class "back", href "/erldoc" ]
+                [ a [ class "back", href "/" ]
                     [ text "Back to Docs" ]
                 ]
             ]
