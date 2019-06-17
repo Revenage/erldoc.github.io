@@ -22,6 +22,8 @@ html {
 }
 
 body {
+  max-width: 100%;
+  overflow-x: hidden;
   padding: 0 0 15px 0;
   .container {
     .row {
@@ -35,12 +37,13 @@ body {
   }
 
   header {
-    height: 80px;
-    margin-bottom: 20px;
+    height: 70px;
+    margin-bottom: 10px;
     // background: grey;
-    padding-top: 20px;
+    padding-top: 10px;
     .navbar {
       .nav {
+        overflow-x: hidden;
         li {
           // border: 1px solid black;
           box-sizing: border-box;
@@ -52,8 +55,14 @@ body {
           line-height: 58px;
           &:first-child {
             width: 80%;
+            text-align: left;
+
             a {
               background: initial;
+              margin-left: 50%;
+              span {
+                margin-left: -50%;
+              }
             }
           }
           &:last-child {
@@ -81,7 +90,9 @@ body {
             width: 80%;
             &:first-child {
               width: 20%;
+              text-align: center;
               a {
+                margin-left: initial;
                 background: url("../images/documents.svg") no-repeat;
                 width: 58px;
                 height: 58px;
@@ -90,9 +101,14 @@ body {
             }
 
             &:last-child {
+              text-align: left;
               a {
                 background: initial;
                 text-indent: initial;
+                margin-left: 24%;
+                span {
+                  margin-left: -50%;
+                }
               }
             }
           }
@@ -130,9 +146,24 @@ body {
     }
   }
 
+  .home {
+    ul {
+      font-size: 20px;
+      line-height: 31px;
+      margin-left: 8px;
+      font-weight: bold;
+      li {
+        a {
+          width: 60%;
+          display: inline-block;
+        }
+      }
+    }
+  }
+
   footer {
     width: 100vw;
-    position: fixed;
+    position: relative;
     bottom: 0;
     text-align: center;
     padding: 30px;

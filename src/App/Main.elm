@@ -111,11 +111,11 @@ loadPageData : Cmd Msg
 loadPageData =
     Cmd.batch
         [ Http.get
-            { url = "./translations/en.json"
+            { url = "/translations/en.json"
             , expect = Http.expectJson HandleTranslateResponse decodeTranslations
             }
         , Http.get
-            { url = "./content/tags.json"
+            { url = "/content/tags.json"
             , expect = Http.expectJson HandleTagResponse decodeTag
             }
         ]
@@ -238,11 +238,11 @@ nav model =
             [ ul [ class "nav" ]
                 [ li []
                     [ a [ href "/" ]
-                        [ text "Docs" ]
+                        [ span [] [ text "Docs" ] ]
                     ]
                 , li []
                     [ a [ href "/settings" ]
-                        [ text "Settings" ]
+                        [ span [] [ text "Settings" ] ]
                     ]
                 ]
             ]
@@ -348,11 +348,10 @@ homeView model =
     in
     { title = "Home Page"
     , content =
-        main_ [ id "content", class "container", tabindex -1 ]
+        main_ [ id "content", class "container home", tabindex -1 ]
             [ input [ placeholder "Search: ", value search, onInput TypeSearch ] []
             , div [ class "row" ]
-                [ h3 [] [ text "Modules:" ]
-                , ul [] (renderList tags)
+                [ ul [] (renderList tags)
                 ]
             ]
     }
@@ -373,7 +372,7 @@ renderList tags =
 
 toLi : String -> Html Msg
 toLi item =
-    li [] [ text item ]
+    li [] [ a [] [ text item ] ]
 
 
 notFoundView : Model -> { title : String, body : List (Html msg) }

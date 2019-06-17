@@ -1291,7 +1291,7 @@
 						],
 						"code": [
 							"heuristic_encoding_bin(Bin) when is_binary(Bin) -> case unicode:characters_to_binary(Bin,utf8,utf8) of Bin -> utf8; _ -> latin1 end.",
-							"heuristic_encoding_file(FileName) -> {ok,F} = file:open(FileName,[read,binary]), loop_through_file(F,<<>>,file:read(F,1024)).loop_through_file(_,<<>>,eof) -> utf8;loop_through_file(_,_,eof) -> latin1;loop_through_file(F,Acc,{ok,Bin}) when is_binary(Bin) -> case unicode:characters_to_binary([Acc,Bin]) of {error,_,_} -> latin1;	{incomplete,_,Rest} -> loop_through_file(F,Rest,file:read(F,1024)); Res when is_binary(Res) -> loop_through_file(F,<<>>,file:read(F,1024)) end.",
+							"heuristic_encoding_file(FileName) -> {ok,F} = file:open(FileName,[read,binary]), loop_through_file(F,<<>>,file:read(F,1024)).loop_through_file(_,<<>>,eof) -> utf8;loop_through_file(_,_,eof) -> latin1;loop_through_file(F,Acc,{ok,Bin}) when is_binary(Bin) -> case unicode:characters_to_binary([Acc,Bin]) of {error,_,_} -> latin1; {incomplete,_,Rest} -> loop_through_file(F,Rest,file:read(F,1024)); Res when is_binary(Res) -> loop_through_file(F,<<>>,file:read(F,1024)) end.",
 							"heuristic_encoding_file2(FileName) -> {ok,F} = file:open(FileName,[read,binary,{encoding,utf8}]), loop_through_file2(F,io:get_chars(F,'',1024)).loop_through_file2(_,eof) -> utf8;loop_through_file2(_,{error,_Err}) -> latin1;loop_through_file2(F,Bin) when is_binary(Bin) -> loop_through_file2(F,io:get_chars(F,'',1024))."
 						]
 					},

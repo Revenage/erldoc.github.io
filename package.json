@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel ./src/index.html",
+    "clear": "rm -rf ./dist",
     "prod": "parcel build ./src/index.html --public-url '/erldoc'",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "git add dist -f && git commit -m 'push -f dist' && git push origin --delete gh-pages && git subtree push --prefix dist origin gh-pages"
+    "push": "git add dist -f && git commit -m 'push -f dist' && git push origin --delete gh-pages && git subtree push --prefix dist origin gh-pages",
+    "deploy": "yarn clear && yarn prod && yarn push"
   },
   "author": "",
   "license": "ISC",

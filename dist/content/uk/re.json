@@ -318,10 +318,10 @@
 									}
 								},
 								{
-									"p": "Specifies specifically that \R is to match only the CR, LF, or CRLF sequences, not the Unicode-specific newline characters."
+									"p": "Specifies specifically that R is to match only the CR, LF, or CRLF sequences, not the Unicode-specific newline characters."
 								},
 								{
-									"p": "Specifies specifically that \\R is to match all the Unicode newline characters (including CRLF, and so on, the default)."
+									"p": "Specifies specifically that R is to match all the Unicode newline characters (including CRLF, and so on, the default)."
 								},
 								{
 									"p": {
@@ -991,10 +991,10 @@
 									}
 								},
 								{
-									"p": "Specifies specifically that \\R is to match only the CR LF, or CRLF sequences, not the Unicode-specific newline characters. (Overrides the compilation option.)"
+									"p": "Specifies specifically that R is to match only the CR LF, or CRLF sequences, not the Unicode-specific newline characters. (Overrides the compilation option.)"
 								},
 								{
-									"p": "Specifies specifically that \\R is to match all the Unicode newline characters (including CRLF, and so on, the default). (Overrides the compilation option.)"
+									"p": "Specifies specifically that R is to match all the Unicode newline characters (including CRLF, and so on, the default). (Overrides the compilation option.)"
 								},
 								{
 									"p": [
@@ -1880,7 +1880,7 @@
 						"em": "Escape sequences in character classes"
 					},
 					"All the sequences that define a single character value can be used both inside and outside character classes. Also, inside a character class, \\b is interpreted as the backspace character (hex 08).",
-					"\N is not allowed in a character class. \B, \R, and \X are not special inside a character class. Like other unrecognized escape sequences, they are treated as the literal characters \"B\", \"R\", and \"X\". Outside a character class, these sequences have different meanings.",
+					"\N is not allowed in a character class. \B, R, and \X are not special inside a character class. Like other unrecognized escape sequences, they are treated as the literal characters \"B\", \"R\", and \"X\". Outside a character class, these sequences have different meanings.",
 					{
 						"em": "Unsupported Escape Sequences"
 					},
@@ -1928,7 +1928,7 @@
 					{
 						"em": "Newline Sequences"
 					},
-					"Outside a character class, by default, the escape sequence \R matches any Unicode newline sequence. In non-UTF-8 mode, \R is equivalent to the following:",
+					"Outside a character class, by default, the escape sequence R matches any Unicode newline sequence. In non-UTF-8 mode, R is equivalent to the following:",
 					"This is an example of an \"atomic group\", details are provided below.",
 					"This particular group matches either the two-character sequence CR followed by LF, or one of the single characters LF (line feed, U+000A), VT (vertical tab, U+000B), FF (form feed, U+000C), CR (carriage return, U+000D), or NEL (next line, U+0085). The two-character sequence is treated as a single unit that cannot be split.",
 					"In Unicode mode, two more characters whose code points are > 255 are added: LS (line separator, U+2028) and PS (paragraph separator, U+2029). Unicode character property support is not needed for these characters to be recognized.",
@@ -1939,7 +1939,7 @@
 						]
 					},
 					"These override the default and the options specified to the compiling function, but they can themselves be overridden by options specified to a matching function. Notice that these special settings, which are not Perl-compatible, are recognized only at the very start of a pattern, and that they must be in upper case. If more than one of them is present, the last one is used. They can be combined with a change of newline convention; for example, a pattern can start with:",
-					"They can also be combined with the (*UTF8), (*UTF), or (*UCP) special sequences. Inside a character class, \R is treated as an unrecognized escape sequence, and so matches the letter \"R\" by default.",
+					"They can also be combined with the (*UTF8), (*UTF), or (*UCP) special sequences. Inside a character class, R is treated as an unrecognized escape sequence, and so matches the letter \"R\" by default.",
 					{
 						"em": "Unicode Character Properties"
 					},
@@ -3071,7 +3071,7 @@
 						"The dot metacharacter",
 						"The \\C escape sequence",
 						"The \\X escape sequence",
-						"The \\R escape sequence",
+						"The R escape sequence",
 						"An escape such as \\d or \\pL that matches a single character",
 						"A character class",
 						"A back reference (see the next section)",
@@ -3230,7 +3230,7 @@
 					"However, it is acceptable to PCRE if rewritten to use two top-level branches:",
 					"Sometimes the escape sequence \K (see above) can be used instead of a lookbehind assertion to get round the fixed-length restriction.",
 					"The implementation of lookbehind assertions is, for each alternative, to move the current position back temporarily by the fixed length and then try to match. If there are insufficient characters before the current position, the assertion fails.",
-					"In a UTF mode, PCRE does not allow the \C escape (which matches a single data unit even in a UTF mode) to appear in lookbehind assertions, as it makes it impossible to calculate the length of the lookbehind. The \X and \R escapes, which can match different numbers of data units, are not permitted either.",
+					"In a UTF mode, PCRE does not allow the \C escape (which matches a single data unit even in a UTF mode) to appear in lookbehind assertions, as it makes it impossible to calculate the length of the lookbehind. The \X and R escapes, which can match different numbers of data units, are not permitted either.",
 					"\"Subroutine\" calls (see below), such as (?2) or (?&X), are permitted in lookbehinds, as long as the subpattern matches a fixed-length string. Recursion, however, is not supported.",
 					"Possessive quantifiers can be used with lookbehind assertions to specify efficient matching of fixed-length strings at the end of subject strings. Consider the following simple pattern when applied to a long string that does not match:",
 					"As matching proceeds from left to right, PCRE looks for each \"a\" in the subject and then sees if what follows matches the remaining pattern. If the pattern is specified as",
