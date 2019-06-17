@@ -192,18 +192,18 @@ body {
   }
 
   .loader {
-    margin-top: 50vh;
+    margin-top: 50%;
     &::before {
       content: "";
       display: block;
-      background: url("../images/spinner.png") no-repeat;
+      background: url("../images/spinner.png") center center no-repeat;
       background-size: contain;
       margin-left: auto;
       margin-right: auto;
       width: 50%;
       height: 200px;
       animation: spin 2s linear infinite;
-      margin-top: -50%;
+      // margin-top: -50%;
     }
   }
 }
