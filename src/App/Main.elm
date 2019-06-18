@@ -54,6 +54,7 @@ type Msg
     | UrlChanged Url.Url
     | HandleTranslateResponse (Result Http.Error Translation)
     | HandleTagResponse (Result Http.Error Tags)
+    | HandleDocResponse (Result Http.Error Doc)
     | ChangeMode
     | TypeSearch String
 
@@ -103,22 +104,57 @@ init flags url key =
             , tags = TagLoading
             }
       }
-    , loadPageData
+    , loadPageData url
     )
 
 
-loadPageData : Cmd Msg
-loadPageData =
+loadPageData : Url.Url -> Cmd Msg
+loadPageData url =
     Cmd.batch
-        [ Http.get
-            { url = "/erldoc/translations/en.json"
-            , expect = Http.expectJson HandleTranslateResponse decodeTranslations
-            }
-        , Http.get
-            { url = "/erldoc/content/tags.json"
-            , expect = Http.expectJson HandleTagResponse decodeTag
-            }
-        ]
+        (List.append
+            [ getTranslation ]
+            [ initialRequests url ]
+        )
+
+
+initialRequests url =
+    let
+        route =
+            toRoute url
+    in
+    case route of
+        Home ->
+            getTags
+
+        Document name ->
+            getDoc name
+
+        _ ->
+            Cmd.none
+
+
+getTranslation : Cmd Msg
+getTranslation =
+    Http.get
+        { url = "/erldoc/translations/en.json"
+        , expect = Http.expectJson HandleTranslateResponse decodeTranslations
+        }
+
+
+getDoc : String -> Cmd Msg
+getDoc name =
+    Http.get
+        { url = "/erldoc/content/en/" ++ name ++ ".json"
+        , expect = Http.expectJson HandleDocResponse decodeDocument
+        }
+
+
+getTags : Cmd Msg
+getTags =
+    Http.get
+        { url = "/erldoc/content/tags.json"
+        , expect = Http.expectJson HandleTagResponse decodeTag
+        }
 
 
 
@@ -138,7 +174,7 @@ update msg model =
 
         UrlChanged url ->
             ( { model | url = url }
-            , Cmd.none
+            , requestOnUrlChanged url
             )
 
         HandleTranslateResponse result ->
@@ -148,6 +184,18 @@ update msg model =
 
                 Err _ ->
                     ( { model | translation = Failure }, Cmd.none )
+
+        HandleDocResponse result ->
+            case result of
+                Ok doc ->
+                    let
+                        l =
+                            Debug.log "Aadf" doc.modulesummary
+                    in
+                    ( model, Cmd.none )
+
+                Err err ->
+                    ( model, Cmd.none )
 
         HandleTagResponse result ->
             case result of
@@ -191,6 +239,22 @@ update msg model =
             ( { model | home = newmodel }
             , Cmd.none
             )
+
+
+requestOnUrlChanged url =
+    let
+        route =
+            toRoute url
+    in
+    case route of
+        Document name ->
+            getDoc name
+
+        Home ->
+            getTags
+
+        _ ->
+            Cmd.none
 
 
 saveSettings : SettingsModel -> Cmd msg
@@ -249,6 +313,27 @@ nav model =
         ]
 
 
+innerNav : Model -> String -> Html Msg
+innerNav model name =
+    let
+        headetClass =
+            checkColapse "navbar" model
+    in
+    header []
+        [ Html.nav [ class "navbar inner", id "myNavBar" ]
+            [ ul [ class "nav" ]
+                [ li []
+                    [ a [ href "/" ]
+                        [ span [] [ text "‹" ]
+                        , span [] [ text "Back" ]
+                        ]
+                    ]
+                , li [] [ span [] [ text name ] ]
+                ]
+            ]
+        ]
+
+
 checkColapse : String -> Model -> String
 checkColapse baseclass model =
     if toRoute model.url == Settings then
@@ -299,6 +384,9 @@ view model =
             case toRoute model.url of
                 Home ->
                     viewPage homeView
+
+                Document name ->
+                    documentView model name
 
                 Settings ->
                     viewPage settingsView
@@ -361,6 +449,23 @@ homeView model =
     }
 
 
+documentView : Model -> String -> Browser.Document Msg
+documentView model name =
+    let
+        { search, tags } =
+            model.home
+    in
+    { title = String.join " " [ "Documentation for", name ]
+    , body =
+        [ innerNav model name
+        , main_ [ id "content", class "container document", tabindex -1 ]
+            [ div [ class "row" ] [ text name ]
+            ]
+        , footer model
+        ]
+    }
+
+
 renderList : HandleTagResponse -> List (Html Msg)
 renderList tags =
     case tags of
@@ -376,7 +481,7 @@ renderList tags =
 
 toLi : String -> Html Msg
 toLi item =
-    li [] [ a [] [ text item ] ]
+    li [] [ a [ href ("/docs/" ++ item) ] [ text item ] ]
 
 
 notFoundView : Model -> { title : String, body : List (Html msg) }

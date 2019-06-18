@@ -9,13 +9,14 @@ import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Url
-import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
+import Url.Parser exposing ((</>), Parser, map, oneOf, parse, s, string, top)
 
 
 type Route
     = Home
     | Settings
     | NotFound
+    | Document String
 
 
 route : Parser (Route -> a) a
@@ -24,6 +25,7 @@ route =
         [ map Home top
         , map Settings (s "settings")
         , map NotFound (s "404")
+        , map Document (s "docs" </> string)
         ]
 
 

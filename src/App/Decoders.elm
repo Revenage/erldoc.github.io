@@ -1,15 +1,15 @@
-module App.Decoders exposing (decodeDocs, decodeTag, decodeTranslations)
+module App.Decoders exposing (decodeDocs, decodeDocument, decodeTag, decodeTranslations)
 
 import App.Types exposing (..)
-import Json.Decode exposing (Decoder, dict, field, list, string)
+import Json.Decode exposing (Decoder, dict, field, list, map, string)
 
 
-decodeTranslations : Decoder Translations
+decodeTranslations : Decoder Translation
 decodeTranslations =
     dict string
 
 
-decodeDocs : Decoder Translations
+decodeDocs : Decoder Translation
 decodeDocs =
     dict string
 
@@ -17,3 +17,11 @@ decodeDocs =
 decodeTag : Decoder Tags
 decodeTag =
     list string
+
+
+decodeDocument : Decoder Doc
+decodeDocument =
+    field "erlref"
+        (map Doc
+            (field "modulesummary" string)
+        )

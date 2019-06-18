@@ -1,4 +1,4 @@
-module App.Types exposing (HandleTagResponse(..), Language(..), RespondStatus(..), Tags, Translation)
+module App.Types exposing (Doc, HandleTagResponse(..), Language(..), RespondStatus(..), Tags, Translation)
 
 import Browser
 import Browser.Navigation as Nav
@@ -36,3 +36,7 @@ type alias Translations =
 
 type alias Tags =
     List String
+
+
+type alias Doc =
+    { modulesummary : String }
