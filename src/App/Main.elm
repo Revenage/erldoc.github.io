@@ -1,9 +1,5 @@
 port module Main exposing (Model, Msg(..), PageView, footer, getLangString, init, main, nav, subscriptions, update, view)
 
--- import App.Page.Home as Home
--- import App.Page.NotFound as NotFound
--- import App.Page.Settings as Settings
-
 import App.Decoders exposing (..)
 import App.Router exposing (..)
 import App.Types exposing (..)
@@ -18,6 +14,12 @@ import Json.Decode exposing (Decoder, dict, field, string)
 import Json.Encode as Encode
 import Url
 import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
+
+
+
+-- import App.Page.Home as Home
+-- import App.Page.NotFound as NotFound
+-- import App.Page.Settings as Settings
 
 
 port settings : Encode.Value -> Cmd msg
@@ -40,12 +42,19 @@ type alias SettingsModel =
     }
 
 
+type alias DocumentModel =
+    { modulesummary : String
+    , description : List String
+    }
+
+
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , translation : RespondStatus
     , home : HomeModel
     , settings : SettingsModel
+    , document : DocumentModel
     }
 
 
@@ -102,6 +111,10 @@ init flags url key =
       , home =
             { search = ""
             , tags = TagLoading
+            }
+      , document =
+            { modulesummary = ""
+            , description = []
             }
       }
     , loadPageData url
@@ -188,11 +201,7 @@ update msg model =
         HandleDocResponse result ->
             case result of
                 Ok doc ->
-                    let
-                        l =
-                            Debug.log "Aadf" doc.modulesummary
-                    in
-                    ( model, Cmd.none )
+                    ( { model | document = doc }, Cmd.none )
 
                 Err err ->
                     ( model, Cmd.none )
@@ -452,14 +461,17 @@ homeView model =
 documentView : Model -> String -> Browser.Document Msg
 documentView model name =
     let
-        { search, tags } =
-            model.home
+        { modulesummary, description } =
+            model.document
     in
     { title = String.join " " [ "Documentation for", name ]
     , body =
         [ innerNav model name
         , main_ [ id "content", class "container document", tabindex -1 ]
-            [ div [ class "row" ] [ text name ]
+            [ div [ class "row" ]
+                [ h1 [] [ text modulesummary ]
+                , div [] (List.map (\item -> p [] [ text item ]) description)
+                ]
             ]
         , footer model
         ]

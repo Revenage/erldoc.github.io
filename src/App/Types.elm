@@ -39,4 +39,4 @@ type alias Tags =
 
 
 type alias Doc =
-    { modulesummary : String }
+    { modulesummary : String, description : List String }
