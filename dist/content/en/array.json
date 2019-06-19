@@ -27,35 +27,6 @@
 		"description": {
 			"p": [
 				"Functional, extendible arrays. Arrays can have fixed size, or can grow automatically as needed. A default value is used for entries that have not been explicitly set.",
-				{
-					"em": "zero"
-				},
-				{
-					"c": "undefined",
-					"seealso": {
-						"marker": "#reset-2",
-						"c": "reset/2"
-					}
-				},
-				{
-					"c": [
-						"I",
-						"I"
-					],
-					"seealso": {
-						"marker": "#resize-2",
-						"c": "resize/2"
-					}
-				},
-				{
-					"em": "Examples:"
-				},
-				{
-					"c": "undefined"
-				},
-				{
-					"c": "true"
-				},
 				"Read back a stored value:",
 				"Accessing an unset entry returns default value:",
 				"Accessing an entry beyond the last set entry also returns the default value, if the array does not have fixed size:",

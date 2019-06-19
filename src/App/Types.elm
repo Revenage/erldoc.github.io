@@ -1,4 +1,4 @@
-module App.Types exposing (Doc, HandleTagResponse(..), Language(..), RespondStatus(..), Tags, Translation)
+module App.Types exposing (Doc, HandleTagResponse(..), Language(..), RespondStatus(..), Tags, Translation, Translations)
 
 import Browser
 import Browser.Navigation as Nav

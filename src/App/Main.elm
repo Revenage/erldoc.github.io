@@ -1,6 +1,7 @@
 port module Main exposing (Model, Msg(..), PageView, footer, getLangString, init, main, nav, subscriptions, update, view)
 
 import App.Decoders exposing (..)
+import App.I18n exposing (..)
 import App.Router exposing (..)
 import App.Types exposing (..)
 import Browser
@@ -23,6 +24,9 @@ import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
 
 
 port settings : Encode.Value -> Cmd msg
+
+
+port translations : Encode.Value -> Cmd msg
 
 
 type alias InitialData =
@@ -51,6 +55,7 @@ type alias DocumentModel =
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
+    , route : Route
     , translation : RespondStatus
     , home : HomeModel
     , settings : SettingsModel
@@ -65,6 +70,7 @@ type Msg
     | HandleTagResponse (Result Http.Error Tags)
     | HandleDocResponse (Result Http.Error Doc)
     | ChangeMode
+    | ChangeLanguage String
     | TypeSearch String
 
 
@@ -99,15 +105,22 @@ getLangString lang =
 
 init : InitialData -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    ( { key = key
-      , url = url
-      , translation = Loading
-      , settings =
+    let
+        route =
+            toRoute url
+
+        initialSetting =
             Maybe.withDefault
                 { darkMode = False
                 , language = getLangString English
                 }
                 flags.settings
+    in
+    ( { key = key
+      , url = url
+      , route = route
+      , translation = Loading
+      , settings = initialSetting
       , home =
             { search = ""
             , tags = TagLoading
@@ -117,47 +130,43 @@ init flags url key =
             , description = []
             }
       }
-    , loadPageData url
+    , loadPageData route initialSetting.language
     )
 
 
-loadPageData : Url.Url -> Cmd Msg
-loadPageData url =
+loadPageData : Route -> String -> Cmd Msg
+loadPageData route lang =
     Cmd.batch
         (List.append
-            [ getTranslation ]
-            [ initialRequests url ]
+            [ getTranslation lang ]
+            [ initialRequests route lang ]
         )
 
 
-initialRequests url =
-    let
-        route =
-            toRoute url
-    in
+initialRequests route lang =
     case route of
         Home ->
             getTags
 
         Document name ->
-            getDoc name
+            getDoc name lang
 
         _ ->
             Cmd.none
 
 
-getTranslation : Cmd Msg
-getTranslation =
+getTranslation : String -> Cmd Msg
+getTranslation lang =
     Http.get
-        { url = "/erldoc/translations/en.json"
+        { url = "/erldoc/translations/" ++ lang ++ ".json"
         , expect = Http.expectJson HandleTranslateResponse decodeTranslations
         }
 
 
-getDoc : String -> Cmd Msg
-getDoc name =
+getDoc : String -> String -> Cmd Msg
+getDoc name lang =
     Http.get
-        { url = "/erldoc/content/en/" ++ name ++ ".json"
+        { url = "/erldoc/content/" ++ lang ++ "/" ++ name ++ ".json"
         , expect = Http.expectJson HandleDocResponse decodeDocument
         }
 
@@ -186,8 +195,12 @@ update msg model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            ( { model | url = url }
-            , requestOnUrlChanged url
+            let
+                route =
+                    toRoute url
+            in
+            ( { model | url = url, route = route }
+            , requestOnUrlChanged route model.settings.language
             )
 
         HandleTranslateResponse result ->
@@ -237,6 +250,18 @@ update msg model =
             , saveSettings newSettings
             )
 
+        ChangeLanguage select ->
+            let
+                oldSettings =
+                    model.settings
+
+                newSettings =
+                    { oldSettings | language = select }
+            in
+            ( { model | settings = newSettings }
+            , Cmd.batch [ saveSettings newSettings, getTranslation select ]
+            )
+
         TypeSearch text ->
             let
                 oldmodel =
@@ -250,14 +275,10 @@ update msg model =
             )
 
 
-requestOnUrlChanged url =
-    let
-        route =
-            toRoute url
-    in
+requestOnUrlChanged route lang =
     case route of
         Document name ->
-            getDoc name
+            getDoc name lang
 
         Home ->
             getTags
@@ -345,7 +366,7 @@ innerNav model name =
 
 checkColapse : String -> Model -> String
 checkColapse baseclass model =
-    if toRoute model.url == Settings then
+    if model.route == Settings then
         String.join " " [ baseclass, "collapse" ]
 
     else
@@ -367,7 +388,7 @@ footer model =
                     ]
                 ]
             ]
-        , small [] [ text "Copyright © 2019" ]
+        , small [] [ text ("Copyright © 2019" ++ "  " ++ App.I18n.get model.translation "TEST") ]
         ]
 
 
@@ -390,7 +411,7 @@ view model =
                     , body = [ nav model, content, footer model ]
                     }
             in
-            case toRoute model.url of
+            case model.route of
                 Home ->
                     viewPage homeView
 
@@ -435,6 +456,13 @@ settingsView model =
                         ]
                         []
                     , label [ class "checkbox-label", attribute "data-off" "Light theme", attribute "data-on" "Dark theme", for "red" ] []
+                    ]
+                ]
+            , div [ class "row" ]
+                [ select [ onInput <| ChangeLanguage ]
+                    [ option [] [ text "en" ]
+                    , option [] [ text "ru" ]
+                    , option [] [ text "uk" ]
                     ]
                 ]
             ]
@@ -514,3 +542,17 @@ notFoundView model =
             ]
         ]
     }
+
+
+
+-- i18get : Model -> String -> String
+-- i18get model key =
+--     case model.translation of
+--         Success translate ->
+--             translate
+--                 |> Dict.get key
+--                 |> Maybe.withDefault key
+--         Failure ->
+--             "qwer"
+--         Loading ->
+--             "qwer"

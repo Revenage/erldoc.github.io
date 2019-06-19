@@ -27,3 +27,7 @@ app.ports.settings.subscribe(function(settings) {
   toggleDarkMode(settings.darkMode);
   localStorage.setItem("settings", JSON.stringify(settings));
 });
+
+// app.ports.translation.subscribe(function(translation) {
+//   console.log("translation:: ", translation);
+// });

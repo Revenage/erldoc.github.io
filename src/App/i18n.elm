@@ -10,8 +10,22 @@ type Language
     | Ukrainian
 
 
-get : Translations -> String -> String
-get dict key =
-    dict
-        |> Dict.get key
-        |> Maybe.withDefault key
+get : RespondStatus -> String -> String
+get status key =
+    case status of
+        Success translate ->
+            translate
+                |> Dict.get key
+                |> Maybe.withDefault key
+
+        Failure ->
+            "qwer"
+
+        Loading ->
+            "qwer"
+
+
+
+-- dict
+--     |> Dict.get key
+--     |> Maybe.withDefault key
