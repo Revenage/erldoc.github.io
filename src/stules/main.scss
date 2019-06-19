@@ -1,6 +1,7 @@
 @import "reset";
 @import "vars";
 @import "switch";
+@import "select";
 
 html {
   background-color: $white;
@@ -17,6 +18,12 @@ html {
     color: $white;
     header {
       border-bottom: 2px solid $white;
+    }
+
+    .select-css {
+      color: $white;
+      border: 1px solid $bgLight;
+      background-color: $bgDark;
     }
   }
 }

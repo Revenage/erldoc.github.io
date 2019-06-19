@@ -1,7 +1,7 @@
 port module Main exposing (Model, Msg(..), PageView, footer, getLangString, init, main, nav, subscriptions, update, view)
 
 import App.Decoders exposing (..)
-import App.I18n exposing (..)
+import App.I18n as I18n exposing (..)
 import App.Router exposing (..)
 import App.Types exposing (..)
 import Browser
@@ -332,11 +332,11 @@ nav model =
             [ ul [ class "nav" ]
                 [ li []
                     [ a [ href "/" ]
-                        [ span [] [ text "Docs" ] ]
+                        [ span [] [ text (I18n.get model.translation "DOCS") ] ]
                     ]
                 , li []
                     [ a [ href "/settings" ]
-                        [ span [] [ text "Settings" ] ]
+                        [ span [] [ text (I18n.get model.translation "SETTINGS") ] ]
                     ]
                 ]
             ]
@@ -355,7 +355,7 @@ innerNav model name =
                 [ li []
                     [ a [ href "/" ]
                         [ span [] [ text "‹" ]
-                        , span [] [ text "Back" ]
+                        , span [] [ text (I18n.get model.translation "BACK") ]
                         ]
                     ]
                 , li [] [ span [] [ text name ] ]
@@ -380,15 +380,15 @@ footer model =
             [ ul []
                 [ li []
                     [ a [ href "/about" ]
-                        [ text "About" ]
+                        [ text (I18n.get model.translation "ABOUT") ]
                     ]
                 , li []
                     [ a [ href "/contact" ]
-                        [ text "Contact" ]
+                        [ text (I18n.get model.translation "CONTACT") ]
                     ]
                 ]
             ]
-        , small [] [ text ("Copyright © 2019" ++ "  " ++ App.I18n.get model.translation "TEST") ]
+        , small [] [ text ("Copyright © 2019" ++ "  " ++ I18n.get model.translation "TEST") ]
         ]
 
 
@@ -396,7 +396,7 @@ view : Model -> Browser.Document Msg
 view model =
     case model.translation of
         Loading ->
-            { title = "Loading"
+            { title = I18n.get model.translation "LOADING"
             , body = loader
             }
 
@@ -425,7 +425,7 @@ view model =
                     notFoundView model
 
         Failure ->
-            { title = "Failure"
+            { title = I18n.get model.translation "FAILURE"
             , body = loader
             }
 
@@ -440,33 +440,50 @@ settingsView model =
         { darkMode } =
             model.settings
     in
-    { title = "Settings"
+    { title = I18n.get model.translation "SETTINGS"
     , content =
         main_ [ id "content", class "container", tabindex -1 ]
             [ div [ class "row" ]
-                [ div [ class "toggle-list" ]
-                    [ input
-                        [ attribute "checked" ""
-                        , class "ios-toggle"
-                        , id "red"
-                        , name "test"
-                        , type_ "checkbox"
-                        , checked <| model.settings.darkMode
-                        , onClick <| ChangeMode
-                        ]
-                        []
-                    , label [ class "checkbox-label", attribute "data-off" "Light theme", attribute "data-on" "Dark theme", for "red" ] []
-                    ]
+                [ switcher
+                    ChangeMode
+                    model.settings.darkMode
+                    (I18n.get model.translation "DARK.THEME")
+                    (I18n.get model.translation "LIGHT.THEME")
                 ]
             , div [ class "row" ]
-                [ select [ onInput <| ChangeLanguage ]
-                    [ option [] [ text "en" ]
-                    , option [] [ text "ru" ]
-                    , option [] [ text "uk" ]
-                    ]
+                [ languageSelect ChangeLanguage [ "en", "ru", "uk" ] model.settings.language
                 ]
             ]
     }
+
+
+switcher : msg -> Bool -> String -> String -> Html msg
+switcher onChange value textOn textOff =
+    div [ class "toggle-list" ]
+        [ input
+            [ attribute "checked" ""
+            , class "ios-toggle"
+            , id "red"
+            , name "test"
+            , type_ "checkbox"
+            , checked <| value
+            , onClick <| onChange
+            ]
+            []
+        , label
+            [ class "checkbox-label"
+            , attribute "data-off" textOff
+            , attribute "data-on" textOn
+            , for "red"
+            ]
+            []
+        ]
+
+
+languageSelect : (String -> msg) -> List String -> String -> Html msg
+languageSelect onSelect options selectedValue =
+    select [ class "select-css", onInput <| onSelect ]
+        (List.map (\opt -> option [ value opt, selected (selectedValue == opt) ] [ text opt ]) options)
 
 
 homeView : Model -> { title : String, content : Html Msg }
@@ -475,7 +492,7 @@ homeView model =
         { search, tags } =
             model.home
     in
-    { title = "Home Page"
+    { title = I18n.get model.translation "HOME"
     , content =
         main_ [ id "content", class "container home", tabindex -1 ]
             [ input [ placeholder "Search: ", value search, onInput TypeSearch ] []
@@ -492,7 +509,7 @@ documentView model name =
         { modulesummary, description } =
             model.document
     in
-    { title = String.join " " [ "Documentation for", name ]
+    { title = String.join " " [ I18n.get model.translation "DOCS.TITLE", name ]
     , body =
         [ innerNav model name
         , main_ [ id "content", class "container document", tabindex -1 ]
@@ -526,18 +543,18 @@ toLi item =
 
 notFoundView : Model -> { title : String, body : List (Html msg) }
 notFoundView model =
-    { title = "Page Not Found"
+    { title = I18n.get model.translation "NOT.FOUND"
     , body =
         [ main_ [ id "content", class "container page404", tabindex -1 ]
             [ div [ class "row" ]
-                [ h1 [ class "title" ] [ text "Page not found" ]
+                [ h1 [ class "title" ] [ text (I18n.get model.translation "NOT.FOUND") ]
                 ]
             , div [ class "row" ]
                 [ div [ class "image404" ] []
                 ]
             , div [ class "row" ]
                 [ a [ class "back", href "/" ]
-                    [ text "Back to Docs" ]
+                    [ text (I18n.get model.translation "BACK.HOME") ]
                 ]
             ]
         ]

@@ -1,3 +1,16 @@
 {
-    "TEST": "this is test"
+  "TEST": "this is test",
+  "ABOUT": "About",
+  "CONTACT": "Contacts",
+  "LOADING": "Loading",
+  "FAILURE": "Failure",
+  "SETTINGS": "Settings",
+  "DOCS": "Docs",
+  "HOME": "Erlang docs",
+  "DOCS.TITLE": "Documentation of",
+  "NOT.FOUND": "Page not found",
+  "BACK.HOME": "Back to docs",
+  "BACK": "Back",
+  "LIGHT.THEME": "Light theme",
+  "DARK.THEME": "Dark theme"
 }
