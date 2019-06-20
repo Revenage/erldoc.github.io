@@ -239,6 +239,41 @@ body {
   }
 
   .home {
+    margin-top: -12px;
+    .input-container {
+      display: block;
+      border: 2px solid $white;
+      font-size: 16px;
+      line-height: 40px;
+      height: 40px;
+      margin-bottom: 18px;
+
+      label {
+        display: none;
+      }
+
+      .icon-search {
+        display: block;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        background: url(../images/search.svg) center center no-repeat;
+      }
+      .input-field {
+        background-color: inherit;
+        border: none;
+        color: $white;
+        font-size: 20px;
+        margin-left: 40px;
+        outline: none;
+
+        &::placeholder {
+          color: $white;
+          font-weight: 100;
+          opacity: 1;
+        }
+      }
+    }
     ul {
       font-size: 18px;
       line-height: 31px;

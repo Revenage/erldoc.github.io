@@ -404,7 +404,7 @@ footer model =
                     ]
                 ]
             ]
-        , small [] [ text ("Copyright © 2019" ++ "  " ++ I18n.get model.translation "TEST") ]
+        , small [] [ text "Copyright © 2019" ]
         ]
 
 
@@ -511,7 +511,21 @@ homeView model =
     { title = I18n.get model.translation "HOME"
     , content =
         main_ [ id "content", class "container home", tabindex -1 ]
-            [ input [ placeholder "Search: ", value search, onInput TypeSearch ] []
+            [ div [ class "input-container" ]
+                [ i [ class "icon-search" ]
+                    []
+                , label [ for "search" ] [ text "Type for search " ]
+                , input
+                    [ class "input-field"
+                    , name "search"
+                    , id "search"
+                    , placeholder "Type for search"
+                    , type_ "text"
+                    , value search
+                    , onInput TypeSearch
+                    ]
+                    []
+                ]
             , div [ class "row" ]
                 [ ul [] (renderList tags)
                 ]
