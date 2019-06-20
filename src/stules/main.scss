@@ -201,7 +201,10 @@ body {
       font-weight: bold;
       li {
         a {
-          width: 60%;
+          text-overflow: ellipsis;
+          max-width: 95%;
+          width: 95%;
+          overflow: hidden;
           display: inline-block;
           text-decoration: none;
           color: inherit;

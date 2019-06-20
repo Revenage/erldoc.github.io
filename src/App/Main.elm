@@ -10,6 +10,8 @@ import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
+import Html.Parser
+import Html.Parser.Util
 import Http
 import Json.Decode exposing (Decoder, dict, field, string)
 import Json.Encode as Encode
@@ -47,8 +49,8 @@ type alias SettingsModel =
 
 
 type alias DocumentModel =
-    { modulesummary : String
-    , description : List String
+    { summary : String
+    , description : String
     }
 
 
@@ -126,8 +128,8 @@ init flags url key =
             , tags = TagLoading
             }
       , document =
-            { modulesummary = ""
-            , description = []
+            { summary = ""
+            , description = ""
             }
       }
     , loadPageData route initialSetting.language
@@ -503,10 +505,20 @@ homeView model =
     }
 
 
+textHtml : String -> List (Html.Html msg)
+textHtml t =
+    case Html.Parser.run t of
+        Ok nodes ->
+            Html.Parser.Util.toVirtualDom nodes
+
+        Err _ ->
+            []
+
+
 documentView : Model -> String -> Browser.Document Msg
 documentView model name =
     let
-        { modulesummary, description } =
+        { summary, description } =
             model.document
     in
     { title = String.join " " [ I18n.get model.translation "DOCS.TITLE", name ]
@@ -514,11 +526,8 @@ documentView model name =
         [ innerNav model name
         , main_ [ id "content", class "container document", tabindex -1 ]
             [ div [ class "row" ]
-                [ h1 [] [ text modulesummary ] ]
-            , div [ class "row" ]
-                [ iframe [ src ("http://erlang.org/doc/man/" ++ modulesummary ++ ".html") ]
-                    []
-                ]
+                [ h1 [] [ text summary ] ]
+            , div [ class "row" ] (textHtml description)
             ]
         , footer model
         ]

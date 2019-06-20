@@ -21,10 +21,6 @@ decodeTag =
 
 decodeDocument : Decoder Doc
 decodeDocument =
-    field "erlref"
-        (map2 Doc
-            (field "modulesummary" string)
-            (field "description"
-                (field "p" (list (oneOf [ string, field "em" string ])))
-            )
-        )
+    map2 Doc
+        (field "summary" string)
+        (field "description" string)
