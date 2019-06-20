@@ -23,9 +23,10 @@ route : Parser (Route -> a) a
 route =
     oneOf
         [ map Home top
-        , map Settings (s "settings")
-        , map NotFound (s "404")
-        , map Document (s "docs" </> string)
+        , map Home (s "erldoc")
+        , map Settings (s "erldoc" </> s "settings")
+        , map NotFound (s "erldoc" </> s "404")
+        , map Document (s "erldoc" </> s "docs" </> string)
         ]
 
 

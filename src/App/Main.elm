@@ -344,11 +344,11 @@ nav model =
         [ Html.nav [ class headetClass, id "myNavBar" ]
             [ ul [ class "nav" ]
                 [ li []
-                    [ a [ href "/" ]
+                    [ a [ href <| assetsUrl "/" ]
                         [ span [] [ text (I18n.get model.translation "DOCS") ] ]
                     ]
                 , li []
-                    [ a [ href "/settings" ]
+                    [ a [ href <| assetsUrl "/settings" ]
                         [ span [] [ text (I18n.get model.translation "SETTINGS") ] ]
                     ]
                 ]
@@ -398,11 +398,11 @@ footer model =
         [ Html.nav []
             [ ul []
                 [ li []
-                    [ a [ href "/about" ]
+                    [ a [ href <| assetsUrl "/about" ]
                         [ text (I18n.get model.translation "ABOUT") ]
                     ]
                 , li []
-                    [ a [ href "/contact" ]
+                    [ a [ href <| assetsUrl "/contact" ]
                         [ text (I18n.get model.translation "CONTACT") ]
                     ]
                 ]
@@ -542,9 +542,9 @@ documentView model name =
     , body =
         [ innerNav model name
         , main_ [ id "content", class "container document", tabindex -1 ]
-            [ div [ class "row" ]
+            [ div [ class "row summary" ]
                 [ h1 [] [ text summary ] ]
-            , div [ class "row" ] (textHtml description)
+            , div [ class "row description" ] (textHtml description)
             ]
         , footer model
         ]
@@ -566,7 +566,7 @@ renderList tags =
 
 toLi : String -> Html Msg
 toLi item =
-    li [] [ a [ href ("/docs/" ++ item) ] [ text item ] ]
+    li [] [ a [ href <| assetsUrl ("/docs/" ++ item) ] [ text item ] ]
 
 
 notFoundView : Model -> { title : String, body : List (Html msg) }
@@ -581,7 +581,7 @@ notFoundView model =
                 [ div [ class "image404" ] []
                 ]
             , div [ class "row" ]
-                [ a [ class "back", href "/" ]
+                [ a [ class "back", href <| assetsUrl "/" ]
                     [ text (I18n.get model.translation "BACK.HOME") ]
                 ]
             ]

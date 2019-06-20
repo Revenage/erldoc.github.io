@@ -140,15 +140,19 @@ body {
 
             &:first-child {
               width: 20%;
+              max-width: 20%;
+              float: left;
               a,
               span {
                 margin: 0;
                 span {
-                  font-size: 20px;
+                  font-size: 18px;
                   font-weight: normal;
                   margin: 0;
                   color: $red;
+                  vertical-align: top;
                   &:first-child {
+                    line-height: 50px;
                     font-weight: 300;
                     font-size: 40px;
                     padding: 0px 5px;
@@ -159,10 +163,14 @@ body {
             }
             &:last-child {
               width: 80%;
+              padding: 0 20px;
               span {
-                font-size: 20px;
+                font-size: 18px;
                 font-weight: bold;
                 margin-left: -24%;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                width: 80%;
               }
             }
           }
@@ -195,14 +203,49 @@ body {
         text-align: center;
         width: 100%;
         display: inline-block;
-        font-size: 20px;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .document {
+    padding: 0 8px;
+    font-size: 16px;
+
+    h1 {
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+      line-height: 2;
+    }
+
+    .description {
+      p {
+        line-height: 1.5;
+        margin-bottom: 16px;
+
+        span {
+          &.bold_code {
+            font-weight: bold;
+          }
+
+          &.bc-19,
+          &.bc-18,
+          &.bc-13 {
+            color: $red;
+            a {
+              text-decoration: none;
+              color: inherit;
+            }
+          }
+        }
       }
     }
   }
 
   .home {
     ul {
-      font-size: 20px;
+      font-size: 18px;
       line-height: 31px;
       margin-left: 8px;
       font-weight: bold;
