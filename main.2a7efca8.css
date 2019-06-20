@@ -391,6 +391,8 @@ body header .navbar.inner .nav li span {
 }
 body header .navbar.inner .nav li:first-child {
   width: 20%;
+  max-width: 20%;
+  float: left;
 }
 body header .navbar.inner .nav li:first-child a,
 body header .navbar.inner .nav li:first-child span {
@@ -398,13 +400,15 @@ body header .navbar.inner .nav li:first-child span {
 }
 body header .navbar.inner .nav li:first-child a span,
 body header .navbar.inner .nav li:first-child span span {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: normal;
   margin: 0;
   color: #f35f42;
+  vertical-align: top;
 }
 body header .navbar.inner .nav li:first-child a span:first-child,
 body header .navbar.inner .nav li:first-child span span:first-child {
+  line-height: 50px;
   font-weight: 300;
   font-size: 40px;
   padding: 0px 5px;
@@ -412,11 +416,15 @@ body header .navbar.inner .nav li:first-child span span:first-child {
 }
 body header .navbar.inner .nav li:last-child {
   width: 80%;
+  padding: 0 20px;
 }
 body header .navbar.inner .nav li:last-child span {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   margin-left: -24%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 80%;
 }
 body .page404 {
   width: 100%;
@@ -444,10 +452,34 @@ body .page404 .row .back {
   text-align: center;
   width: 100%;
   display: inline-block;
-  font-size: 20px;
+  font-size: 18px;
+}
+body .document {
+  padding: 0 8px;
+  font-size: 16px;
+}
+body .document h1 {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  line-height: 2;
+}
+body .document .description p {
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+body .document .description p span.bold_code {
+  font-weight: bold;
+}
+body .document .description p span.bc-19, body .document .description p span.bc-18, body .document .description p span.bc-13 {
+  color: #f35f42;
+}
+body .document .description p span.bc-19 a, body .document .description p span.bc-18 a, body .document .description p span.bc-13 a {
+  text-decoration: none;
+  color: inherit;
 }
 body .home ul {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 31px;
   margin-left: 8px;
   font-weight: bold;

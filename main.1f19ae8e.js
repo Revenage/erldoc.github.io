@@ -5659,19 +5659,32 @@ var author$project$App$Router$route = elm$url$Url$Parser$oneOf(
 			A2(elm$url$Url$Parser$map, author$project$App$Router$Home, elm$url$Url$Parser$top),
 			A2(
 			elm$url$Url$Parser$map,
+			author$project$App$Router$Home,
+			elm$url$Url$Parser$s('erldoc')),
+			A2(
+			elm$url$Url$Parser$map,
 			author$project$App$Router$Settings,
-			elm$url$Url$Parser$s('settings')),
+			A2(
+				elm$url$Url$Parser$slash,
+				elm$url$Url$Parser$s('erldoc'),
+				elm$url$Url$Parser$s('settings'))),
 			A2(
 			elm$url$Url$Parser$map,
 			author$project$App$Router$NotFound,
-			elm$url$Url$Parser$s('404')),
+			A2(
+				elm$url$Url$Parser$slash,
+				elm$url$Url$Parser$s('erldoc'),
+				elm$url$Url$Parser$s('404'))),
 			A2(
 			elm$url$Url$Parser$map,
 			author$project$App$Router$Document,
 			A2(
 				elm$url$Url$Parser$slash,
-				elm$url$Url$Parser$s('docs'),
-				elm$url$Url$Parser$string))
+				elm$url$Url$Parser$s('erldoc'),
+				A2(
+					elm$url$Url$Parser$slash,
+					elm$url$Url$Parser$s('docs'),
+					elm$url$Url$Parser$string)))
 		]));
 var elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
@@ -6330,9 +6343,10 @@ var author$project$App$Router$toRoute = function (string) {
 			A2(elm$url$Url$Parser$parse, author$project$App$Router$route, string));
 	}
 };
+var author$project$App$Types$DocLoading = {$: 'DocLoading'};
 var author$project$App$Types$English = {$: 'English'};
-var author$project$App$Types$Loading = {$: 'Loading'};
 var author$project$App$Types$TagLoading = {$: 'TagLoading'};
+var author$project$App$Types$TranslateLoading = {$: 'TranslateLoading'};
 var author$project$Main$getLangString = function (lang) {
 	switch (lang.$) {
 		case 'English':
@@ -7066,12 +7080,12 @@ var author$project$Main$getDoc = F2(
 	});
 var elm$json$Json$Decode$list = _Json_decodeList;
 var author$project$App$Decoders$decodeTag = elm$json$Json$Decode$list(elm$json$Json$Decode$string);
-var author$project$Main$HandleTagResponse = function (a) {
-	return {$: 'HandleTagResponse', a: a};
+var author$project$Main$HandleTagStatus = function (a) {
+	return {$: 'HandleTagStatus', a: a};
 };
 var author$project$Main$getTags = elm$http$Http$get(
 	{
-		expect: A2(elm$http$Http$expectJson, author$project$Main$HandleTagResponse, author$project$App$Decoders$decodeTag),
+		expect: A2(elm$http$Http$expectJson, author$project$Main$HandleTagStatus, author$project$App$Decoders$decodeTag),
 		url: author$project$Main$assetsUrl('/content/tags.json')
 	});
 var elm$core$Platform$Cmd$batch = _Platform_batch;
@@ -7114,12 +7128,12 @@ var author$project$Main$init = F3(
 			flags.settings);
 		return _Utils_Tuple2(
 			{
-				document: {description: '', summary: ''},
+				document: author$project$App$Types$DocLoading,
 				home: {search: '', tags: author$project$App$Types$TagLoading},
 				key: key,
 				route: route,
 				settings: initialSetting,
-				translation: author$project$App$Types$Loading,
+				translation: author$project$App$Types$TranslateLoading,
 				url: url
 			},
 			A2(author$project$Main$loadPageData, route, initialSetting.language));
@@ -7129,12 +7143,15 @@ var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
 var author$project$Main$subscriptions = function (_n0) {
 	return elm$core$Platform$Sub$none;
 };
-var author$project$App$Types$Failure = {$: 'Failure'};
-var author$project$App$Types$Success = function (a) {
-	return {$: 'Success', a: a};
+var author$project$App$Types$DocSuccess = function (a) {
+	return {$: 'DocSuccess', a: a};
 };
 var author$project$App$Types$TagSuccess = function (a) {
 	return {$: 'TagSuccess', a: a};
+};
+var author$project$App$Types$TranslateFailure = {$: 'TranslateFailure'};
+var author$project$App$Types$TranslateSuccess = function (a) {
+	return {$: 'TranslateSuccess', a: a};
 };
 var author$project$Main$requestOnUrlChanged = F2(
 	function (route, lang) {
@@ -10847,14 +10864,14 @@ var author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								translation: author$project$App$Types$Success(translation)
+								translation: author$project$App$Types$TranslateSuccess(translation)
 							}),
 						elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{translation: author$project$App$Types$Failure}),
+							{translation: author$project$App$Types$TranslateFailure}),
 						elm$core$Platform$Cmd$none);
 				}
 			case 'HandleDocResponse':
@@ -10864,13 +10881,15 @@ var author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{document: doc}),
+							{
+								document: author$project$App$Types$DocSuccess(doc)
+							}),
 						elm$core$Platform$Cmd$none);
 				} else {
 					var err = result.a;
 					return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 				}
-			case 'HandleTagResponse':
+			case 'HandleTagStatus':
 				var result = msg.a;
 				if (result.$ === 'Ok') {
 					var tags = result.a;
@@ -10934,13 +10953,13 @@ var author$project$Main$update = F2(
 var author$project$App$I18n$get = F2(
 	function (status, key) {
 		switch (status.$) {
-			case 'Success':
+			case 'TranslateSuccess':
 				var translate = status.a;
 				return A2(
 					elm$core$Maybe$withDefault,
 					key,
 					A2(elm$core$Dict$get, key, translate));
-			case 'Failure':
+			case 'TranslateFailure':
 				return '';
 			default:
 				return '';
@@ -10977,7 +10996,8 @@ var author$project$Main$footer = function (model) {
 										elm$html$Html$a,
 										_List_fromArray(
 											[
-												elm$html$Html$Attributes$href('/about')
+												elm$html$Html$Attributes$href(
+												author$project$Main$assetsUrl('/about'))
 											]),
 										_List_fromArray(
 											[
@@ -10994,7 +11014,8 @@ var author$project$Main$footer = function (model) {
 										elm$html$Html$a,
 										_List_fromArray(
 											[
-												elm$html$Html$Attributes$href('/contact')
+												elm$html$Html$Attributes$href(
+												author$project$Main$assetsUrl('/contact'))
 											]),
 										_List_fromArray(
 											[
@@ -11096,6 +11117,13 @@ var author$project$Main$innerNav = F2(
 						]))
 				]));
 	});
+var author$project$Main$loader = A2(
+	elm$html$Html$div,
+	_List_fromArray(
+		[
+			elm$html$Html$Attributes$class('loader')
+		]),
+	_List_Nil);
 var elm$parser$Parser$DeadEnd = F3(
 	function (row, col, problem) {
 		return {col: col, problem: problem, row: row};
@@ -14634,71 +14662,86 @@ var elm$html$Html$Attributes$tabindex = function (n) {
 var author$project$Main$documentView = F2(
 	function (model, name) {
 		var _n0 = model.document;
-		var summary = _n0.summary;
-		var description = _n0.description;
-		return {
-			body: _List_fromArray(
-				[
-					A2(author$project$Main$innerNav, model, name),
-					A2(
-					elm$html$Html$main_,
-					_List_fromArray(
+		switch (_n0.$) {
+			case 'DocLoading':
+				return {
+					body: _List_fromArray(
 						[
-							elm$html$Html$Attributes$id('content'),
-							elm$html$Html$Attributes$class('container document'),
-							elm$html$Html$Attributes$tabindex(-1)
+							A2(author$project$Main$innerNav, model, name),
+							author$project$Main$loader,
+							author$project$Main$footer(model)
 						]),
-					_List_fromArray(
+					title: A2(author$project$App$I18n$get, model.translation, 'LOADING')
+				};
+			case 'DocSuccess':
+				var document = _n0.a;
+				var _n1 = document;
+				var summary = _n1.summary;
+				var description = _n1.description;
+				return {
+					body: _List_fromArray(
 						[
+							A2(author$project$Main$innerNav, model, name),
 							A2(
-							elm$html$Html$div,
+							elm$html$Html$main_,
 							_List_fromArray(
 								[
-									elm$html$Html$Attributes$class('row')
+									elm$html$Html$Attributes$id('content'),
+									elm$html$Html$Attributes$class('container document'),
+									elm$html$Html$Attributes$tabindex(-1)
 								]),
 							_List_fromArray(
 								[
 									A2(
-									elm$html$Html$h1,
-									_List_Nil,
+									elm$html$Html$div,
 									_List_fromArray(
 										[
-											elm$html$Html$text(summary)
-										]))
+											elm$html$Html$Attributes$class('row summary')
+										]),
+									_List_fromArray(
+										[
+											A2(
+											elm$html$Html$h1,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text(summary)
+												]))
+										])),
+									A2(
+									elm$html$Html$div,
+									_List_fromArray(
+										[
+											elm$html$Html$Attributes$class('row description')
+										]),
+									author$project$Main$textHtml(description))
 								])),
-							A2(
-							elm$html$Html$div,
-							_List_fromArray(
-								[
-									elm$html$Html$Attributes$class('row')
-								]),
-							author$project$Main$textHtml(description))
-						])),
-					author$project$Main$footer(model)
-				]),
-			title: A2(
-				elm$core$String$join,
-				' ',
-				_List_fromArray(
-					[
-						A2(author$project$App$I18n$get, model.translation, 'DOCS.TITLE'),
-						name
-					]))
-		};
+							author$project$Main$footer(model)
+						]),
+					title: A2(
+						elm$core$String$join,
+						' ',
+						_List_fromArray(
+							[
+								A2(author$project$App$I18n$get, model.translation, 'DOCS.TITLE'),
+								name
+							]))
+				};
+			default:
+				return {
+					body: _List_fromArray(
+						[
+							A2(author$project$Main$innerNav, model, name),
+							author$project$Main$loader,
+							author$project$Main$footer(model)
+						]),
+					title: A2(author$project$App$I18n$get, model.translation, 'FAILURE')
+				};
+		}
 	});
 var author$project$Main$TypeSearch = function (a) {
 	return {$: 'TypeSearch', a: a};
 };
-var author$project$Main$loader = _List_fromArray(
-	[
-		A2(
-		elm$html$Html$div,
-		_List_fromArray(
-			[
-				elm$html$Html$Attributes$class('loader')
-			]),
-		_List_Nil)
-	]);
 var author$project$Main$toLi = function (item) {
 	return A2(
 		elm$html$Html$li,
@@ -14709,7 +14752,8 @@ var author$project$Main$toLi = function (item) {
 				elm$html$Html$a,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$href('/docs/' + item)
+						elm$html$Html$Attributes$href(
+						author$project$Main$assetsUrl('/docs/' + item))
 					]),
 				_List_fromArray(
 					[
@@ -14723,9 +14767,11 @@ var author$project$Main$renderList = function (tags) {
 			var tagList = tags.a;
 			return A2(elm$core$List$map, author$project$Main$toLi, tagList);
 		case 'TagLoading':
-			return author$project$Main$loader;
+			return _List_fromArray(
+				[author$project$Main$loader]);
 		default:
-			return author$project$Main$loader;
+			return _List_fromArray(
+				[author$project$Main$loader]);
 	}
 };
 var elm$html$Html$input = _VirtualDom_node('input');
@@ -14836,7 +14882,8 @@ var author$project$Main$nav = function (model) {
 										elm$html$Html$a,
 										_List_fromArray(
 											[
-												elm$html$Html$Attributes$href('/')
+												elm$html$Html$Attributes$href(
+												author$project$Main$assetsUrl('/'))
 											]),
 										_List_fromArray(
 											[
@@ -14859,7 +14906,8 @@ var author$project$Main$nav = function (model) {
 										elm$html$Html$a,
 										_List_fromArray(
 											[
-												elm$html$Html$Attributes$href('/settings')
+												elm$html$Html$Attributes$href(
+												author$project$Main$assetsUrl('/settings'))
 											]),
 										_List_fromArray(
 											[
@@ -14940,7 +14988,8 @@ var author$project$Main$notFoundView = function (model) {
 								_List_fromArray(
 									[
 										elm$html$Html$Attributes$class('back'),
-										elm$html$Html$Attributes$href('/')
+										elm$html$Html$Attributes$href(
+										author$project$Main$assetsUrl('/'))
 									]),
 								_List_fromArray(
 									[
@@ -15085,12 +15134,13 @@ var author$project$Main$settingsView = function (model) {
 var author$project$Main$view = function (model) {
 	var _n0 = model.translation;
 	switch (_n0.$) {
-		case 'Loading':
+		case 'TranslateLoading':
 			return {
-				body: author$project$Main$loader,
+				body: _List_fromArray(
+					[author$project$Main$loader]),
 				title: A2(author$project$App$I18n$get, model.translation, 'LOADING')
 			};
-		case 'Success':
+		case 'TranslateSuccess':
 			var viewPage = function (pageview) {
 				var _n2 = pageview(model);
 				var title = _n2.title;
@@ -15119,7 +15169,8 @@ var author$project$Main$view = function (model) {
 			}
 		default:
 			return {
-				body: author$project$Main$loader,
+				body: _List_fromArray(
+					[author$project$Main$loader]),
 				title: A2(author$project$App$I18n$get, model.translation, 'FAILURE')
 			};
 	}
@@ -15160,7 +15211,7 @@ _Platform_export({'Main':{'init':author$project$Main$main(
 									A2(elm$json$Json$Decode$field, 'darkMode', elm$json$Json$Decode$bool));
 							},
 							A2(elm$json$Json$Decode$field, 'language', elm$json$Json$Decode$string)))
-					])))))({"versions":{"elm":"0.19.0"},"types":{"message":"Main.Msg","aliases":{"App.Types.Doc":{"args":[],"type":"{ summary : String.String, description : String.String }"},"App.Types.Tags":{"args":[],"type":"List.List String.String"},"App.Types.Translation":{"args":[],"type":"Dict.Dict String.String String.String"},"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"}},"unions":{"Main.Msg":{"args":[],"tags":{"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"HandleTranslateResponse":["Result.Result Http.Error App.Types.Translation"],"HandleTagResponse":["Result.Result Http.Error App.Types.Tags"],"HandleDocResponse":["Result.Result Http.Error App.Types.Doc"],"ChangeMode":[],"ChangeLanguage":["String.String"],"TypeSearch":["String.String"],"Back":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"Dict.NColor":{"args":[],"tags":{"Red":[],"Black":[]}}}}})}});
+					])))))({"versions":{"elm":"0.19.0"},"types":{"message":"Main.Msg","aliases":{"App.Types.Doc":{"args":[],"type":"{ summary : String.String, description : String.String }"},"App.Types.Tags":{"args":[],"type":"List.List String.String"},"App.Types.Translation":{"args":[],"type":"Dict.Dict String.String String.String"},"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"}},"unions":{"Main.Msg":{"args":[],"tags":{"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"HandleTranslateResponse":["Result.Result Http.Error App.Types.Translation"],"HandleTagStatus":["Result.Result Http.Error App.Types.Tags"],"HandleDocResponse":["Result.Result Http.Error App.Types.Doc"],"ChangeMode":[],"ChangeLanguage":["String.String"],"TypeSearch":["String.String"],"Back":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"Dict.NColor":{"args":[],"tags":{"Red":[],"Black":[]}}}}})}});
 
 //////////////////// HMR BEGIN ////////////////////
 
@@ -15735,7 +15786,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58304" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64384" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
