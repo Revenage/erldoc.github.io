@@ -10,16 +10,16 @@ type Language
     | Ukrainian
 
 
-get : RespondStatus -> String -> String
+get : TranslateStatus -> String -> String
 get status key =
     case status of
-        Success translate ->
+        TranslateSuccess translate ->
             translate
                 |> Dict.get key
                 |> Maybe.withDefault key
 
-        Failure ->
+        TranslateFailure ->
             ""
 
-        Loading ->
+        TranslateLoading ->
             ""

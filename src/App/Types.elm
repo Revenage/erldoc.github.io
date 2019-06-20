@@ -1,4 +1,4 @@
-module App.Types exposing (Doc, HandleTagResponse(..), Language(..), RespondStatus(..), Tags, Translation, Translations)
+module App.Types exposing (Doc, DocStatus(..), Language(..), TagStatus(..), Tags, TranslateStatus(..), Translation, Translations)
 
 import Browser
 import Browser.Navigation as Nav
@@ -8,16 +8,22 @@ import Http
 import Url
 
 
-type RespondStatus
-    = Failure
-    | Loading
-    | Success Translation
+type TranslateStatus
+    = TranslateFailure
+    | TranslateLoading
+    | TranslateSuccess Translation
 
 
-type HandleTagResponse
+type TagStatus
     = TagFailure
     | TagLoading
     | TagSuccess Tags
+
+
+type DocStatus
+    = DocFailure
+    | DocLoading
+    | DocSuccess Doc
 
 
 type Language

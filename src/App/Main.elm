@@ -38,7 +38,7 @@ type alias InitialData =
 
 type alias HomeModel =
     { search : String
-    , tags : HandleTagResponse
+    , tags : TagStatus
     }
 
 
@@ -58,10 +58,10 @@ type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , route : Route
-    , translation : RespondStatus
+    , translation : TranslateStatus
     , home : HomeModel
     , settings : SettingsModel
-    , document : DocumentModel
+    , document : DocStatus
     }
 
 
@@ -69,7 +69,7 @@ type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
     | HandleTranslateResponse (Result Http.Error Translation)
-    | HandleTagResponse (Result Http.Error Tags)
+    | HandleTagStatus (Result Http.Error Tags)
     | HandleDocResponse (Result Http.Error Doc)
     | ChangeMode
     | ChangeLanguage String
@@ -127,16 +127,13 @@ init flags url key =
     ( { key = key
       , url = url
       , route = route
-      , translation = Loading
+      , translation = TranslateLoading
       , settings = initialSetting
       , home =
             { search = ""
             , tags = TagLoading
             }
-      , document =
-            { summary = ""
-            , description = ""
-            }
+      , document = DocLoading
       }
     , loadPageData route initialSetting.language
     )
@@ -183,7 +180,7 @@ getTags : Cmd Msg
 getTags =
     Http.get
         { url = assetsUrl "/content/tags.json"
-        , expect = Http.expectJson HandleTagResponse decodeTag
+        , expect = Http.expectJson HandleTagStatus decodeTag
         }
 
 
@@ -214,20 +211,20 @@ update msg model =
         HandleTranslateResponse result ->
             case result of
                 Ok translation ->
-                    ( { model | translation = Success translation }, Cmd.none )
+                    ( { model | translation = TranslateSuccess translation }, Cmd.none )
 
                 Err _ ->
-                    ( { model | translation = Failure }, Cmd.none )
+                    ( { model | translation = TranslateFailure }, Cmd.none )
 
         HandleDocResponse result ->
             case result of
                 Ok doc ->
-                    ( { model | document = doc }, Cmd.none )
+                    ( { model | document = DocSuccess doc }, Cmd.none )
 
                 Err err ->
                     ( model, Cmd.none )
 
-        HandleTagResponse result ->
+        HandleTagStatus result ->
             case result of
                 Ok tags ->
                     let
@@ -414,12 +411,12 @@ footer model =
 view : Model -> Browser.Document Msg
 view model =
     case model.translation of
-        Loading ->
+        TranslateLoading ->
             { title = I18n.get model.translation "LOADING"
-            , body = loader
+            , body = [ loader ]
             }
 
-        Success _ ->
+        TranslateSuccess _ ->
             let
                 viewPage pageview =
                     let
@@ -443,14 +440,14 @@ view model =
                 NotFound ->
                     notFoundView model
 
-        Failure ->
+        TranslateFailure ->
             { title = I18n.get model.translation "FAILURE"
-            , body = loader
+            , body = [ loader ]
             }
 
 
 loader =
-    [ div [ class "loader" ] [] ]
+    div [ class "loader" ] []
 
 
 settingsView : Model -> { title : String, content : Html Msg }
@@ -534,34 +531,46 @@ textHtml t =
 
 documentView : Model -> String -> Browser.Document Msg
 documentView model name =
-    let
-        { summary, description } =
-            model.document
-    in
-    { title = String.join " " [ I18n.get model.translation "DOCS.TITLE", name ]
-    , body =
-        [ innerNav model name
-        , main_ [ id "content", class "container document", tabindex -1 ]
-            [ div [ class "row summary" ]
-                [ h1 [] [ text summary ] ]
-            , div [ class "row description" ] (textHtml description)
-            ]
-        , footer model
-        ]
-    }
+    case model.document of
+        DocLoading ->
+            { title = I18n.get model.translation "LOADING"
+            , body = [ innerNav model name, loader, footer model ]
+            }
+
+        DocSuccess document ->
+            let
+                { summary, description } =
+                    document
+            in
+            { title = String.join " " [ I18n.get model.translation "DOCS.TITLE", name ]
+            , body =
+                [ innerNav model name
+                , main_ [ id "content", class "container document", tabindex -1 ]
+                    [ div [ class "row summary" ]
+                        [ h1 [] [ text summary ] ]
+                    , div [ class "row description" ] (textHtml description)
+                    ]
+                , footer model
+                ]
+            }
+
+        DocFailure ->
+            { title = I18n.get model.translation "FAILURE"
+            , body = [ innerNav model name, loader, footer model ]
+            }
 
 
-renderList : HandleTagResponse -> List (Html Msg)
+renderList : TagStatus -> List (Html Msg)
 renderList tags =
     case tags of
         TagSuccess tagList ->
             List.map toLi tagList
 
         TagLoading ->
-            loader
+            [ loader ]
 
         TagFailure ->
-            loader
+            [ loader ]
 
 
 toLi : String -> Html Msg
