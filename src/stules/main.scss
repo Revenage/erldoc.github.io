@@ -227,11 +227,6 @@ body {
         span {
           &.bold_code {
             font-weight: bold;
-          }
-
-          &.bc-19,
-          &.bc-18,
-          &.bc-13 {
             color: $red;
             a {
               text-decoration: none;
