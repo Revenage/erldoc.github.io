@@ -222,7 +222,7 @@ update msg model =
                     ( { model | document = DocSuccess doc }, Cmd.none )
 
                 Err err ->
-                    ( model, Cmd.none )
+                    ( model | document = DocFailure, Cmd.none )
 
         HandleTagStatus result ->
             case result of
