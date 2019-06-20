@@ -497,8 +497,10 @@ documentView model name =
         [ innerNav model name
         , main_ [ id "content", class "container document", tabindex -1 ]
             [ div [ class "row" ]
-                [ h1 [] [ text modulesummary ]
-                , div [] (List.map (\item -> p [] [ text item ]) description)
+                [ h1 [] [ text modulesummary ] ]
+            , div [ class "row" ]
+                [ iframe [ src ("http://erlang.org/doc/man/" ++ modulesummary ++ ".html") ]
+                    []
                 ]
             ]
         , footer model
