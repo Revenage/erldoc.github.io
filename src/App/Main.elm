@@ -9,7 +9,7 @@ import Browser.Navigation as Nav
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick, onInput)
+import Html.Events exposing (custom, onClick, onInput)
 import Html.Parser
 import Html.Parser.Util
 import Http
@@ -74,10 +74,16 @@ type Msg
     | ChangeMode
     | ChangeLanguage String
     | TypeSearch String
+    | Back
 
 
 type alias PageView =
     { title : String, content : Html Msg }
+
+
+assetsUrl : String -> String
+assetsUrl path =
+    "/erldoc" ++ path
 
 
 main : Program InitialData Model Msg
@@ -160,7 +166,7 @@ initialRequests route lang =
 getTranslation : String -> Cmd Msg
 getTranslation lang =
     Http.get
-        { url = "/erldoc/translations/" ++ lang ++ ".json"
+        { url = assetsUrl "/translations/" ++ lang ++ ".json"
         , expect = Http.expectJson HandleTranslateResponse decodeTranslations
         }
 
@@ -168,7 +174,7 @@ getTranslation lang =
 getDoc : String -> String -> Cmd Msg
 getDoc name lang =
     Http.get
-        { url = "/erldoc/content/" ++ lang ++ "/" ++ name ++ ".json"
+        { url = assetsUrl "/content/" ++ lang ++ "/" ++ name ++ ".json"
         , expect = Http.expectJson HandleDocResponse decodeDocument
         }
 
@@ -176,7 +182,7 @@ getDoc name lang =
 getTags : Cmd Msg
 getTags =
     Http.get
-        { url = "/erldoc/content/tags.json"
+        { url = assetsUrl "/content/tags.json"
         , expect = Http.expectJson HandleTagResponse decodeTag
         }
 
@@ -276,6 +282,11 @@ update msg model =
             , Cmd.none
             )
 
+        Back ->
+            ( model
+            , Nav.back model.key 1
+            )
+
 
 requestOnUrlChanged route lang =
     case route of
@@ -355,7 +366,9 @@ innerNav model name =
         [ Html.nav [ class "navbar inner", id "myNavBar" ]
             [ ul [ class "nav" ]
                 [ li []
-                    [ a [ href "/" ]
+                    [ span
+                        [ onClick Back
+                        ]
                         [ span [] [ text "‹" ]
                         , span [] [ text (I18n.get model.translation "BACK") ]
                         ]
@@ -364,6 +377,10 @@ innerNav model name =
                 ]
             ]
         ]
+
+
+
+-- import Browser.Navigation as Nav
 
 
 checkColapse : String -> Model -> String
@@ -570,17 +587,3 @@ notFoundView model =
             ]
         ]
     }
-
-
-
--- i18get : Model -> String -> String
--- i18get model key =
---     case model.translation of
---         Success translate ->
---             translate
---                 |> Dict.get key
---                 |> Maybe.withDefault key
---         Failure ->
---             "qwer"
---         Loading ->
---             "qwer"

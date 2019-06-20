@@ -64,7 +64,8 @@ body {
             width: 80%;
             text-align: left;
 
-            a {
+            a,
+            span {
               background: initial;
               margin-left: 50%;
               span {
@@ -74,7 +75,8 @@ body {
           }
           &:last-child {
             // width: 80%;
-            a {
+            a,
+            span {
               background: url("../images/settings.svg") no-repeat;
               width: 58px;
               height: 58px;
@@ -82,7 +84,8 @@ body {
             }
           }
 
-          a {
+          a,
+          span {
             text-decoration: none;
             color: inherit;
             display: inline-block;
@@ -98,7 +101,8 @@ body {
             &:first-child {
               width: 20%;
               text-align: center;
-              a {
+              a,
+              span {
                 margin-left: initial;
                 background: url("../images/documents.svg") no-repeat;
                 width: 58px;
@@ -109,7 +113,8 @@ body {
 
             &:last-child {
               text-align: left;
-              a {
+              a,
+              span {
                 background: initial;
                 text-indent: initial;
                 margin-left: 24%;
@@ -125,7 +130,8 @@ body {
       &.inner {
         .nav {
           li {
-            a {
+            a,
+            span {
               background: initial;
               text-indent: initial;
             }
@@ -134,7 +140,8 @@ body {
 
             &:first-child {
               width: 20%;
-              a {
+              a,
+              span {
                 margin: 0;
                 span {
                   font-size: 20px;

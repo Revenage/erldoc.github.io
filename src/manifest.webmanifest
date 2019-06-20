@@ -1,4 +1,5 @@
 {
+  "start_url": "/",
   "name": "Erldoc - documents for Erlang/OTP",
   "short_name": "Erldoc",
   "icons": [
@@ -11,9 +12,14 @@
       "src": "/images/android-chrome-256x256.png",
       "sizes": "256x256",
       "type": "image/png"
+    },
+    {
+      "src": "/images/android-chrome-256x256.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
+  "display": "fullscreen",
   "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "background_color": "#ffffff"
 }

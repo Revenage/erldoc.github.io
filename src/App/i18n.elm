@@ -19,13 +19,7 @@ get status key =
                 |> Maybe.withDefault key
 
         Failure ->
-            "qwer"
+            ""
 
         Loading ->
-            "qwer"
-
-
-
--- dict
---     |> Dict.get key
---     |> Maybe.withDefault key
+            ""
