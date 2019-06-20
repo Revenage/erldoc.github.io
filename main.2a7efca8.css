@@ -470,13 +470,45 @@ body .document .description p {
 }
 body .document .description p span.bold_code {
   font-weight: bold;
-}
-body .document .description p span.bc-19, body .document .description p span.bc-18, body .document .description p span.bc-13 {
   color: #f35f42;
 }
-body .document .description p span.bc-19 a, body .document .description p span.bc-18 a, body .document .description p span.bc-13 a {
+body .document .description p span.bold_code a {
   text-decoration: none;
   color: inherit;
+}
+body .home {
+  margin-top: -12px;
+}
+body .home .input-container {
+  display: block;
+  border: 2px solid #ffffff;
+  font-size: 16px;
+  line-height: 40px;
+  height: 40px;
+  margin-bottom: 18px;
+}
+body .home .input-container label {
+  display: none;
+}
+body .home .input-container .icon-search {
+  display: block;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  background: url(/erldoc/search.48f4844e.svg) center center no-repeat;
+}
+body .home .input-container .input-field {
+  background-color: inherit;
+  border: none;
+  color: #ffffff;
+  font-size: 20px;
+  margin-left: 40px;
+  outline: none;
+}
+body .home .input-container .input-field::placeholder {
+  color: #ffffff;
+  font-weight: 100;
+  opacity: 1;
 }
 body .home ul {
   font-size: 18px;

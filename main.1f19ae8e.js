@@ -7143,6 +7143,7 @@ var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
 var author$project$Main$subscriptions = function (_n0) {
 	return elm$core$Platform$Sub$none;
 };
+var author$project$App$Types$DocFailure = {$: 'DocFailure'};
 var author$project$App$Types$DocSuccess = function (a) {
 	return {$: 'DocSuccess', a: a};
 };
@@ -10887,7 +10888,11 @@ var author$project$Main$update = F2(
 						elm$core$Platform$Cmd$none);
 				} else {
 					var err = result.a;
-					return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{document: author$project$App$Types$DocFailure}),
+						elm$core$Platform$Cmd$none);
 				}
 			case 'HandleTagStatus':
 				var result = msg.a;
@@ -14774,8 +14779,13 @@ var author$project$Main$renderList = function (tags) {
 				[author$project$Main$loader]);
 	}
 };
+var elm$html$Html$i = _VirtualDom_node('i');
 var elm$html$Html$input = _VirtualDom_node('input');
+var elm$html$Html$label = _VirtualDom_node('label');
+var elm$html$Html$Attributes$for = elm$html$Html$Attributes$stringProperty('htmlFor');
+var elm$html$Html$Attributes$name = elm$html$Html$Attributes$stringProperty('name');
 var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
+var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
 var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
 var elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
@@ -14824,14 +14834,44 @@ var author$project$Main$homeView = function (model) {
 			_List_fromArray(
 				[
 					A2(
-					elm$html$Html$input,
+					elm$html$Html$div,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$placeholder('Search: '),
-							elm$html$Html$Attributes$value(search),
-							elm$html$Html$Events$onInput(author$project$Main$TypeSearch)
+							elm$html$Html$Attributes$class('input-container')
 						]),
-					_List_Nil),
+					_List_fromArray(
+						[
+							A2(
+							elm$html$Html$i,
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$class('icon-search')
+								]),
+							_List_Nil),
+							A2(
+							elm$html$Html$label,
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$for('search')
+								]),
+							_List_fromArray(
+								[
+									elm$html$Html$text('Type for search ')
+								])),
+							A2(
+							elm$html$Html$input,
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$class('input-field'),
+									elm$html$Html$Attributes$name('search'),
+									elm$html$Html$Attributes$id('search'),
+									elm$html$Html$Attributes$placeholder('Type for search'),
+									elm$html$Html$Attributes$type_('text'),
+									elm$html$Html$Attributes$value(search),
+									elm$html$Html$Events$onInput(author$project$Main$TypeSearch)
+								]),
+							_List_Nil)
+						])),
 					A2(
 					elm$html$Html$div,
 					_List_fromArray(
@@ -15043,11 +15083,7 @@ var author$project$Main$languageSelect = F3(
 				},
 				options));
 	});
-var elm$html$Html$label = _VirtualDom_node('label');
 var elm$html$Html$Attributes$checked = elm$html$Html$Attributes$boolProperty('checked');
-var elm$html$Html$Attributes$for = elm$html$Html$Attributes$stringProperty('htmlFor');
-var elm$html$Html$Attributes$name = elm$html$Html$Attributes$stringProperty('name');
-var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
 var author$project$Main$switcher = F4(
 	function (onChange, value, textOn, textOff) {
 		return A2(
@@ -15786,7 +15822,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64384" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51183" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
