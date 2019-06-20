@@ -6,12 +6,12 @@ self.addEventListener("install", event => {
       .open(CACHE)
       .then(cache =>
         cache.addAll([
-          "/",
-          "/index.html",
-          "/favicon.ico",
-          "/content/*.json",
-          "/content/**/*.json",
-          "/translations/**/*.json"
+          "/erldoc/",
+          "/erldoc/index.html",
+          "/erldoc/favicon.ico",
+          "/erldoc/content/*.json",
+          "/erldoc/content/**/*.json",
+          "/erldoc/translations/**/*.json"
         ])
       )
   );
