@@ -10,7 +10,7 @@ self.addEventListener("install", event => {
           "/erldoc/index.html",
           "/erldoc/*.png",
           "/erldoc/*.svg",
-          "/erldoc/content/*.json",
+          "/erldoc/content/tags.json",
           "/erldoc/content/**/*.json",
           "/erldoc/translations/**/*.json"
         ])
