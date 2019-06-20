@@ -8,7 +8,8 @@ self.addEventListener("install", event => {
         cache.addAll([
           "/erldoc/",
           "/erldoc/index.html",
-          "/erldoc/favicon.ico",
+          "/erldoc/*.png",
+          "/erldoc/*.svg",
           "/erldoc/content/*.json",
           "/erldoc/content/**/*.json",
           "/erldoc/translations/**/*.json"
