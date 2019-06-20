@@ -339,7 +339,7 @@ body header .navbar .nav li:first-child span span {
 }
 body header .navbar .nav li:last-child a,
 body header .navbar .nav li:last-child span {
-  background: url("/settings.15f40d4b.svg") no-repeat;
+  background: url("/erldoc/settings.15f40d4b.svg") no-repeat;
   width: 58px;
   height: 58px;
   text-indent: 100vw;
@@ -362,7 +362,7 @@ body header .navbar.collapse .nav li:first-child {
 body header .navbar.collapse .nav li:first-child a,
 body header .navbar.collapse .nav li:first-child span {
   margin-left: initial;
-  background: url("/documents.11e58171.svg") no-repeat;
+  background: url("/erldoc/documents.11e58171.svg") no-repeat;
   width: 58px;
   height: 58px;
   text-indent: -100vw;
@@ -436,7 +436,7 @@ body .page404 .row .image404 {
   height: 600px;
   background-size: cover;
   display: block;
-  background: url("/otter_light.99bec48a.png") 50% 50% no-repeat;
+  background: url("/erldoc/otter_light.99bec48a.png") 50% 50% no-repeat;
 }
 body .page404 .row .back {
   text-decoration: none;
@@ -495,7 +495,7 @@ body .loader {
 body .loader::before {
   content: "";
   display: block;
-  background: url("/spinner.8b7d0f4a.png") center center no-repeat;
+  background: url("/erldoc/spinner.8b7d0f4a.png") center center no-repeat;
   background-size: contain;
   margin-left: auto;
   margin-right: auto;
@@ -510,4 +510,4 @@ body .loader::before {
   }
 }
 
-/*# sourceMappingURL=/main.2a7efca8.css.map */
+/*# sourceMappingURL=/erldoc/main.2a7efca8.css.map */

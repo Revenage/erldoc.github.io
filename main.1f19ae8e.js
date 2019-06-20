@@ -6724,6 +6724,9 @@ var author$project$App$Decoders$decodeTranslations = elm$json$Json$Decode$dict(e
 var author$project$Main$HandleTranslateResponse = function (a) {
 	return {$: 'HandleTranslateResponse', a: a};
 };
+var author$project$Main$assetsUrl = function (path) {
+	return '/erldoc' + path;
+};
 var elm$core$Result$mapError = F2(
 	function (f, result) {
 		if (result.$ === 'Ok') {
@@ -7036,7 +7039,7 @@ var author$project$Main$getTranslation = function (lang) {
 	return elm$http$Http$get(
 		{
 			expect: A2(elm$http$Http$expectJson, author$project$Main$HandleTranslateResponse, author$project$App$Decoders$decodeTranslations),
-			url: '/translations/' + (lang + '.json')
+			url: author$project$Main$assetsUrl('/translations/') + (lang + '.json')
 		});
 };
 var author$project$App$Types$Doc = F2(
@@ -7058,7 +7061,7 @@ var author$project$Main$getDoc = F2(
 		return elm$http$Http$get(
 			{
 				expect: A2(elm$http$Http$expectJson, author$project$Main$HandleDocResponse, author$project$App$Decoders$decodeDocument),
-				url: '/content/' + (lang + ('/' + (name + '.json')))
+				url: author$project$Main$assetsUrl('/content/') + (lang + ('/' + (name + '.json')))
 			});
 	});
 var elm$json$Json$Decode$list = _Json_decodeList;
@@ -7069,7 +7072,7 @@ var author$project$Main$HandleTagResponse = function (a) {
 var author$project$Main$getTags = elm$http$Http$get(
 	{
 		expect: A2(elm$http$Http$expectJson, author$project$Main$HandleTagResponse, author$project$App$Decoders$decodeTag),
-		url: '/content/tags.json'
+		url: author$project$Main$assetsUrl('/content/tags.json')
 	});
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
@@ -15732,7 +15735,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61479" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58304" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -15908,4 +15911,4 @@ function hmrAcceptRun(bundle, id) {
   }
 }
 },{}]},{},["../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
-//# sourceMappingURL=/main.1f19ae8e.js.map
+//# sourceMappingURL=/erldoc/main.1f19ae8e.js.map
