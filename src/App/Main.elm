@@ -15,6 +15,7 @@ import Html.Parser.Util
 import Http
 import Json.Decode exposing (Decoder, dict, field, string)
 import Json.Encode as Encode
+import Regex exposing (..)
 import Url
 import Url.Parser exposing (Parser, map, oneOf, parse, s, string, top)
 
@@ -514,7 +515,7 @@ homeView model =
             [ div [ class "input-container" ]
                 [ i [ class "icon-search" ]
                     []
-                , label [ for "search" ] [ text "Type for search " ]
+                , label [ for "search" ] [ text (I18n.get model.translation "SEARCH") ]
                 , input
                     [ class "input-field"
                     , name "search"
@@ -522,12 +523,13 @@ homeView model =
                     , placeholder "Type for search"
                     , type_ "text"
                     , value search
+                    , autofocus False
                     , onInput TypeSearch
                     ]
                     []
                 ]
             , div [ class "row" ]
-                [ ul [] (renderList tags)
+                [ ul [] (renderList tags search)
                 ]
             ]
     }
@@ -574,11 +576,20 @@ documentView model name =
             }
 
 
-renderList : TagStatus -> List (Html Msg)
-renderList tags =
+includeStr s item =
+    String.contains s (String.join " " item)
+
+
+renderList : TagStatus -> String -> List (Html Msg)
+renderList tags search =
     case tags of
         TagSuccess tagList ->
-            List.map toLi tagList
+            case search of
+                "" ->
+                    List.map (toLi "") tagList
+
+                s ->
+                    List.map (toLi s) (List.filter (includeStr s) tagList)
 
         TagLoading ->
             [ loader ]
@@ -587,9 +598,64 @@ renderList tags =
             [ loader ]
 
 
-toLi : String -> Html Msg
-toLi item =
-    li [] [ a [ href <| assetsUrl ("/docs/" ++ item) ] [ text item ] ]
+tagStr : String -> Regex.Regex
+tagStr str =
+    Maybe.withDefault Regex.never <|
+        Regex.fromStringWith { caseInsensitive = True, multiline = True }
+            ("(\\w+)?"
+                ++ str
+                ++ "(\\w+)?"
+            )
+
+
+findTags : String -> String -> List String
+findTags search str =
+    let
+        matches =
+            Regex.find (tagStr search) str
+    in
+    List.map (\i -> i.match) matches
+
+
+uniq : List String -> List String
+uniq list =
+    -- List.foldl
+    --     (\result curr ->
+    --         if List.member curr result then
+    --             result :: curr
+    --         else
+    --             result
+    --     )
+    --     []
+    list
+
+
+toLi : String -> List String -> Html Msg
+toLi search item =
+    let
+        modulename =
+            Maybe.withDefault "" (List.head item)
+    in
+    case search of
+        "" ->
+            li [] [ a [ href <| assetsUrl ("/docs/" ++ modulename) ] [ text modulename ] ]
+
+        s ->
+            let
+                tagsList =
+                    findTags s (Maybe.withDefault "" (List.head (List.reverse item)))
+            in
+            li []
+                [ a [ href <| assetsUrl ("/docs/" ++ modulename) ] [ text modulename ]
+
+                -- , span [] [ text (String.join ", " tagsList) ]
+                , ul [ class "tag-list" ] (rendetTagsList <| uniq tagsList)
+                ]
+
+
+rendetTagsList : List String -> List (Html msg)
+rendetTagsList list =
+    List.map (\item -> li [ class "tag" ] [ text item ]) list
 
 
 notFoundView : Model -> { title : String, body : List (Html msg) }

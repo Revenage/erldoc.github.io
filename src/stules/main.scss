@@ -1,13 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap&subset=latin-ext");
 @import "reset";
 @import "vars";
 @import "switch";
 @import "select";
 
 html {
-  background-color: $white;
+  background-color: $bgLight;
   color: $black;
   min-height: 100%;
-  font-family: Helvetica Neue, helvetica, arial, verdana, sans-serif;
+  font-family: "Raleway", Helvetica Neue, helvetica, arial, verdana, sans-serif;
+  letter-spacing: 0.4px;
 
   header {
     border-bottom: 2px solid $black;
@@ -25,6 +27,25 @@ html {
       border: 1px solid $bgLight;
       background-color: $bgDark;
     }
+
+    .home {
+      .input-container {
+        border: 2px solid $white;
+        .icon-search {
+          display: block;
+          width: 40px;
+          height: 40px;
+          position: absolute;
+          background: url(../images/search.svg) center center no-repeat;
+        }
+        .input-field {
+          color: $white;
+          &::placeholder {
+            color: $white;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -32,7 +53,9 @@ body {
   max-width: 100%;
   overflow-x: hidden;
   padding: 0 0 15px 0;
+
   .container {
+    outline: none;
     .row {
       .toggle-list {
         width: 60px;
@@ -242,7 +265,7 @@ body {
     margin-top: -12px;
     .input-container {
       display: block;
-      border: 2px solid $white;
+      border: 2px solid $black;
       font-size: 16px;
       line-height: 40px;
       height: 40px;
@@ -257,20 +280,19 @@ body {
         width: 40px;
         height: 40px;
         position: absolute;
-        background: url(../images/search.svg) center center no-repeat;
+        background: url(../images/search.black.svg) center center no-repeat;
       }
       .input-field {
         background-color: inherit;
         border: none;
-        color: $white;
+        color: $black;
         font-size: 20px;
         margin-left: 40px;
         outline: none;
 
         &::placeholder {
-          color: $white;
+          color: $black;
           font-weight: 100;
-          opacity: 1;
         }
       }
     }
@@ -282,8 +304,8 @@ body {
       li {
         a {
           text-overflow: ellipsis;
-          max-width: 95%;
-          width: 95%;
+          // max-width: 95%;
+          // width: 95%;
           overflow: hidden;
           display: inline-block;
           text-decoration: none;

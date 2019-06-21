@@ -16,7 +16,7 @@ decodeDocs =
 
 decodeTag : Decoder Tags
 decodeTag =
-    list string
+    list (list string)
 
 
 decodeDocument : Decoder Doc

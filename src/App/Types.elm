@@ -41,7 +41,7 @@ type alias Translations =
 
 
 type alias Tags =
-    List String
+    List (List String)
 
 
 type alias Doc =
