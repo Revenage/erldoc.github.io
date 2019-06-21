@@ -274,7 +274,7 @@ update msg model =
                     model.home
 
                 newmodel =
-                    { oldmodel | search = text }
+                    { oldmodel | search = String.toLower text }
             in
             ( { model | home = newmodel }
             , Cmd.none
@@ -317,19 +317,6 @@ saveSettings model =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
-
-
-
--- VIEW
--- mainView : PageView -> Model -> Browser.Document Msg
--- mainView pageview model =
---     { title = pageview.title
---     , body =
---         [ nav model
---         , pageview.content
---         , footer model
---         ]
---     }
 
 
 nav : Model -> Html Msg

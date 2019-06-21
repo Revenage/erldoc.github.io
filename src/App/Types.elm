@@ -45,7 +45,8 @@ type alias Tags =
 
 
 type alias Doc =
-    { summary : String, description : String
+    { summary : String
+    , description : String
 
-    {--, funcs : String--}
+    -- , funcs : String
     }

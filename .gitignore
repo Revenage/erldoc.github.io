@@ -1,7 +1,6 @@
-xml/
+
 .vscode/
 .cache/
 dist/
 elm-stuff/
 node_modules/
-scripts/
