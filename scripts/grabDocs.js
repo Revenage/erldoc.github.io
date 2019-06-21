@@ -25,8 +25,8 @@ const escaping = str =>
         .replace(/onmouseover="(.*?)"/gi, "")
         .replace(/onmouseout="(.*?)"/gi, "")
         .replace(/\s\s+/g, " ")
-        .replace(/\n/g, "")
-        .replace('""', '"');
+        .replace(/\n/g, "");
+// .replace('""', '"');
 
 function pageParser(body) {
   const $ = cheerio.load(body);

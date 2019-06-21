@@ -561,7 +561,7 @@ documentView model name =
 
         DocSuccess document ->
             let
-                { summary, description } =
+                { summary, description, funcs } =
                     document
             in
             { title = String.join " " [ trans "DOCS.TITLE", name ]
@@ -570,9 +570,9 @@ documentView model name =
                 , main_ [ id "content", class "container document", tabindex -1 ]
                     [ div [ class "row summary" ]
                         [ h1 [] [ text summary ] ]
-                    , div [ class "row description" ] (textHtml description)
-
-                    -- , div [ class "row funcs" ] (textHtml funcs)
+                    , div [ class "row description" ]
+                        (textHtml description)
+                    , div [ class "row funcs" ] (textHtml funcs)
                     ]
                 , footer model
                 ]
