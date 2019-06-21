@@ -7157,17 +7157,18 @@ var author$project$Main$getTranslation = function (lang) {
 			url: author$project$Main$assetsUrl('/translations/') + (lang + '.json')
 		});
 };
-var author$project$App$Types$Doc = F2(
-	function (summary, description) {
-		return {description: description, summary: summary};
+var author$project$App$Types$Doc = F3(
+	function (summary, description, funcs) {
+		return {description: description, funcs: funcs, summary: summary};
 	});
 var elm$json$Json$Decode$field = _Json_decodeField;
-var elm$json$Json$Decode$map2 = _Json_map2;
-var author$project$App$Decoders$decodeDocument = A3(
-	elm$json$Json$Decode$map2,
+var elm$json$Json$Decode$map3 = _Json_map3;
+var author$project$App$Decoders$decodeDocument = A4(
+	elm$json$Json$Decode$map3,
 	author$project$App$Types$Doc,
 	A2(elm$json$Json$Decode$field, 'summary', elm$json$Json$Decode$string),
-	A2(elm$json$Json$Decode$field, 'description', elm$json$Json$Decode$string));
+	A2(elm$json$Json$Decode$field, 'description', elm$json$Json$Decode$string),
+	A2(elm$json$Json$Decode$field, 'funcs', elm$json$Json$Decode$string));
 var author$project$Main$HandleDocResponse = function (a) {
 	return {$: 'HandleDocResponse', a: a};
 };
@@ -7429,6 +7430,7 @@ var elm$browser$Debugger$Overlay$Choose = F2(
 	});
 var elm$browser$Debugger$Overlay$goodNews1 = '\nThe good news is that having values like this in your message type is not\nso great in the long run. You are better off using simpler data, like\n';
 var elm$browser$Debugger$Overlay$goodNews2 = '\nfunction can pattern match on that data and call whatever functions, JSON\ndecoders, etc. you need. This makes the code much more explicit and easy to\nfollow for other readers (or you in a few months!)\n';
+var elm$json$Json$Decode$map2 = _Json_map2;
 var elm$json$Json$Decode$succeed = _Json_succeed;
 var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	switch (handler.$) {
@@ -9284,7 +9286,6 @@ var elm$browser$Debugger$Metadata$decodeUnion = A3(
 		'tags',
 		elm$json$Json$Decode$dict(
 			elm$json$Json$Decode$list(elm$json$Json$Decode$string))));
-var elm$json$Json$Decode$map3 = _Json_map3;
 var elm$browser$Debugger$Metadata$decodeTypes = A4(
 	elm$json$Json$Decode$map3,
 	elm$browser$Debugger$Metadata$Types,
@@ -10888,6 +10889,7 @@ var elm$browser$Browser$Navigation$back = F2(
 	});
 var elm$browser$Browser$Navigation$load = _Browser_load;
 var elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
+var elm$core$String$toLower = _String_toLower;
 var elm$url$Url$addPort = F2(
 	function (maybePort, starter) {
 		if (maybePort.$ === 'Nothing') {
@@ -11045,7 +11047,9 @@ var author$project$Main$update = F2(
 				var oldmodel = model.home;
 				var newmodel = _Utils_update(
 					oldmodel,
-					{search: text});
+					{
+						search: elm$core$String$toLower(text)
+					});
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -11076,6 +11080,7 @@ var elm$html$Html$footer = _VirtualDom_node('footer');
 var elm$html$Html$nav = _VirtualDom_node('nav');
 var elm$html$Html$small = _VirtualDom_node('small');
 var author$project$Main$footer = function (model) {
+	var trans = author$project$App$I18n$get(model.translation);
 	return A2(
 		elm$html$Html$footer,
 		_List_fromArray(
@@ -11109,7 +11114,7 @@ var author$project$Main$footer = function (model) {
 										_List_fromArray(
 											[
 												elm$html$Html$text(
-												A2(author$project$App$I18n$get, model.translation, 'ABOUT'))
+												trans('ABOUT'))
 											]))
 									])),
 								A2(
@@ -11127,7 +11132,7 @@ var author$project$Main$footer = function (model) {
 										_List_fromArray(
 											[
 												elm$html$Html$text(
-												A2(author$project$App$I18n$get, model.translation, 'CONTACT'))
+												trans('CONTACT'))
 											]))
 									]))
 							]))
@@ -11535,7 +11540,6 @@ var hecrj$html_parser$Html$Parser$Element = F3(
 	function (a, b, c) {
 		return {$: 'Element', a: a, b: b, c: c};
 	});
-var elm$core$String$toLower = _String_toLower;
 var elm$parser$Parser$Advanced$mapChompedString = F2(
 	function (func, _n0) {
 		var parse = _n0.a;
@@ -14767,6 +14771,7 @@ var elm$html$Html$Attributes$tabindex = function (n) {
 };
 var author$project$Main$documentView = F2(
 	function (model, name) {
+		var trans = author$project$App$I18n$get(model.translation);
 		var _n0 = model.document;
 		switch (_n0.$) {
 			case 'DocLoading':
@@ -14777,13 +14782,14 @@ var author$project$Main$documentView = F2(
 							author$project$Main$loader,
 							author$project$Main$footer(model)
 						]),
-					title: A2(author$project$App$I18n$get, model.translation, 'LOADING')
+					title: trans('LOADING')
 				};
 			case 'DocSuccess':
 				var document = _n0.a;
 				var _n1 = document;
 				var summary = _n1.summary;
 				var description = _n1.description;
+				var funcs = _n1.funcs;
 				return {
 					body: _List_fromArray(
 						[
@@ -14820,7 +14826,14 @@ var author$project$Main$documentView = F2(
 										[
 											elm$html$Html$Attributes$class('row description')
 										]),
-									author$project$Main$textHtml(description))
+									author$project$Main$textHtml(description)),
+									A2(
+									elm$html$Html$div,
+									_List_fromArray(
+										[
+											elm$html$Html$Attributes$class('row funcs')
+										]),
+									author$project$Main$textHtml(funcs))
 								])),
 							author$project$Main$footer(model)
 						]),
@@ -14829,7 +14842,7 @@ var author$project$Main$documentView = F2(
 						' ',
 						_List_fromArray(
 							[
-								A2(author$project$App$I18n$get, model.translation, 'DOCS.TITLE'),
+								trans('DOCS.TITLE'),
 								name
 							]))
 				};
@@ -14841,19 +14854,45 @@ var author$project$Main$documentView = F2(
 							author$project$Main$loader,
 							author$project$Main$footer(model)
 						]),
-					title: A2(author$project$App$I18n$get, model.translation, 'FAILURE')
+					title: trans('FAILURE')
 				};
 		}
 	});
 var author$project$Main$TypeSearch = function (a) {
 	return {$: 'TypeSearch', a: a};
 };
-var author$project$Main$includeStr = F2(
-	function (s, item) {
+var elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return elm$core$Maybe$Just(x);
+	} else {
+		return elm$core$Maybe$Nothing;
+	}
+};
+var author$project$Main$toLi = F2(
+	function (search, item) {
+		var modulename = A2(
+			elm$core$Maybe$withDefault,
+			'',
+			elm$core$List$head(item));
 		return A2(
-			elm$core$String$contains,
-			s,
-			A2(elm$core$String$join, ' ', item));
+			elm$html$Html$li,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$a,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$href(
+							author$project$Main$assetsUrl('/docs/' + modulename))
+						]),
+					_List_fromArray(
+						[
+							elm$html$Html$text(modulename)
+						]))
+				]));
 	});
 var elm$regex$Regex$Match = F4(
 	function (match, index, number, submatches) {
@@ -14925,42 +14964,14 @@ var elm$core$List$filter = F2(
 			_List_Nil,
 			list);
 	});
-var elm$core$List$head = function (list) {
-	if (list.b) {
-		var x = list.a;
-		var xs = list.b;
-		return elm$core$Maybe$Just(x);
-	} else {
-		return elm$core$Maybe$Nothing;
-	}
-};
-var author$project$Main$toLi = F2(
+var author$project$Main$toTaggedLi = F2(
 	function (search, item) {
 		var modulename = A2(
 			elm$core$Maybe$withDefault,
 			'',
 			elm$core$List$head(item));
-		if (search === '') {
-			return A2(
-				elm$html$Html$li,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						elm$html$Html$a,
-						_List_fromArray(
-							[
-								elm$html$Html$Attributes$href(
-								author$project$Main$assetsUrl('/docs/' + modulename))
-							]),
-						_List_fromArray(
-							[
-								elm$html$Html$text(modulename)
-							]))
-					]));
-		} else {
-			var s = search;
-			var tagsList = (elm$core$List$length(item) > 1) ? A2(
+		var tagsList = (elm$core$List$length(item) > 1) ? author$project$Main$uniq(
+			A2(
 				elm$core$List$filter,
 				function (lf) {
 					return !_Utils_eq(
@@ -14969,38 +14980,36 @@ var author$project$Main$toLi = F2(
 				},
 				A2(
 					author$project$Main$findTags,
-					s,
+					search,
 					A2(
 						elm$core$Maybe$withDefault,
 						'',
 						elm$core$List$head(
-							elm$core$List$reverse(item))))) : _List_Nil;
-			return A2(
-				elm$html$Html$li,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						elm$html$Html$a,
-						_List_fromArray(
-							[
-								elm$html$Html$Attributes$href(
-								author$project$Main$assetsUrl('/docs/' + modulename))
-							]),
-						_List_fromArray(
-							[
-								elm$html$Html$text(modulename)
-							])),
-						A2(
-						elm$html$Html$ul,
-						_List_fromArray(
-							[
-								elm$html$Html$Attributes$class('tag-list')
-							]),
-						author$project$Main$rendetTagsList(
-							author$project$Main$uniq(tagsList)))
-					]));
-		}
+							elm$core$List$reverse(item)))))) : _List_Nil;
+		return (elm$core$List$length(tagsList) > 0) ? A2(
+			elm$html$Html$li,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$a,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$href(
+							author$project$Main$assetsUrl('/docs/' + modulename))
+						]),
+					_List_fromArray(
+						[
+							elm$html$Html$text(modulename)
+						])),
+					A2(
+					elm$html$Html$ul,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('tag-list')
+						]),
+					author$project$Main$rendetTagsList(tagsList))
+				])) : A2(elm$html$Html$li, _List_Nil, _List_Nil);
 	});
 var author$project$Main$renderList = F2(
 	function (tags, search) {
@@ -15016,11 +15025,8 @@ var author$project$Main$renderList = F2(
 					var s = search;
 					return A2(
 						elm$core$List$map,
-						author$project$Main$toLi(s),
-						A2(
-							elm$core$List$filter,
-							author$project$Main$includeStr(s),
-							tagList));
+						author$project$Main$toTaggedLi(s),
+						tagList);
 				}
 			case 'TagLoading':
 				return _List_fromArray(
@@ -15077,6 +15083,7 @@ var elm$html$Html$Events$onInput = function (tagger) {
 			A2(elm$json$Json$Decode$map, tagger, elm$html$Html$Events$targetValue)));
 };
 var author$project$Main$homeView = function (model) {
+	var trans = author$project$App$I18n$get(model.translation);
 	var _n0 = model.home;
 	var search = _n0.search;
 	var tags = _n0.tags;
@@ -15109,7 +15116,7 @@ var author$project$Main$homeView = function (model) {
 							_List_fromArray(
 								[
 									elm$html$Html$text(
-									A2(author$project$App$I18n$get, model.translation, 'SEARCH'))
+									trans('SEARCH'))
 								])),
 							A2(
 							elm$html$Html$input,
@@ -15140,10 +15147,11 @@ var author$project$Main$homeView = function (model) {
 							A2(author$project$Main$renderList, tags, search))
 						]))
 				])),
-		title: A2(author$project$App$I18n$get, model.translation, 'HOME')
+		title: trans('HOME')
 	};
 };
 var author$project$Main$nav = function (model) {
+	var trans = author$project$App$I18n$get(model.translation);
 	var headetClass = A2(author$project$Main$checkColapse, 'navbar', model);
 	return A2(
 		elm$html$Html$header,
@@ -15187,7 +15195,7 @@ var author$project$Main$nav = function (model) {
 												_List_fromArray(
 													[
 														elm$html$Html$text(
-														A2(author$project$App$I18n$get, model.translation, 'DOCS'))
+														trans('DOCS'))
 													]))
 											]))
 									])),
@@ -15211,7 +15219,7 @@ var author$project$Main$nav = function (model) {
 												_List_fromArray(
 													[
 														elm$html$Html$text(
-														A2(author$project$App$I18n$get, model.translation, 'SETTINGS'))
+														trans('SETTINGS'))
 													]))
 											]))
 									]))
@@ -15220,6 +15228,7 @@ var author$project$Main$nav = function (model) {
 			]));
 };
 var author$project$Main$notFoundView = function (model) {
+	var trans = author$project$App$I18n$get(model.translation);
 	return {
 		body: _List_fromArray(
 			[
@@ -15250,7 +15259,7 @@ var author$project$Main$notFoundView = function (model) {
 								_List_fromArray(
 									[
 										elm$html$Html$text(
-										A2(author$project$App$I18n$get, model.translation, 'NOT.FOUND'))
+										trans('NOT.FOUND'))
 									]))
 							])),
 						A2(
@@ -15288,12 +15297,12 @@ var author$project$Main$notFoundView = function (model) {
 								_List_fromArray(
 									[
 										elm$html$Html$text(
-										A2(author$project$App$I18n$get, model.translation, 'BACK.HOME'))
+										trans('BACK.HOME'))
 									]))
 							]))
 					]))
 			]),
-		title: A2(author$project$App$I18n$get, model.translation, 'NOT.FOUND')
+		title: trans('NOT.FOUND')
 	};
 };
 var author$project$Main$ChangeLanguage = function (a) {
@@ -15367,6 +15376,7 @@ var author$project$Main$switcher = F4(
 				]));
 	});
 var author$project$Main$settingsView = function (model) {
+	var trans = author$project$App$I18n$get(model.translation);
 	var _n0 = model.settings;
 	var darkMode = _n0.darkMode;
 	return {
@@ -15392,8 +15402,8 @@ var author$project$Main$settingsView = function (model) {
 							author$project$Main$switcher,
 							author$project$Main$ChangeMode,
 							model.settings.darkMode,
-							A2(author$project$App$I18n$get, model.translation, 'DARK.THEME'),
-							A2(author$project$App$I18n$get, model.translation, 'LIGHT.THEME'))
+							trans('DARK.THEME'),
+							trans('LIGHT.THEME'))
 						])),
 					A2(
 					elm$html$Html$div,
@@ -15411,17 +15421,18 @@ var author$project$Main$settingsView = function (model) {
 							model.settings.language)
 						]))
 				])),
-		title: A2(author$project$App$I18n$get, model.translation, 'SETTINGS')
+		title: trans('SETTINGS')
 	};
 };
 var author$project$Main$view = function (model) {
+	var trans = author$project$App$I18n$get(model.translation);
 	var _n0 = model.translation;
 	switch (_n0.$) {
 		case 'TranslateLoading':
 			return {
 				body: _List_fromArray(
 					[author$project$Main$loader]),
-				title: A2(author$project$App$I18n$get, model.translation, 'LOADING')
+				title: trans('LOADING')
 			};
 		case 'TranslateSuccess':
 			var viewPage = function (pageview) {
@@ -15454,7 +15465,7 @@ var author$project$Main$view = function (model) {
 			return {
 				body: _List_fromArray(
 					[author$project$Main$loader]),
-				title: A2(author$project$App$I18n$get, model.translation, 'FAILURE')
+				title: trans('FAILURE')
 			};
 	}
 };
@@ -15494,7 +15505,7 @@ _Platform_export({'Main':{'init':author$project$Main$main(
 									A2(elm$json$Json$Decode$field, 'darkMode', elm$json$Json$Decode$bool));
 							},
 							A2(elm$json$Json$Decode$field, 'language', elm$json$Json$Decode$string)))
-					])))))({"versions":{"elm":"0.19.0"},"types":{"message":"Main.Msg","aliases":{"App.Types.Doc":{"args":[],"type":"{ summary : String.String, description : String.String }"},"App.Types.Tags":{"args":[],"type":"List.List (List.List String.String)"},"App.Types.Translation":{"args":[],"type":"Dict.Dict String.String String.String"},"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"}},"unions":{"Main.Msg":{"args":[],"tags":{"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"HandleTranslateResponse":["Result.Result Http.Error App.Types.Translation"],"HandleTagStatus":["Result.Result Http.Error App.Types.Tags"],"HandleDocResponse":["Result.Result Http.Error App.Types.Doc"],"ChangeMode":[],"ChangeLanguage":["String.String"],"TypeSearch":["String.String"],"Back":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"Dict.NColor":{"args":[],"tags":{"Red":[],"Black":[]}}}}})}});
+					])))))({"versions":{"elm":"0.19.0"},"types":{"message":"Main.Msg","aliases":{"App.Types.Doc":{"args":[],"type":"{ summary : String.String, description : String.String, funcs : String.String }"},"App.Types.Tags":{"args":[],"type":"List.List (List.List String.String)"},"App.Types.Translation":{"args":[],"type":"Dict.Dict String.String String.String"},"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"}},"unions":{"Main.Msg":{"args":[],"tags":{"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"HandleTranslateResponse":["Result.Result Http.Error App.Types.Translation"],"HandleTagStatus":["Result.Result Http.Error App.Types.Tags"],"HandleDocResponse":["Result.Result Http.Error App.Types.Doc"],"ChangeMode":[],"ChangeLanguage":["String.String"],"TypeSearch":["String.String"],"Back":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"Dict.NColor":{"args":[],"tags":{"Red":[],"Black":[]}}}}})}});
 
 //////////////////// HMR BEGIN ////////////////////
 
@@ -16069,7 +16080,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64402" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63765" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -479,23 +479,44 @@ body .document {
   padding: 0 8px;
   font-size: 16px;
 }
+body .document .code {
+  background-color: rgba(243, 95, 66, 0.2);
+  font-weight: bold;
+  letter-spacing: 1.8px;
+}
 body .document h1 {
   font-weight: bold;
   font-size: 18px;
   text-align: center;
   line-height: 2;
 }
-body .document .description p {
+body .document .description,
+body .document .funcs {
   line-height: 1.5;
   margin-bottom: 16px;
 }
-body .document .description p span.bold_code {
+body .document .description .func-table,
+body .document .funcs .func-table {
+  margin: 10px 0;
+}
+body .document .description span.bold_code,
+body .document .description span .title_link,
+body .document .funcs span.bold_code,
+body .document .funcs span .title_link {
   font-weight: bold;
   color: #f35f42;
+  text-decoration: none;
 }
-body .document .description p span.bold_code a {
+body .document .description span.bold_code a,
+body .document .description span .title_link a,
+body .document .funcs span.bold_code a,
+body .document .funcs span .title_link a {
   text-decoration: none;
   color: inherit;
+}
+body .document .description .func-types-title,
+body .document .funcs .func-types-title {
+  font-weight: bold;
 }
 body .home {
   margin-top: -12px;
