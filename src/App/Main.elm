@@ -500,9 +500,7 @@ homeView model =
     , content =
         main_ [ id "content", class "container home", tabindex -1 ]
             [ div [ class "input-container" ]
-                [ i [ class "icon-search" ]
-                    []
-                , label [ for "search" ] [ text (I18n.get model.translation "SEARCH") ]
+                [ label [ class "icon-search", for "search" ] [ text (I18n.get model.translation "SEARCH") ]
                 , input
                     [ class "input-field"
                     , name "search"
