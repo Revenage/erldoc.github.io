@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap&subset=latin-ext");
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -275,31 +276,51 @@ table {
 }
 
 html {
-  background-color: #ffffff;
+  background-color: #eeeeee;
   color: #333;
   min-height: 100%;
-  font-family: Helvetica Neue, helvetica, arial, verdana, sans-serif;
+  font-family: "Raleway", Helvetica Neue, helvetica, arial, verdana, sans-serif;
+  letter-spacing: 0.4px;
 }
 html header {
   border-bottom: 2px solid #333;
 }
 html.dark {
   background-color: #3d4457;
-  color: #ffffff;
+  color: #cacaca;
 }
 html.dark header {
-  border-bottom: 2px solid #ffffff;
+  border-bottom: 2px solid #cacaca;
 }
 html.dark .select-css {
-  color: #ffffff;
+  color: #cacaca;
   border: 1px solid #eeeeee;
   background-color: #3d4457;
+}
+html.dark .home .input-container {
+  border: 2px solid #cacaca;
+}
+html.dark .home .input-container .icon-search {
+  display: block;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  background: url(/erldoc/search.48f4844e.svg) center center no-repeat;
+}
+html.dark .home .input-container .input-field {
+  color: #cacaca;
+}
+html.dark .home .input-container .input-field::placeholder {
+  color: #cacaca;
 }
 
 body {
   max-width: 100%;
   overflow-x: hidden;
   padding: 0 0 15px 0;
+}
+body .container {
+  outline: none;
 }
 body .container .row .toggle-list {
   width: 60px;
@@ -481,7 +502,7 @@ body .home {
 }
 body .home .input-container {
   display: block;
-  border: 2px solid #ffffff;
+  border: 2px solid #333;
   font-size: 16px;
   line-height: 40px;
   height: 40px;
@@ -495,20 +516,19 @@ body .home .input-container .icon-search {
   width: 40px;
   height: 40px;
   position: absolute;
-  background: url(/erldoc/search.48f4844e.svg) center center no-repeat;
+  background: url(/erldoc/search.black.800b3f64.svg) center center no-repeat;
 }
 body .home .input-container .input-field {
   background-color: inherit;
   border: none;
-  color: #ffffff;
+  color: #333;
   font-size: 20px;
   margin-left: 40px;
   outline: none;
 }
 body .home .input-container .input-field::placeholder {
-  color: #ffffff;
+  color: #333;
   font-weight: 100;
-  opacity: 1;
 }
 body .home ul {
   font-size: 18px;
@@ -518,12 +538,23 @@ body .home ul {
 }
 body .home ul li a {
   text-overflow: ellipsis;
-  max-width: 95%;
-  width: 95%;
   overflow: hidden;
   display: inline-block;
   text-decoration: none;
   color: inherit;
+}
+body .home ul li .tag-list {
+  line-height: initial;
+  margin-left: auto;
+  font-size: 12px;
+  color: #f35f42;
+}
+body .home ul li .tag-list .tag {
+  display: inline-block;
+  padding: 5px;
+  border: 1px solid #f35f42;
+  margin: 0 5px 5px 0;
+  border-radius: 3px;
 }
 body footer {
   width: 100vw;

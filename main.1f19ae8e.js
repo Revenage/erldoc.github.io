@@ -5313,6 +5313,107 @@ var _Parser_findSubString = F5(function(smallString, offset, row, col, bigString
 
 	return _Utils_Tuple3(newOffset, row, col);
 });
+
+
+// CREATE
+
+var _Regex_never = /.^/;
+
+var _Regex_fromStringWith = F2(function(options, string)
+{
+	var flags = 'g';
+	if (options.multiline) { flags += 'm'; }
+	if (options.caseInsensitive) { flags += 'i'; }
+
+	try
+	{
+		return elm$core$Maybe$Just(new RegExp(string, flags));
+	}
+	catch(error)
+	{
+		return elm$core$Maybe$Nothing;
+	}
+});
+
+
+// USE
+
+var _Regex_contains = F2(function(re, string)
+{
+	return string.match(re) !== null;
+});
+
+
+var _Regex_findAtMost = F3(function(n, re, str)
+{
+	var out = [];
+	var number = 0;
+	var string = str;
+	var lastIndex = re.lastIndex;
+	var prevLastIndex = -1;
+	var result;
+	while (number++ < n && (result = re.exec(string)))
+	{
+		if (prevLastIndex == re.lastIndex) break;
+		var i = result.length - 1;
+		var subs = new Array(i);
+		while (i > 0)
+		{
+			var submatch = result[i];
+			subs[--i] = submatch
+				? elm$core$Maybe$Just(submatch)
+				: elm$core$Maybe$Nothing;
+		}
+		out.push(A4(elm$regex$Regex$Match, result[0], result.index, number, _List_fromArray(subs)));
+		prevLastIndex = re.lastIndex;
+	}
+	re.lastIndex = lastIndex;
+	return _List_fromArray(out);
+});
+
+
+var _Regex_replaceAtMost = F4(function(n, re, replacer, string)
+{
+	var count = 0;
+	function jsReplacer(match)
+	{
+		if (count++ >= n)
+		{
+			return match;
+		}
+		var i = arguments.length - 3;
+		var submatches = new Array(i);
+		while (i > 0)
+		{
+			var submatch = arguments[i];
+			submatches[--i] = submatch
+				? elm$core$Maybe$Just(submatch)
+				: elm$core$Maybe$Nothing;
+		}
+		return replacer(A4(elm$regex$Regex$Match, match, arguments[arguments.length - 2], count, _List_fromArray(submatches)));
+	}
+	return string.replace(re, jsReplacer);
+});
+
+var _Regex_splitAtMost = F3(function(n, re, str)
+{
+	var string = str;
+	var out = [];
+	var start = re.lastIndex;
+	var restoreLastIndex = re.lastIndex;
+	while (n--)
+	{
+		var result = re.exec(string);
+		if (!result) break;
+		out.push(string.slice(start, result.index));
+		start = re.lastIndex;
+	}
+	out.push(string.slice(start));
+	re.lastIndex = restoreLastIndex;
+	return _List_fromArray(out);
+});
+
+var _Regex_infinity = Infinity;
 var author$project$Main$LinkClicked = function (a) {
 	return {$: 'LinkClicked', a: a};
 };
@@ -7079,7 +7180,8 @@ var author$project$Main$getDoc = F2(
 			});
 	});
 var elm$json$Json$Decode$list = _Json_decodeList;
-var author$project$App$Decoders$decodeTag = elm$json$Json$Decode$list(elm$json$Json$Decode$string);
+var author$project$App$Decoders$decodeTag = elm$json$Json$Decode$list(
+	elm$json$Json$Decode$list(elm$json$Json$Decode$string));
 var author$project$Main$HandleTagStatus = function (a) {
 	return {$: 'HandleTagStatus', a: a};
 };
@@ -11035,8 +11137,7 @@ var author$project$Main$footer = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						elm$html$Html$text(
-						'Copyright © 2019' + ('  ' + A2(author$project$App$I18n$get, model.translation, 'TEST')))
+						elm$html$Html$text('Copyright © 2019')
 					]))
 			]));
 };
@@ -14747,41 +14848,199 @@ var author$project$Main$documentView = F2(
 var author$project$Main$TypeSearch = function (a) {
 	return {$: 'TypeSearch', a: a};
 };
-var author$project$Main$toLi = function (item) {
+var author$project$Main$includeStr = F2(
+	function (s, item) {
+		return A2(
+			elm$core$String$contains,
+			s,
+			A2(elm$core$String$join, ' ', item));
+	});
+var elm$regex$Regex$Match = F4(
+	function (match, index, number, submatches) {
+		return {index: index, match: match, number: number, submatches: submatches};
+	});
+var elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
+var elm$regex$Regex$never = _Regex_never;
+var author$project$Main$tagStr = function (str) {
 	return A2(
-		elm$html$Html$li,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				elm$html$Html$a,
+		elm$core$Maybe$withDefault,
+		elm$regex$Regex$never,
+		A2(
+			elm$regex$Regex$fromStringWith,
+			{caseInsensitive: true, multiline: true},
+			'(\\w+)?' + (str + '(\\w+)?')));
+};
+var elm$regex$Regex$find = _Regex_findAtMost(_Regex_infinity);
+var author$project$Main$findTags = F2(
+	function (search, str) {
+		var matches = A2(
+			elm$regex$Regex$find,
+			author$project$Main$tagStr(search),
+			str);
+		return A2(
+			elm$core$List$map,
+			function (i) {
+				return i.match;
+			},
+			matches);
+	});
+var author$project$Main$rendetTagsList = function (list) {
+	return A2(
+		elm$core$List$map,
+		function (item) {
+			return A2(
+				elm$html$Html$li,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$href(
-						author$project$Main$assetsUrl('/docs/' + item))
+						elm$html$Html$Attributes$class('tag')
 					]),
 				_List_fromArray(
 					[
 						elm$html$Html$text(item)
-					]))
-			]));
+					]));
+		},
+		list);
 };
-var author$project$Main$renderList = function (tags) {
-	switch (tags.$) {
-		case 'TagSuccess':
-			var tagList = tags.a;
-			return A2(elm$core$List$map, author$project$Main$toLi, tagList);
-		case 'TagLoading':
-			return _List_fromArray(
-				[author$project$Main$loader]);
-		default:
-			return _List_fromArray(
-				[author$project$Main$loader]);
+var author$project$Main$uniq = function (list) {
+	return A3(
+		elm$core$List$foldr,
+		F2(
+			function (curr, result) {
+				return A2(
+					elm$core$List$member,
+					elm$core$String$toLower(curr),
+					A2(elm$core$List$map, elm$core$String$toLower, result)) ? result : A2(elm$core$List$cons, curr, result);
+			}),
+		_List_Nil,
+		list);
+};
+var elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2(elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return elm$core$Maybe$Just(x);
+	} else {
+		return elm$core$Maybe$Nothing;
 	}
 };
+var author$project$Main$toLi = F2(
+	function (search, item) {
+		var modulename = A2(
+			elm$core$Maybe$withDefault,
+			'',
+			elm$core$List$head(item));
+		if (search === '') {
+			return A2(
+				elm$html$Html$li,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$a,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$href(
+								author$project$Main$assetsUrl('/docs/' + modulename))
+							]),
+						_List_fromArray(
+							[
+								elm$html$Html$text(modulename)
+							]))
+					]));
+		} else {
+			var s = search;
+			var tagsList = (elm$core$List$length(item) > 1) ? A2(
+				elm$core$List$filter,
+				function (lf) {
+					return !_Utils_eq(
+						elm$core$String$toLower(lf),
+						modulename);
+				},
+				A2(
+					author$project$Main$findTags,
+					s,
+					A2(
+						elm$core$Maybe$withDefault,
+						'',
+						elm$core$List$head(
+							elm$core$List$reverse(item))))) : _List_Nil;
+			return A2(
+				elm$html$Html$li,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$a,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$href(
+								author$project$Main$assetsUrl('/docs/' + modulename))
+							]),
+						_List_fromArray(
+							[
+								elm$html$Html$text(modulename)
+							])),
+						A2(
+						elm$html$Html$ul,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$class('tag-list')
+							]),
+						author$project$Main$rendetTagsList(
+							author$project$Main$uniq(tagsList)))
+					]));
+		}
+	});
+var author$project$Main$renderList = F2(
+	function (tags, search) {
+		switch (tags.$) {
+			case 'TagSuccess':
+				var tagList = tags.a;
+				if (search === '') {
+					return A2(
+						elm$core$List$map,
+						author$project$Main$toLi(''),
+						tagList);
+				} else {
+					var s = search;
+					return A2(
+						elm$core$List$map,
+						author$project$Main$toLi(s),
+						A2(
+							elm$core$List$filter,
+							author$project$Main$includeStr(s),
+							tagList));
+				}
+			case 'TagLoading':
+				return _List_fromArray(
+					[author$project$Main$loader]);
+			default:
+				return _List_fromArray(
+					[author$project$Main$loader]);
+		}
+	});
 var elm$html$Html$i = _VirtualDom_node('i');
 var elm$html$Html$input = _VirtualDom_node('input');
 var elm$html$Html$label = _VirtualDom_node('label');
+var elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$bool(bool));
+	});
+var elm$html$Html$Attributes$autofocus = elm$html$Html$Attributes$boolProperty('autofocus');
 var elm$html$Html$Attributes$for = elm$html$Html$Attributes$stringProperty('htmlFor');
 var elm$html$Html$Attributes$name = elm$html$Html$Attributes$stringProperty('name');
 var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
@@ -14856,7 +15115,8 @@ var author$project$Main$homeView = function (model) {
 								]),
 							_List_fromArray(
 								[
-									elm$html$Html$text('Type for search ')
+									elm$html$Html$text(
+									A2(author$project$App$I18n$get, model.translation, 'SEARCH'))
 								])),
 							A2(
 							elm$html$Html$input,
@@ -14868,6 +15128,7 @@ var author$project$Main$homeView = function (model) {
 									elm$html$Html$Attributes$placeholder('Type for search'),
 									elm$html$Html$Attributes$type_('text'),
 									elm$html$Html$Attributes$value(search),
+									elm$html$Html$Attributes$autofocus(false),
 									elm$html$Html$Events$onInput(author$project$Main$TypeSearch)
 								]),
 							_List_Nil)
@@ -14883,7 +15144,7 @@ var author$project$Main$homeView = function (model) {
 							A2(
 							elm$html$Html$ul,
 							_List_Nil,
-							author$project$Main$renderList(tags))
+							A2(author$project$Main$renderList, tags, search))
 						]))
 				])),
 		title: A2(author$project$App$I18n$get, model.translation, 'HOME')
@@ -15048,13 +15309,6 @@ var author$project$Main$ChangeLanguage = function (a) {
 var author$project$Main$ChangeMode = {$: 'ChangeMode'};
 var elm$html$Html$option = _VirtualDom_node('option');
 var elm$html$Html$select = _VirtualDom_node('select');
-var elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			elm$json$Json$Encode$bool(bool));
-	});
 var elm$html$Html$Attributes$selected = elm$html$Html$Attributes$boolProperty('selected');
 var author$project$Main$languageSelect = F3(
 	function (onSelect, options, selectedValue) {
@@ -15247,7 +15501,7 @@ _Platform_export({'Main':{'init':author$project$Main$main(
 									A2(elm$json$Json$Decode$field, 'darkMode', elm$json$Json$Decode$bool));
 							},
 							A2(elm$json$Json$Decode$field, 'language', elm$json$Json$Decode$string)))
-					])))))({"versions":{"elm":"0.19.0"},"types":{"message":"Main.Msg","aliases":{"App.Types.Doc":{"args":[],"type":"{ summary : String.String, description : String.String }"},"App.Types.Tags":{"args":[],"type":"List.List String.String"},"App.Types.Translation":{"args":[],"type":"Dict.Dict String.String String.String"},"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"}},"unions":{"Main.Msg":{"args":[],"tags":{"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"HandleTranslateResponse":["Result.Result Http.Error App.Types.Translation"],"HandleTagStatus":["Result.Result Http.Error App.Types.Tags"],"HandleDocResponse":["Result.Result Http.Error App.Types.Doc"],"ChangeMode":[],"ChangeLanguage":["String.String"],"TypeSearch":["String.String"],"Back":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"Dict.NColor":{"args":[],"tags":{"Red":[],"Black":[]}}}}})}});
+					])))))({"versions":{"elm":"0.19.0"},"types":{"message":"Main.Msg","aliases":{"App.Types.Doc":{"args":[],"type":"{ summary : String.String, description : String.String }"},"App.Types.Tags":{"args":[],"type":"List.List (List.List String.String)"},"App.Types.Translation":{"args":[],"type":"Dict.Dict String.String String.String"},"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"}},"unions":{"Main.Msg":{"args":[],"tags":{"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"HandleTranslateResponse":["Result.Result Http.Error App.Types.Translation"],"HandleTagStatus":["Result.Result Http.Error App.Types.Tags"],"HandleDocResponse":["Result.Result Http.Error App.Types.Doc"],"ChangeMode":[],"ChangeLanguage":["String.String"],"TypeSearch":["String.String"],"Back":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"Dict.NColor":{"args":[],"tags":{"Red":[],"Black":[]}}}}})}});
 
 //////////////////// HMR BEGIN ////////////////////
 
@@ -15822,7 +16076,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51183" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51594" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
