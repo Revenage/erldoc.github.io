@@ -311,6 +311,21 @@ body {
           text-decoration: none;
           color: inherit;
         }
+
+        .tag-list {
+          line-height: initial;
+          margin-left: auto;
+          font-size: 12px;
+          color: $red;
+
+          .tag {
+            display: inline-block;
+            padding: 5px;
+            border: 1px solid $red;
+            margin: 0 5px 5px 0;
+            border-radius: 3px;
+          }
+        }
       }
     }
   }

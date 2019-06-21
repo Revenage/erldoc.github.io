@@ -565,6 +565,8 @@ documentView model name =
                     [ div [ class "row summary" ]
                         [ h1 [] [ text summary ] ]
                     , div [ class "row description" ] (textHtml description)
+
+                    -- , div [ class "row funcs" ] (textHtml funcs)
                     ]
                 , footer model
                 ]
@@ -619,15 +621,16 @@ findTags search str =
 
 uniq : List String -> List String
 uniq list =
-    -- List.foldl
-    --     (\result curr ->
-    --         if List.member curr result then
-    --             result :: curr
-    --         else
-    --             result
-    --     )
-    --     []
-    list
+    List.foldr
+        (\curr result ->
+            if List.member (String.toLower curr) (List.map String.toLower result) then
+                result
+
+            else
+                curr :: result
+        )
+        []
+        list
 
 
 toLi : String -> List String -> Html Msg
@@ -643,12 +646,19 @@ toLi search item =
         s ->
             let
                 tagsList =
-                    findTags s (Maybe.withDefault "" (List.head (List.reverse item)))
+                    if List.length item > 1 then
+                        item
+                            |> List.reverse
+                            |> List.head
+                            |> Maybe.withDefault ""
+                            |> findTags s
+                            |> List.filter (\lf -> String.toLower lf /= modulename)
+
+                    else
+                        []
             in
             li []
                 [ a [ href <| assetsUrl ("/docs/" ++ modulename) ] [ text modulename ]
-
-                -- , span [] [ text (String.join ", " tagsList) ]
                 , ul [ class "tag-list" ] (rendetTagsList <| uniq tagsList)
                 ]
 
