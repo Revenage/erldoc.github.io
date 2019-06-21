@@ -337,17 +337,20 @@ nav model =
     let
         headetClass =
             checkColapse "navbar" model
+
+        trans =
+            I18n.get model.translation
     in
     header []
         [ Html.nav [ class headetClass, id "myNavBar" ]
             [ ul [ class "nav" ]
                 [ li []
                     [ a [ href <| assetsUrl "/" ]
-                        [ span [] [ text (I18n.get model.translation "DOCS") ] ]
+                        [ span [] [ text (trans "DOCS") ] ]
                     ]
                 , li []
                     [ a [ href <| assetsUrl "/settings" ]
-                        [ span [] [ text (I18n.get model.translation "SETTINGS") ] ]
+                        [ span [] [ text (trans "SETTINGS") ] ]
                     ]
                 ]
             ]
@@ -392,16 +395,20 @@ checkColapse baseclass model =
 
 footer : Model -> Html Msg
 footer model =
+    let
+        trans =
+            I18n.get model.translation
+    in
     Html.footer [ class "container" ]
         [ Html.nav []
             [ ul []
                 [ li []
                     [ a [ href <| assetsUrl "/about" ]
-                        [ text (I18n.get model.translation "ABOUT") ]
+                        [ text (trans "ABOUT") ]
                     ]
                 , li []
                     [ a [ href <| assetsUrl "/contact" ]
-                        [ text (I18n.get model.translation "CONTACT") ]
+                        [ text (trans "CONTACT") ]
                     ]
                 ]
             ]
@@ -411,9 +418,13 @@ footer model =
 
 view : Model -> Browser.Document Msg
 view model =
+    let
+        trans =
+            I18n.get model.translation
+    in
     case model.translation of
         TranslateLoading ->
-            { title = I18n.get model.translation "LOADING"
+            { title = trans "LOADING"
             , body = [ loader ]
             }
 
@@ -442,7 +453,7 @@ view model =
                     notFoundView model
 
         TranslateFailure ->
-            { title = I18n.get model.translation "FAILURE"
+            { title = trans "FAILURE"
             , body = [ loader ]
             }
 
@@ -456,16 +467,19 @@ settingsView model =
     let
         { darkMode } =
             model.settings
+
+        trans =
+            I18n.get model.translation
     in
-    { title = I18n.get model.translation "SETTINGS"
+    { title = trans "SETTINGS"
     , content =
         main_ [ id "content", class "container", tabindex -1 ]
             [ div [ class "row" ]
                 [ switcher
                     ChangeMode
                     model.settings.darkMode
-                    (I18n.get model.translation "DARK.THEME")
-                    (I18n.get model.translation "LIGHT.THEME")
+                    (trans "DARK.THEME")
+                    (trans "LIGHT.THEME")
                 ]
             , div [ class "row" ]
                 [ languageSelect ChangeLanguage [ "en", "ru", "uk" ] model.settings.language
@@ -508,12 +522,15 @@ homeView model =
     let
         { search, tags } =
             model.home
+
+        trans =
+            I18n.get model.translation
     in
-    { title = I18n.get model.translation "HOME"
+    { title = trans "HOME"
     , content =
         main_ [ id "content", class "container home", tabindex -1 ]
             [ div [ class "input-container" ]
-                [ label [ class "icon-search", for "search" ] [ text (I18n.get model.translation "SEARCH") ]
+                [ label [ class "icon-search", for "search" ] [ text (trans "SEARCH") ]
                 , input
                     [ class "input-field"
                     , name "search"
@@ -545,9 +562,13 @@ textHtml t =
 
 documentView : Model -> String -> Browser.Document Msg
 documentView model name =
+    let
+        trans =
+            I18n.get model.translation
+    in
     case model.document of
         DocLoading ->
-            { title = I18n.get model.translation "LOADING"
+            { title = trans "LOADING"
             , body = [ innerNav model name, loader, footer model ]
             }
 
@@ -556,7 +577,7 @@ documentView model name =
                 { summary, description } =
                     document
             in
-            { title = String.join " " [ I18n.get model.translation "DOCS.TITLE", name ]
+            { title = String.join " " [ trans "DOCS.TITLE", name ]
             , body =
                 [ innerNav model name
                 , main_ [ id "content", class "container document", tabindex -1 ]
@@ -571,13 +592,9 @@ documentView model name =
             }
 
         DocFailure ->
-            { title = I18n.get model.translation "FAILURE"
+            { title = trans "FAILURE"
             , body = [ innerNav model name, loader, footer model ]
             }
-
-
-includeStr s item =
-    String.contains s (String.join " " item)
 
 
 renderList : TagStatus -> String -> List (Html Msg)
@@ -589,7 +606,7 @@ renderList tags search =
                     List.map (toLi "") tagList
 
                 s ->
-                    List.map (toLi s) (List.filter (includeStr s) tagList)
+                    List.map (toTaggedLi s) tagList
 
         TagLoading ->
             [ loader ]
@@ -637,28 +654,37 @@ toLi search item =
         modulename =
             Maybe.withDefault "" (List.head item)
     in
-    case search of
-        "" ->
-            li [] [ a [ href <| assetsUrl ("/docs/" ++ modulename) ] [ text modulename ] ]
+    li [] [ a [ href <| assetsUrl ("/docs/" ++ modulename) ] [ text modulename ] ]
 
-        s ->
-            let
-                tagsList =
-                    if List.length item > 1 then
-                        item
-                            |> List.reverse
-                            |> List.head
-                            |> Maybe.withDefault ""
-                            |> findTags s
-                            |> List.filter (\lf -> String.toLower lf /= modulename)
 
-                    else
-                        []
-            in
-            li []
-                [ a [ href <| assetsUrl ("/docs/" ++ modulename) ] [ text modulename ]
-                , ul [ class "tag-list" ] (rendetTagsList <| uniq tagsList)
-                ]
+toTaggedLi : String -> List String -> Html Msg
+toTaggedLi search item =
+    let
+        modulename =
+            Maybe.withDefault "" (List.head item)
+    in
+    let
+        tagsList =
+            if List.length item > 1 then
+                item
+                    |> List.reverse
+                    |> List.head
+                    |> Maybe.withDefault ""
+                    |> findTags search
+                    |> List.filter (\lf -> String.toLower lf /= modulename)
+                    |> uniq
+
+            else
+                []
+    in
+    if List.length tagsList > 0 then
+        li []
+            [ a [ href <| assetsUrl ("/docs/" ++ modulename) ] [ text modulename ]
+            , ul [ class "tag-list" ] (rendetTagsList tagsList)
+            ]
+
+    else
+        li [] []
 
 
 rendetTagsList : List String -> List (Html msg)
@@ -668,18 +694,22 @@ rendetTagsList list =
 
 notFoundView : Model -> { title : String, body : List (Html msg) }
 notFoundView model =
-    { title = I18n.get model.translation "NOT.FOUND"
+    let
+        trans =
+            I18n.get model.translation
+    in
+    { title = trans "NOT.FOUND"
     , body =
         [ main_ [ id "content", class "container page404", tabindex -1 ]
             [ div [ class "row" ]
-                [ h1 [ class "title" ] [ text (I18n.get model.translation "NOT.FOUND") ]
+                [ h1 [ class "title" ] [ text (trans "NOT.FOUND") ]
                 ]
             , div [ class "row" ]
                 [ div [ class "image404" ] []
                 ]
             , div [ class "row" ]
                 [ a [ class "back", href <| assetsUrl "/" ]
-                    [ text (I18n.get model.translation "BACK.HOME") ]
+                    [ text (trans "BACK.HOME") ]
                 ]
             ]
         ]
