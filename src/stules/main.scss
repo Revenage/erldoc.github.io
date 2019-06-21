@@ -271,16 +271,13 @@ body {
       height: 40px;
       margin-bottom: 18px;
 
-      label {
-        display: none;
-      }
-
       .icon-search {
         display: block;
         width: 40px;
         height: 40px;
         position: absolute;
         background: url(../images/search.black.svg) center center no-repeat;
+        text-indent: -9999px;
       }
       .input-field {
         background-color: inherit;

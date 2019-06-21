@@ -23,10 +23,6 @@ self.addEventListener("fetch", function(event) {
   event.waitUntil(update(event.request));
 });
 
-self.addEventListener("activate", event => {
-  console.log("activated");
-});
-
 function fromCache(request) {
   return caches
     .open(CACHE)
@@ -41,6 +37,5 @@ function update(request) {
     .open(CACHE)
     .then(cache =>
       fetch(request).then(response => cache.put(request, response))
-    )
-    .catch(err => console.log(err));
+    );
 }
