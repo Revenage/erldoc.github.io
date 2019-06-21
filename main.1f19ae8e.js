@@ -15030,7 +15030,6 @@ var author$project$Main$renderList = F2(
 					[author$project$Main$loader]);
 		}
 	});
-var elm$html$Html$i = _VirtualDom_node('i');
 var elm$html$Html$input = _VirtualDom_node('input');
 var elm$html$Html$label = _VirtualDom_node('label');
 var elm$html$Html$Attributes$boolProperty = F2(
@@ -15101,16 +15100,10 @@ var author$project$Main$homeView = function (model) {
 					_List_fromArray(
 						[
 							A2(
-							elm$html$Html$i,
-							_List_fromArray(
-								[
-									elm$html$Html$Attributes$class('icon-search')
-								]),
-							_List_Nil),
-							A2(
 							elm$html$Html$label,
 							_List_fromArray(
 								[
+									elm$html$Html$Attributes$class('icon-search'),
 									elm$html$Html$Attributes$for('search')
 								]),
 							_List_fromArray(
@@ -16048,7 +16041,7 @@ app.ports.settings.subscribe(function (settings) {
 }); // app.ports.translation.subscribe(function(translation) {
 //   console.log("translation:: ", translation);
 // });
-},{"./App/Main.elm":"App/Main.elm"}],"../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./App/Main.elm":"App/Main.elm"}],"../../../../../usr/local/share/.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -16076,7 +16069,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51594" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55047" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -16251,5 +16244,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
+},{}]},{},["../../../../../usr/local/share/.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
 //# sourceMappingURL=/erldoc/main.1f19ae8e.js.map

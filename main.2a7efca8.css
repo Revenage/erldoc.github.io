@@ -508,15 +508,13 @@ body .home .input-container {
   height: 40px;
   margin-bottom: 18px;
 }
-body .home .input-container label {
-  display: none;
-}
 body .home .input-container .icon-search {
   display: block;
   width: 40px;
   height: 40px;
   position: absolute;
   background: url(/erldoc/search.black.800b3f64.svg) center center no-repeat;
+  text-indent: -9999px;
 }
 body .home .input-container .input-field {
   background-color: inherit;
