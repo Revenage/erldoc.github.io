@@ -188,6 +188,8 @@ body {
               width: 80%;
               padding: 0 20px;
               span {
+                font-weight: bold;
+                font-variant: small-caps;
                 font-size: 18px;
                 font-weight: bold;
                 margin-left: -24%;
@@ -234,6 +236,8 @@ body {
   .document {
     padding: 0 8px;
     font-size: 16px;
+    overflow: hidden;
+    overflow-wrap: break-word;
 
     .code {
       background-color: rgba(243, 95, 66, 0.2);
@@ -338,6 +342,27 @@ body {
             border-radius: 3px;
           }
         }
+      }
+    }
+  }
+
+  .settings {
+    .offline-btn {
+      width: 50%;
+      margin: 50px auto;
+      height: 40px;
+      border: 1px solid $white;
+      .loaded {
+        background: #a7a7a7;
+        height: 100%;
+        transition: 1s;
+      }
+      span {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+        line-height: 2.5;
       }
     }
   }

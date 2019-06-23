@@ -1,7 +1,7 @@
 module App.Decoders exposing (decodeDocs, decodeDocument, decodeTag, decodeTranslations)
 
 import App.Types exposing (..)
-import Json.Decode exposing (Decoder, array, dict, field, index, list, map, map3, maybe, oneOf, string)
+import Json.Decode exposing (Decoder, array, dict, field, index, list, map, map4, maybe, oneOf, string)
 
 
 decodeTranslations : Decoder Translation
@@ -21,7 +21,8 @@ decodeTag =
 
 decodeDocument : Decoder Doc
 decodeDocument =
-    map3 Doc
+    map4 Doc
+        (field "name" string)
         (field "summary" string)
         (field "description" string)
         (field "funcs" string)

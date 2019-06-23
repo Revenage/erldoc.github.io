@@ -1,7 +1,10 @@
-port module Main exposing (Model, Msg(..), PageView, footer, getLangString, init, main, nav, subscriptions, update, view)
+port module Main exposing (DocumentModel, HomeModel, InitialData, Model, Msg(..), PageView, SettingsModel, calculateProgress, checkColapse, doOffline, documentView, findTags, footer, getDoc, getLangString, getTags, getTranslation, homeView, init, initialRequests, innerNav, languageSelect, loadPageData, loader, main, nav, renderList, rendetTagsList, requestOnUrlChanged, saveSettings, settings, settingsView, subscriptions, tagStr, textHtml, toLi, toTaggedLi, translations, uniq, update, view)
 
+import App.Components.Switcher as Switcher
 import App.Decoders exposing (..)
+import App.Helpers.AssetsUrl exposing (assetsUrl)
 import App.I18n as I18n exposing (..)
+import App.Pages.NotFound as NotFound
 import App.Router exposing (..)
 import App.Types exposing (..)
 import Browser
@@ -63,6 +66,7 @@ type alias Model =
     , home : HomeModel
     , settings : SettingsModel
     , document : DocStatus
+    , loadedDocumentsList : List String
     }
 
 
@@ -72,19 +76,16 @@ type Msg
     | HandleTranslateResponse (Result Http.Error Translation)
     | HandleTagStatus (Result Http.Error Tags)
     | HandleDocResponse (Result Http.Error Doc)
-    | ChangeMode
+    | ChangeMode Switcher.Msg
     | ChangeLanguage String
     | TypeSearch String
     | Back
+    | LoadAllDocuments
+    | MsgNotFound NotFound.Msg
 
 
 type alias PageView =
     { title : String, content : Html Msg }
-
-
-assetsUrl : String -> String
-assetsUrl path =
-    "/erldoc" ++ path
 
 
 main : Program InitialData Model Msg
@@ -135,6 +136,7 @@ init flags url key =
             , tags = TagLoading
             }
       , document = DocLoading
+      , loadedDocumentsList = []
       }
     , loadPageData route initialSetting.language
     )
@@ -192,6 +194,11 @@ getTags =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        MsgNotFound _ ->
+            ( model
+            , Cmd.none
+            )
+
         LinkClicked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
@@ -220,7 +227,12 @@ update msg model =
         HandleDocResponse result ->
             case result of
                 Ok doc ->
-                    ( { model | document = DocSuccess doc }, Cmd.none )
+                    ( { model
+                        | document = DocSuccess doc
+                        , loadedDocumentsList = uniq <| doc.name :: model.loadedDocumentsList
+                      }
+                    , Cmd.none
+                    )
 
                 Err err ->
                     ( { model | document = DocFailure }, Cmd.none )
@@ -244,7 +256,7 @@ update msg model =
                     , Cmd.none
                     )
 
-        ChangeMode ->
+        ChangeMode Switcher.ToggleChange ->
             let
                 oldSettings =
                     model.settings
@@ -284,6 +296,40 @@ update msg model =
             ( model
             , Nav.back model.key 1
             )
+
+        LoadAllDocuments ->
+            case model.home.tags of
+                TagSuccess tags ->
+                    let
+                        names =
+                            List.map (\item -> Maybe.withDefault "" (List.head item)) tags
+                    in
+                    ( model
+                    , Cmd.batch (List.map (\n -> getDoc n model.settings.language) names)
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+
+calculateProgress : TagStatus -> List String -> String
+calculateProgress tagStatus loadedList =
+    case tagStatus of
+        TagSuccess tags ->
+            let
+                full =
+                    tags |> List.length |> toFloat
+
+                loaded =
+                    loadedList |> List.length |> toFloat
+
+                precent =
+                    round ((loaded / full) * 100)
+            in
+            String.fromInt precent ++ "%"
+
+        _ ->
+            "0%"
 
 
 requestOnUrlChanged route lang =
@@ -437,7 +483,13 @@ view model =
                     viewPage settingsView
 
                 NotFound ->
-                    notFoundView model
+                    let
+                        { title, body } =
+                            NotFound.view (NotFound.Model model.translation)
+                    in
+                    { title = title
+                    , body = List.map (Html.map MsgNotFound) body
+                    }
 
         TranslateFailure ->
             { title = trans "FAILURE"
@@ -460,42 +512,64 @@ settingsView model =
     in
     { title = trans "SETTINGS"
     , content =
-        main_ [ id "content", class "container", tabindex -1 ]
+        main_ [ id "content", class "container settings", tabindex -1 ]
             [ div [ class "row" ]
-                [ switcher
-                    ChangeMode
-                    model.settings.darkMode
-                    (trans "DARK.THEME")
-                    (trans "LIGHT.THEME")
+                [ Html.map ChangeMode
+                    (Switcher.view
+                        { value = model.settings.darkMode
+                        , textOn = trans "DARK.THEME"
+                        , textOff = trans "LIGHT.THEME"
+                        }
+                    )
                 ]
             , div [ class "row" ]
                 [ languageSelect ChangeLanguage [ "en", "ru", "uk" ] model.settings.language
+                ]
+            , div [ class "row" ]
+                [ doOffline model LoadAllDocuments
                 ]
             ]
     }
 
 
-switcher : msg -> Bool -> String -> String -> Html msg
-switcher onChange value textOn textOff =
-    div [ class "toggle-list" ]
-        [ input
-            [ attribute "checked" ""
-            , class "ios-toggle"
-            , id "red"
-            , name "test"
-            , type_ "checkbox"
-            , checked <| value
-            , onClick <| onChange
-            ]
-            []
-        , label
-            [ class "checkbox-label"
-            , attribute "data-off" textOff
-            , attribute "data-on" textOn
-            , for "red"
+doOffline : Model -> msg -> Html msg
+doOffline model click =
+    let
+        progress =
+            calculateProgress model.home.tags model.loadedDocumentsList
+    in
+    div [ class "offline-btn", onClick click ]
+        [ span [] [ text <| String.join ": " [ I18n.get model.translation "OFFLINE.DOCS", progress ] ]
+        , div
+            [ class "loaded"
+            , style "width" progress
             ]
             []
         ]
+
+
+
+-- switcher : msg -> Bool -> String -> String -> Html msg
+-- switcher onChange value textOn textOff =
+--     div [ class "toggle-list" ]
+--         [ input
+--             [ attribute "checked" ""
+--             , class "ios-toggle"
+--             , id "red"
+--             , name "test"
+--             , type_ "checkbox"
+--             , checked <| value
+--             , onClick <| onChange
+--             ]
+--             []
+--         , label
+--             [ class "checkbox-label"
+--             , attribute "data-off" textOff
+--             , attribute "data-on" textOn
+--             , for "red"
+--             ]
+--             []
+--         ]
 
 
 languageSelect : (String -> msg) -> List String -> String -> Html msg
@@ -679,25 +753,26 @@ rendetTagsList list =
     List.map (\item -> li [ class "tag" ] [ text item ]) list
 
 
-notFoundView : Model -> { title : String, body : List (Html msg) }
-notFoundView model =
-    let
-        trans =
-            I18n.get model.translation
-    in
-    { title = trans "NOT.FOUND"
-    , body =
-        [ main_ [ id "content", class "container page404", tabindex -1 ]
-            [ div [ class "row" ]
-                [ h1 [ class "title" ] [ text (trans "NOT.FOUND") ]
-                ]
-            , div [ class "row" ]
-                [ div [ class "image404" ] []
-                ]
-            , div [ class "row" ]
-                [ a [ class "back", href <| assetsUrl "/" ]
-                    [ text (trans "BACK.HOME") ]
-                ]
-            ]
-        ]
-    }
+
+-- notFoundView : Model -> { title : String, body : List (Html msg) }
+-- notFoundView model =
+--     let
+--         trans =
+--             I18n.get model.translation
+--     in
+--     { title = trans "NOT.FOUND"
+--     , body =
+--         [ main_ [ id "content", class "container page404", tabindex -1 ]
+--             [ div [ class "row" ]
+--                 [ h1 [ class "title" ] [ text (trans "NOT.FOUND") ]
+--                 ]
+--             , div [ class "row" ]
+--                 [ div [ class "image404" ] []
+--                 ]
+--             , div [ class "row" ]
+--                 [ a [ class "back", href <| assetsUrl "/" ]
+--                     [ text (trans "BACK.HOME") ]
+--                 ]
+--             ]
+--         ]
+--     }

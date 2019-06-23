@@ -12,5 +12,6 @@
   "BACK.HOME": "Back to docs",
   "BACK": "Back",
   "LIGHT.THEME": "Light theme",
-  "DARK.THEME": "Dark theme"
+  "DARK.THEME": "Dark theme",
+  "OFFLINE.DOCS": "Load docs"
 }

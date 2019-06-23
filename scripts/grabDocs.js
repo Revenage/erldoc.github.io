@@ -28,7 +28,7 @@ const escaping = str =>
         .replace(/\n/g, "");
 // .replace('""', '"');
 
-function pageParser(body) {
+function pageParser(name, body) {
   const $ = cheerio.load(body);
   const summary = $(".module-summary-body").get().length
     ? $(".module-summary-body").text()
@@ -37,6 +37,7 @@ function pageParser(body) {
   const funcs = $(".exports-body").html();
 
   return {
+    name,
     summary,
     description: escaping(description),
     funcs: escaping(funcs)
@@ -58,7 +59,7 @@ modulesList.forEach(moduleName => {
         return;
       }
 
-      const json = pageParser(body);
+      const json = pageParser(moduleName, body);
       languages.forEach(lang => {
         const langFolder = path.resolve(dist, lang);
         if (!fs.existsSync(langFolder)) {
