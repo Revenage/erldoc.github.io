@@ -1,11 +1,11 @@
-port module App.Pages.Settings exposing (Model, Msg(..), calculateProgress, doOffline, getDoc, getTranslation, init, languageSelect, saveSettings, settings, settingsPage, subscriptions, update, view)
+port module Pages.Settings exposing (Model, Msg(..), calculateProgress, doOffline, getDoc, getTranslation, init, languageSelect, saveSettings, settings, settingsPage, subscriptions, update, view)
 
-import App.Components.Switcher as Switcher
-import App.Decoders exposing (..)
-import App.Helpers.AssetsUrl exposing (assetsUrl)
-import App.Helpers.Uniq exposing (uniq)
-import App.I18n as I18n exposing (..)
-import App.Types exposing (..)
+import Components.Switcher as Switcher
+import Decoders exposing (..)
+import Helpers.AssetsUrl exposing (assetsUrl)
+import Helpers.Uniq exposing (uniq)
+import I18n as I18n exposing (..)
+import Types exposing (..)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)

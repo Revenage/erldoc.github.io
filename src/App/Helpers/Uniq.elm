@@ -1,4 +1,4 @@
-module App.Helpers.Uniq exposing (uniq)
+module Helpers.Uniq exposing (uniq)
 
 
 uniq : List String -> List String

@@ -1,4 +1,4 @@
-module App.Components.Switcher exposing (Model, Msg(..), init, subscriptions, switcher, update, view)
+module Components.Switcher exposing (Model, Msg(..), init, subscriptions, switcher, update, view)
 
 import Browser
 import Html exposing (Html, div, input, label, text)

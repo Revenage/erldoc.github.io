@@ -1,8 +1,8 @@
-module App.Pages.NotFound exposing (Model, Msg(..), init, notFound, subscriptions, update, view)
+module Pages.NotFound exposing (Model, Msg(..), init, notFound, subscriptions, update, view)
 
-import App.Helpers.AssetsUrl exposing (assetsUrl)
-import App.I18n as I18n exposing (..)
-import App.Types exposing (..)
+import Helpers.AssetsUrl exposing (assetsUrl)
+import I18n as I18n exposing (..)
+import Types exposing (..)
 import Browser
 import Html exposing (Html, a, div, h1, input, main_, text)
 import Html.Attributes exposing (..)

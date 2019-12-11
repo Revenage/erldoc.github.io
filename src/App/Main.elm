@@ -1,19 +1,16 @@
 port module Main exposing (DocumentModel, HomeModel, InitialData, Model, Msg(..), PageView, SettingsModel, calculateProgress, checkColapse, doOffline, documentView, findTags, footer, getDoc, getLangString, getTags, getTranslation, homeView, init, initialRequests, innerNav, languageSelect, loadPageData, loader, main, nav, renderList, rendetTagsList, requestOnUrlChanged, saveSettings, settings, settingsView, subscriptions, tagStr, textHtml, toLi, toTaggedLi, translations, uniq, update, view)
 
-<<<<<<< HEAD
 import Decoders exposing (..)
 import I18n exposing (..)
 import Router exposing (..)
 import Types exposing (..)
-=======
-import App.Components.Switcher as Switcher
-import App.Decoders exposing (..)
-import App.Helpers.AssetsUrl exposing (assetsUrl)
-import App.I18n as I18n exposing (..)
-import App.Pages.NotFound as NotFound
-import App.Router exposing (..)
-import App.Types exposing (..)
->>>>>>> f02441e54c8a83fa6f304c7ae5cca4a7b52824bf
+
+import Components.Switcher as Switcher
+
+import Helpers.AssetsUrl exposing (assetsUrl)
+
+import Pages.NotFound as NotFound
+
 import Browser
 import Browser.Navigation as Nav
 import Dict exposing (Dict)

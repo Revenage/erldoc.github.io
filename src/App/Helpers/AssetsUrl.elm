@@ -1,4 +1,4 @@
-module App.Helpers.AssetsUrl exposing (assetsUrl)
+module Helpers.AssetsUrl exposing (assetsUrl)
 
 
 assetsUrl : String -> String
