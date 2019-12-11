@@ -125,7 +125,7 @@ init flags url key =
 
         initialSetting =
             Maybe.withDefault
-                { darkMode = False
+                { darkMode = True
                 , language = getLangString English
                 }
                 flags.settings
