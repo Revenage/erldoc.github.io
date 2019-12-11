@@ -239,6 +239,7 @@ update msg model =
                     )
 
                 Err err ->
+                    let error = Debug.log "error" err in
                     ( { model | document = DocFailure }, Cmd.none )
 
         HandleTagStatus result ->
@@ -617,12 +618,15 @@ homeView model =
 
 textHtml : String -> List (Html.Html msg)
 textHtml t =
-    case Html.Parser.run t of
-        Ok nodes ->
-            Html.Parser.Util.toVirtualDom nodes
+   
+    [div [ class "testtext" ] []]
+    -- let adsf = Debug.log "t" t in
+    -- case Html.Parser.run t of
+    --     Ok nodes ->
+    --         Html.Parser.Util.toVirtualDom nodes
 
-        Err _ ->
-            []
+    --     Err err ->
+    --         []
 
 
 documentView : Model -> String -> Browser.Document Msg
@@ -658,7 +662,7 @@ documentView model name =
 
         DocFailure ->
             { title = trans "FAILURE"
-            , body = [ innerNav model name, loader, footer model ]
+            , body = [ innerNav model name, div [] [text (trans "FAILURE")], footer model ]
             }
 
 
