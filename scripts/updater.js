@@ -8,30 +8,37 @@ const languages = ["en", "ru", "uk"];
 
 const source = name => `http://erlang.org/doc/man/${name}.html`;
 
-const dist = path.resolve(__dirname, `../static/content`);
+const contentPath = `../static/content`;
+const lang = "en";
 
-fs.readdirSync(path.resolve(__dirname, `../static/content/en`)).forEach(
+const dist = path.resolve(__dirname, contentPath);
+
+fs.readdirSync(path.resolve(__dirname, `${contentPath}/${lang}`)).forEach(
   file => {
     console.log(file);
 
+    // if (file !== "alarm_handler.json") {
+    //   return;
+    // }
+
     fs.readFile(
-      path.resolve(__dirname, "../static/content/en", file),
+      path.resolve(__dirname, `${contentPath}/${lang}`, file),
       (err, text) => {
         const json = JSON.parse(text);
+
         json.name = file
           .split(".")
           .slice(0, -1)
           .join(".");
 
-        console.log("JSON.stringify(json)", JSON.stringify(json));
-        // fs.writeFile(
-        //   path.resolve(__dirname, "../static/content/en", file),
-        //   JSON.stringify(json),
-        //   function(err) {
-        //     if (err) throw err;
-        //     console.log(`File ${file}.json created successfully.`);
-        //   }
-        // );
+        fs.writeFile(
+          path.resolve(__dirname, `${contentPath}/${lang}`, file),
+          JSON.stringify(json),
+          function(err) {
+            if (err) throw err;
+            console.log(`File ${file}.json created successfully.`);
+          }
+        );
       }
     );
   }

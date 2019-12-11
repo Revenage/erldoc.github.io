@@ -216,7 +216,7 @@ update msg model =
                 route =
                     toRoute url
             in
-            ( { model | url = url, route = route }
+            ( { model | url = url, route = route, document = DocLoading }
             , requestOnUrlChanged route model.settings.language
             )
 
@@ -239,7 +239,6 @@ update msg model =
                     )
 
                 Err err ->
-                    let error = Debug.log "error" err in
                     ( { model | document = DocFailure }, Cmd.none )
 
         HandleTagStatus result ->
@@ -618,15 +617,12 @@ homeView model =
 
 textHtml : String -> List (Html.Html msg)
 textHtml t =
-   
-    [div [ class "testtext" ] []]
-    -- let adsf = Debug.log "t" t in
-    -- case Html.Parser.run t of
-    --     Ok nodes ->
-    --         Html.Parser.Util.toVirtualDom nodes
+    case Html.Parser.run t of
+        Ok nodes ->
+            Html.Parser.Util.toVirtualDom nodes
 
-    --     Err err ->
-    --         []
+        Err err ->
+            []
 
 
 documentView : Model -> String -> Browser.Document Msg
