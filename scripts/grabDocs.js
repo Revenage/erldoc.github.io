@@ -361,10 +361,10 @@ const escaping = str =>
         .replace(/onmouseover="(.*?)"/gi, "")
         .replace(/onmouseout="(.*?)"/gi, "")
         .replace(/\s\s+/g, " ")
-        .replace(/\n/g, "")
-        .replace('""', '"');
+        .replace(/\n/g, "");
+// .replace('""', '"');
 
-function pageParser(body) {
+function pageParser(name, body) {
   const $ = cheerio.load(body);
   const summary = $(".module-summary-body").get().length
     ? $(".module-summary-body").text()
@@ -373,6 +373,7 @@ function pageParser(body) {
   const funcs = $(".exports-body").html();
 
   return {
+    name,
     summary,
     description: escaping(description),
     funcs: escaping(funcs)
