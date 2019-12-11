@@ -129,39 +129,42 @@ init flags url key =
                 , language = getLangString English
                 }
                 flags.settings
+
+        model = { key = key
+                    , url = url
+                    , route = route
+                    , translation = TranslateLoading
+                    , settings = initialSetting
+                    , home =
+                            { search = ""
+                            , tags = TagLoading
+                            }
+                    , document = DocLoading
+                    , loadedDocumentsList = []
+                }
     in
-    ( { key = key
-      , url = url
-      , route = route
-      , translation = TranslateLoading
-      , settings = initialSetting
-      , home =
-            { search = ""
-            , tags = TagLoading
-            }
-      , document = DocLoading
-      , loadedDocumentsList = []
-      }
-    , loadPageData route initialSetting.language
+    ( model
+    , loadPageData route model
     )
 
 
-loadPageData : Route -> String -> Cmd Msg
-loadPageData route lang =
+loadPageData : Route -> Model -> Cmd Msg
+loadPageData route model =
     Cmd.batch
         (List.append
-            [ getTranslation lang ]
-            [ initialRequests route lang ]
+            [ getTranslation model.settings.language ]
+            [ initialRequests route model ]
         )
 
 
-initialRequests route lang =
+initialRequests : Route -> Model -> Cmd Msg
+initialRequests route model =
     case route of
         Home ->
-            getTags
+            getTags model.home.tags
 
         Document name ->
-            getDoc name lang
+            getDoc name model.settings.language 
 
         _ ->
             Cmd.none
@@ -183,12 +186,21 @@ getDoc name lang =
         }
 
 
-getTags : Cmd Msg
-getTags =
-    Http.get
-        { url = assetsUrl "/content/tags.json"
-        , expect = Http.expectJson HandleTagStatus decodeTag
-        }
+getTags : TagStatus -> Cmd Msg
+getTags tags =
+    case tags of
+        TagSuccess _ ->
+            Cmd.none
+        TagLoading ->
+            Http.get
+                { url = assetsUrl "/content/tags.json"
+                , expect = Http.expectJson HandleTagStatus decodeTag
+                }
+        TagFailure ->
+            Http.get
+                { url = assetsUrl "/content/tags.json"
+                , expect = Http.expectJson HandleTagStatus decodeTag
+                }
 
 
 
@@ -216,8 +228,9 @@ update msg model =
                 route =
                     toRoute url
             in
-            ( { model | url = url, route = route, document = DocLoading }
-            , requestOnUrlChanged route model.settings.language
+
+            ( { model | url = url, route = route }
+            , requestOnUrlChanged route model
             )
 
         HandleTranslateResponse result ->
@@ -238,7 +251,7 @@ update msg model =
                     , Cmd.none
                     )
 
-                Err err ->
+                Err _ ->
                     ( { model | document = DocFailure }, Cmd.none )
 
         HandleTagStatus result ->
@@ -297,7 +310,7 @@ update msg model =
             )
 
         Back ->
-            ( model
+            ( { model | document = DocEmpty }
             , Nav.back model.key 1
             )
 
@@ -335,14 +348,18 @@ calculateProgress tagStatus loadedList =
         _ ->
             "0%"
 
-
-requestOnUrlChanged route lang =
+requestOnUrlChanged: Route -> Model -> Cmd Msg
+requestOnUrlChanged route model =
     case route of
         Document name ->
-            getDoc name lang
+            case model.route of
+                Home ->
+                    getDoc name model.settings.language
+                _ ->
+                    Cmd.none
 
         Home ->
-            getTags
+            getTags model.home.tags
 
         _ ->
             Cmd.none
@@ -635,6 +652,11 @@ documentView model name =
         DocLoading ->
             { title = trans "LOADING"
             , body = [ innerNav model name, loader, footer model ]
+            }
+
+        DocEmpty ->
+            { title = ""
+            , body = [ innerNav model name, div [class "empty"] [], footer model ]
             }
 
         DocSuccess document ->

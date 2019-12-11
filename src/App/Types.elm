@@ -24,6 +24,7 @@ type DocStatus
     = DocFailure
     | DocLoading
     | DocSuccess Doc
+    | DocEmpty
 
 
 type Language
