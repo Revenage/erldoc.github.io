@@ -1,0 +1,1 @@
+{"summary":"Standard I/O server.","description":"<p> </p><p><span class=\"code\">user</span> is a server that responds to all messages defined in the I/O interface. The code in <span class=\"code\">user.erl</span> can be used as a model for building alternative I/O servers.</p> <p></p>","funcs":""}
