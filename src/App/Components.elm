@@ -1,4 +1,4 @@
-module App.Components exposing (..)
+module Components exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)

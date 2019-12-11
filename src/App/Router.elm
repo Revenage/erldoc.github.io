@@ -1,4 +1,4 @@
-module App.Router exposing (Route(..), route, toRoute)
+module Router exposing (Route(..), route, toRoute)
 
 -- import App.Page.Home as Home
 -- import App.Page.Settings as Settings
@@ -22,11 +22,11 @@ type Route
 route : Parser (Route -> a) a
 route =
     oneOf
-        [ map Home top
-        , map Home (s "erldoc")
-        , map Settings (s "erldoc" </> s "settings")
-        , map NotFound (s "erldoc" </> s "404")
-        , map Document (s "erldoc" </> s "docs" </> string)
+        [ Url.Parser.map Home top
+        , Url.Parser.map Home (Url.Parser.s "erldoc")
+        , Url.Parser.map Settings (Url.Parser.s "erldoc" </> Url.Parser.s "settings")
+        , Url.Parser.map NotFound (Url.Parser.s "erldoc" </> Url.Parser.s "404")
+        , Url.Parser.map Document (Url.Parser.s "erldoc" </> Url.Parser.s "docs" </> string)
         ]
 
 

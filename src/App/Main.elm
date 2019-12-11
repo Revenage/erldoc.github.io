@@ -1,9 +1,9 @@
 port module Main exposing (Model, Msg(..), PageView, footer, getLangString, init, main, nav, subscriptions, update, view)
 
-import App.Decoders exposing (..)
-import App.I18n as I18n exposing (..)
-import App.Router exposing (..)
-import App.Types exposing (..)
+import Decoders exposing (..)
+import I18n exposing (..)
+import Router exposing (..)
+import Types exposing (..)
 import Browser
 import Browser.Navigation as Nav
 import Dict exposing (Dict)

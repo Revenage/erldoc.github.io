@@ -1,4 +1,4 @@
-module App.Types exposing (Doc, DocStatus(..), Language(..), TagStatus(..), Tags, TranslateStatus(..), Translation, Translations)
+module Types exposing (Doc, DocStatus(..), Language(..), TagStatus(..), Tags, TranslateStatus(..), Translation, Translations)
 
 import Browser
 import Browser.Navigation as Nav

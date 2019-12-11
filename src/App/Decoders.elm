@@ -1,6 +1,6 @@
-module App.Decoders exposing (decodeDocs, decodeDocument, decodeTag, decodeTranslations)
+module Decoders exposing (decodeDocs, decodeDocument, decodeTag, decodeTranslations)
 
-import App.Types exposing (..)
+import Types exposing (..)
 import Json.Decode exposing (Decoder, array, dict, field, index, list, map, map2, maybe, oneOf, string)
 
 

@@ -1,6 +1,6 @@
-module App.I18n exposing (get)
+module I18n exposing (get)
 
-import App.Types exposing (..)
+import Types exposing (..)
 import Dict exposing (Dict)
 
 
